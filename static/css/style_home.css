@@ -1,0 +1,108 @@
+.logo{
+    position: absolute;
+    margin: 8% auto;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 0;
+    width: 50%;
+    height: 10%;
+
+}
+
+.container1 {
+  display: flex;
+  justify-content: center;
+  weight: 5px;
+  font-size: 15px;
+}
+
+.container2 {
+  display: flex;
+  justify-content: center;
+}
+
+.container3 {
+  display: flex;
+  justify-content: center;
+  weight: 5px;
+  font-size: 15px;
+}
+
+/* Закрашенный закругленный прямоугольник */
+.box1 {
+  background-color: #004eab;
+  padding: 50px;
+  border-radius: 25px;
+  color: #fff;
+}
+
+/* Размеры и отступы */
+.box1 {
+  width: 320px;
+  height: 180px;
+  margin-top: 25%;
+}
+
+/* Закрашенный закругленный прямоугольник */
+.box2 {
+  background-color: #004eab;
+  padding: 50px;
+  border-radius: 25px;
+  color: #fff;
+}
+
+/* Размеры и отступы */
+.box2 {
+  width: 320px;
+  height: 180px;
+  margin-top: 2%;
+}
+
+.box3 {
+  background-color: #004eab;
+  padding: 50px;
+  border-radius: 25px;
+  color: #fff;
+}
+
+/* Размеры и отступы */
+.box3 {
+  width: 320px;
+  height: 180px;
+  margin-top: 2%;
+ }
+
+
+.c1{
+  float: right
+}
+
+.c1{
+  text-align: right;
+}
+
+.c2{
+  float: left
+}
+
+.c2{
+  text-align: left;
+}
+
+.регистрация {
+  border-radius: 25px;
+  weight: 20%;
+  height: 4%;
+  text-color: white;
+  font-weight: bold;
+  color: white;
+}
+
+.вход {
+  border-radius: 25px;
+  weight: 20%;
+  height: 4%;
+  text-color: white;
+  font-weight: bold;
+  color: white;
+}
