@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!---Coding By CoderGirl | www.codinglabweb.com--->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Login & Registration Form | CoderGirl</title>
+  <!---Custom CSS File--->
+  <link rel="stylesheet" href="/static/css/klim's_test_logpage.css">
+</head>
+<body>
+  <div class="container">
+    <input type="checkbox" id="check">
+    <div class="login form">
+      <p class="center_img"><img src="static/pic/logo.png" height="100px" alt="альтернативный текст"></p>
+      <header>Вход</header>
+      <form action="#">
+        <input type="text" placeholder="Номер телефона">
+        <input type="password" minlength="4" maxlength="8" placeholder="Пароль">
+        <a href="#">Восстановить пароль</a>
+        <input type="button" class="button" value="Войти">
+      </form>
+      <div class="signup">
+        <span class="signup">Нет аккаунта?
+         <label for="check">Регистрация</label>
+        </span>
+      </div>
+    </div>
+    <div class="registration form">
+      <p class="center_img"><img src="static/pic/logo.png" height="100px" alt="альтернативный текст"></p>
+      <header>Регистрация</header>
+      <form action="#">
+        <input type="text" placeholder="Номер телефона">
+        <input type="password" minlength="4" maxlength="8" placeholder="Пароль (от 4 до 8 символов)">
+        <input type="password" placeholder="Подтверждение пароля">
+        <input type="button" class="button" value="Зарегистрироваться">
+      </form>
+      <div class="signup">
+        <span class="signup">Уже есть аккаунт?
+         <label for="check">Вход</label>
+        </span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
