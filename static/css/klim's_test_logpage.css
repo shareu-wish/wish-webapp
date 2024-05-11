@@ -34,6 +34,11 @@ body{
 #check{
   display: none;
 }
+.logo{
+  max-width: 400px;
+  min-width: 100px;
+  width: 90%;
+}
 .container .form{
   padding: 2rem;
 }
