@@ -35,3 +35,18 @@ body{
 .container login form{
   vertical-align: middle;
 }
+
+.button{
+  color: #fff;
+  background: #004eab;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-top: 1.7rem;
+  cursor: pointer;
+  transition: 0.4s;
+}
+.button:hover{
+  background: #ff815b;
+}
+

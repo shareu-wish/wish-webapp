@@ -11,18 +11,18 @@ body{
   width: 100%;
   background: #f2f2f2;
 }
-.container{
+.container1{
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  max-width: 430px;
+  max-width: 350px;
   width: 100%;
   background: #fff;
   border-radius: 7px;
   box-shadow: 0 5px 10px rgba(0,0,0,0.3);
 }
-.container .registration{
+.container1 .registration{
   display: none;
 }
 #check:checked ~ .registration{
@@ -39,7 +39,7 @@ body{
   min-width: 100px;
   width: 90%;
 }
-.container .form{
+.container1 .form{
   padding: 2rem;
 }
 .form header{
@@ -72,6 +72,7 @@ body{
 
 .center_img{
   text-align: center;
+
 }
 
 .form input.button{
@@ -87,6 +88,18 @@ body{
 .form input.button:hover{
   background: #ff815b;
 }
+
+.form input.button_2{
+  color: #fff;
+  background: green;
+  font-size: 1rem;
+  font-weight: 50;
+  cursor: pointer;
+}
+.form input.button_2:hover{
+  background: #ff815b;
+}
+
 .signup{
   font-size: 17px;
   text-align: center;
@@ -98,3 +111,5 @@ body{
 .signup label:hover{
   text-decoration: underline;
 }
+
+
