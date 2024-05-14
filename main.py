@@ -9,15 +9,21 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
+        return render_template('registration_2.html')
+    else:
+        return render_template('home_2.html')
+
+@app.route('/1', methods=['GET', 'POST'])
+def reg():
+    if request.method == 'POST':
         text = request.form['text']
         return render_template('registration_2.html', text=text)
     else:
         return render_template('registration_2.html')
 
-@app.route('/')
-@app.route('/1')
+@app.route('/12')
 def main():
-    return render_template("admit_2.html")
+    return render_template("home_2.html")
 
 
 @app.route('/')
