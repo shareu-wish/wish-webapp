@@ -1,0 +1,2 @@
+REDSMS_LOGIN=""
+REDSMS_KEY=""
