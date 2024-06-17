@@ -5,80 +5,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://api-maps.yandex.ru/v3/?apikey=122cc2d8-cfc2-4b95-8482-ab66964ffb28&lang=ru_RU"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/static/css/device_map.css">
 
-  <script>
-    initMap();
-
-    async function initMap() {
-      await ymaps3.ready;
-
-      const {
-        YMap,
-        YMapDefaultSchemeLayer,
-        YMapDefaultFeaturesLayer,
-        YMapControls,
-      } = ymaps3;
-
-      const { YMapDefaultMarker } = await ymaps3.import(
-        "@yandex/ymaps3-markers@0.0.1"
-      );
-
-      const { YMapGeolocationControl } = await ymaps3.import(
-        "@yandex/ymaps3-controls@0.0.1"
-      );
-
-      const map = new YMap(document.getElementById("map"), {
-        location: {
-          center: [25.229762, 55.289311],
-          zoom: 10,
-        },
-        controls: ["routeButtonControl"],
-      });
-
-      map.addChild(new YMapDefaultSchemeLayer());
-      map.addChild(new YMapDefaultFeaturesLayer());
-
-      /*ymaps3.geolocation.getPosition().then((pos) => {
-        console.log(pos);
-      });*/
-
-      /*const markerElement = document.createElement("div");
-      markerElement.className = "icon-marker";
-      markerElement.innerText = "I'm marker!";
-
-      const marker = new YMapMarker(
-        {
-          coordinates: [25.229762, 55.289311]
-        },
-        markerElement
-      );
-
-      map.addChild(marker);*/
-
-      /*map.addChild(
-        new YMapDefaultMarker({
-          coordinates: [25.229762, 55.289311],
-          title: "Hello World!",
-          subtitle: "kind and bright",
-          color: "blue",
-        })
-      );*/
-
-      map.addChild(
-        // Using YMapControls you can change the position of the control
-        new YMapControls({ position: "left" })
-          // Add the geolocation control to the map
-          .addChild(new YMapGeolocationControl({}))
-      );
-    }
-  </script>
+  <link rel="icon" href="/static/img/umbrella.svg" alt="logo" class="logo">
 
   <title>Карта | WISH</title>
 </head>
 
 <body>
+  <img src="/static/img/logo.png" alt="logo" class="logo">
+
   <div id="map"></div>
+
+  <nav>
+    <div class="nav-el"><i class="bi bi-list-ul"></i></div>
+    <div class="nav-el"><i class="bi bi-qr-code-scan"></i></div>
+    <div class="nav-el"><i class="bi bi-person-fill"></i></div>
+  </nav>
+
+  <script src="/static/js/device_map.js"></script>
 </body>
 
 </html>
