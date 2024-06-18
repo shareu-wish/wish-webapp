@@ -35,9 +35,9 @@ def devices_cards():
 
 
 # аппараты на карте (Яндекс-карты)
-@app.route('/device-map')
-def device_map():
-    return render_template("device_map.html")
+@app.route('/station-map')
+def station_map():
+    return render_template("station_map.html")
 
 
 # ввод номера аппарата

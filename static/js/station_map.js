@@ -70,14 +70,14 @@ async function initMap() {
 
   map.addChild(
     // Using YMapControls you can change the position of the control
-    new YMapControls({ position: "top right" })
+    new YMapControls({ position: "bottom left" })
       // Add the geolocation control to the map
       .addChild(new YMapGeolocationControl({}))
   );
 
   document.getElementsByClassName("ymaps3x0--control-button")[0].click();
 
-  const devices = [
+  const stations = [
     {
       station_id: 1,
       title: "Певческая капелла",
@@ -96,21 +96,24 @@ async function initMap() {
     },
   ];
 
-  for (const device of devices) {
+  for (const station of stations) {
     const markerElement = document.createElement("div");
-    markerElement.className = "device-marker";
+    markerElement.className = "station-marker";
     markerElement.innerHTML = `
-      <div onclick="toggleStationWindow('${device.station_id}')">
-        <div class="umbrellas-count">${device.umbrellas_count}</div>
+      <div onclick="toggleStationWindow('${station.station_id}')">
+        <div class="umbrellas-count">${station.umbrellas_count}</div>
         <img src="/static/img/umbrella.svg">
       </div>
-      <div class="window" id="${device.station_id}Window">
+      <div class="window" id="${station.station_id}Window">
         <div class="windowContent">
-          <div class="left" style="background-image: url('${device.image}');"></div>
+          <div class="left" style="background-image: url('${station.image}');"></div>
           <div class="right">
             <div class="titleContainer">
-              <span class="title">${device.title}</span>
-              <span class="address">${device.address}</span>
+              <span class="title">${station.title}</span>
+              <span class="address">${station.address}</span>
+            </div>
+            <div class="btnContainer">
+            <button class="markerBtn ">
             </div>
           </div>
         </div>
@@ -119,7 +122,7 @@ async function initMap() {
 
     const marker = new YMapMarker(
       {
-        coordinates: device.coords.reverse(),
+        coordinates: station.coords.reverse(),
       },
       markerElement
     );

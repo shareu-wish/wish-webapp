@@ -51,7 +51,9 @@ nav {
   z-index: 2;
 }
 
-.device-marker {
+
+/* Station marker */
+.station-marker {
   width: 3rem;
   /* background-image: url('/static/img/umbrella.svg'); */
   height: 3rem;
@@ -61,12 +63,12 @@ nav {
   cursor: pointer;
 }
 
-.device-marker img {
+.station-marker img {
   width: 3rem;
   height: 3rem;
 }
 
-.device-marker .umbrellas-count {
+.station-marker .umbrellas-count {
   position: absolute;
   /* top: -0.7rem;
     left: -0.7rem; */
@@ -84,14 +86,14 @@ nav {
   text-align: center;
 }
 
-.device-marker .window {
+.station-marker .window {
   display: none;
 
   position: absolute;
   top: 0;
   right: 0;
-  width: 20rem;
-  height: 8rem;
+  width: 25rem;
+  height: 10rem;
   transform: translateX(102%);
 
   background-color: white;
@@ -101,16 +103,16 @@ nav {
   z-index: 2;
 }
 
-.device-marker .window .windowContent {
+.station-marker .window .windowContent {
   display: flex;
-  width: 20rem;
-  height: 8rem;
+  width: 25rem;
+  height: 10rem;
   border-radius: 1rem;
 }
 
-.device-marker .window .left {
-  width: 12rem;
-  height: 8rem;
+.station-marker .window .left {
+  width: 15rem;
+  height: 10rem;
   background-position: center center;
   background-size: cover;
   overflow: hidden;
@@ -118,20 +120,20 @@ nav {
   border-bottom-left-radius: 1rem;
 }
 
-.device-marker .window .right {
+.station-marker .window .right {
   padding: 0.5rem;
 }
 
-.device-marker .titleContainer {
+.station-marker .titleContainer {
   display: flex;
   flex-direction: column;
 }
 
-.device-marker .titleContainer .title {
+.station-marker .titleContainer .title {
     font-size: 1.1rem;
 }
 
-.device-marker .titleContainer .address {
+.station-marker .titleContainer .address {
     font-size: 0.9rem;
     color: rgb(117, 117, 117);
 }
