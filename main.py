@@ -82,5 +82,11 @@ def test():
     return render_template("tests.html")
 
 
+# Страница с бесконечной загрузкой, преднозначена для начальной страницы в station-map в навигаторе
+@app.route('/loading')
+def loading():
+    return render_template("loading.html")
+
+
 if __name__ == '__main__':
-    app.run(port=8080, debug=True)
+    app.run(port=8080, debug=True, host='192.168.10.104')

@@ -17,13 +17,23 @@
 <body>
   <img src="/static/img/logo.png" alt="logo" class="logo">
 
+  <div class="profile"><span id="name">Марк</span> <i class="bi bi-person-circle"></i></div>
+
   <div id="map"></div>
 
   <nav>
     <div class="nav-el"><i class="bi bi-list-ul"></i></div>
     <div class="nav-el"><i class="bi bi-qr-code-scan"></i></div>
-    <div class="nav-el"><i class="bi bi-person-fill"></i></div>
+    <!-- <div class="nav-el"><i class="bi bi-person-fill"></i></div> -->
   </nav>
+
+  <div class="station-info-window" id="mainWindow"></div>
+
+  <div class="route-window" id="routeWindow">
+    <div class="close-route-window" onclick="$('#routeWindow').hide()"><i class="bi bi-x-lg"></i></div>
+    <div class="navigator-header">Навигатор</div>
+    <iframe src="/loading" id="navigator"></iframe>
+  </div>
 
   <script src="/static/js/station_map.js"></script>
 </body>

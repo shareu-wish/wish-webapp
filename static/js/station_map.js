@@ -1,6 +1,21 @@
+/* 
+Как работают карточки с информацией о станциях:
+1) На телефонах: 
+    При нажатии на метку на карте открывается карточка поверх карты и не двигается с движением карты. 
+    При нажатии на другую метку, контент заменяется.
+2) На других устройствах:
+    При нажатии на метку на карте открывается карточка внутри карты. Карточка прикреплена к метке, с движением карты двигается карточка.
+    При нажатии на другую метку, старая закрывается, а новая открывается.
+
+При повторном нажатии на метку, карточка закрывается.
+*/
+
+const isMobileScreen = window.innerWidth <= 480;
+
 function toggleStationWindow(windowId) {
   if (activeStationWindow === windowId) {
     $(`#${windowId}Window`).hide();
+    $("#mainWindow").hide();
     activeStationWindow = null;
     return;
   }
@@ -8,9 +23,28 @@ function toggleStationWindow(windowId) {
   if (activeStationWindow) {
     $(`#${activeStationWindow}Window`).hide();
   }
-  $(`#${windowId}Window`).show();
+  if (isMobileScreen) {
+    $("#mainWindow").html($(`#${windowId}Window`).html() + 
+        `<div class="close-station-info-window" onclick="$('#mainWindow').hide();activeStationWindow = null;"><i class="bi bi-x-lg"></i></div>`);
+    $("#mainWindow").show();
+  } else {
+    $(`#${windowId}Window`).show();
+  }
   activeStationWindow = windowId;
 }
+
+
+function showRoute(station_coords) {
+  ymaps3.geolocation.getPosition().then((pos) => {
+    pos = pos.coords;
+    $("#navigator").attr(
+      "src",
+      `https://yandex.ru/map-widget/v1/?mode=routes&rtext=${pos[1]}%2C${pos[0]}~${station_coords[0]}%2C${station_coords[1]}&rtt=pd&ruri=~`
+    );
+    $("#routeWindow").show()
+  });
+}
+
 
 async function initMap() {
   await ymaps3.ready;
@@ -104,7 +138,7 @@ async function initMap() {
         <div class="umbrellas-count">${station.umbrellas_count}</div>
         <img src="/static/img/umbrella.svg">
       </div>
-      <div class="window" id="${station.station_id}Window">
+      <div class="station-info-window" id="${station.station_id}Window">
         <div class="windowContent">
           <div class="left" style="background-image: url('${station.image}');"></div>
           <div class="right">
@@ -113,7 +147,8 @@ async function initMap() {
               <span class="address">${station.address}</span>
             </div>
             <div class="btnContainer">
-            <button class="markerBtn ">
+              <button class="markerBtn route" onclick="showRoute([${station.coords[0]}, ${station.coords[1]}])"><i class="bi bi-geo-alt-fill"></i> Маршрут</button>
+              <button class="markerBtn take-umbrella"><i class="bi bi-umbrella-fill"></i> Взять зонт</button>
             </div>
           </div>
         </div>
