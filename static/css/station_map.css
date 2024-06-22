@@ -3,6 +3,8 @@
   padding: 0;
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 html,
@@ -18,9 +20,9 @@ body {
 
 nav {
   position: absolute;
-  bottom: 4.5rem;
-  /* left: 50%;
-  transform: translateX(-50%); */
+  bottom: calc(50% - 4.15rem);
+  /* transform: translateY(50%); */
+  /* left: 50%; */
   left: 0.7rem;
   display: flex;
   flex-direction: column;
@@ -44,30 +46,67 @@ nav {
   /* border: 1px solid rgb(231, 231, 231); */
 }
 
+.nav-el.nav-placeholder {
+  opacity: 0;
+}
+
 /* .nav-el:hover {
   background: rgba(255, 255, 255, 0.7);
 } */
 
-.logo {
-  width: 8rem;
+
+/* Header */
+
+header {
+  width: 100%;
   position: absolute;
   top: 0.5rem;
-  left: 0.5rem;
+  left: 0;
   z-index: 2;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 0.5rem;
 }
 
-.profile {
-  position: absolute;
-  top: 0.5rem;
-  right: 1rem;
+.logo {
+  height: 2.2rem;
+}
 
+header .right {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search-btn, .profile, .header-login {
   background-color: white;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   border-radius: 0.5rem;
   cursor: pointer;
+}
 
-  padding: 0.5rem 1rem;
-  z-index: 2;
+.search-btn:active, .profile:active {
+  background-color: rgb(242, 241, 241);
+}
+
+.search-btn {
+  font-size: 1.3rem;
+  padding: 0.3rem 0.45rem;
+}
+
+.profile {
+  padding: 0.5rem 0.8rem;
+}
+
+.header-login {
+  background-color: #ff815b;
+  padding: 0.5rem 0.8rem;
+  color: white;
+}
+
+.header-login:active {
+  background-color: #fd6c40;
 }
 
 
@@ -92,15 +131,16 @@ nav {
   /* top: -0.7rem;
     left: -0.7rem; */
   bottom: 0;
-  left: -0.6rem;
+  right: 2.5rem;
   background-color: #004eab;
   color: #f2f2f2;
 
-  width: 1.2rem;
+  min-width: 1.2rem;
   height: 1.2rem;
   line-height: 1.2rem;
   border-radius: 0.5rem;
   font-size: 1.2rem;
+  padding: 0 0.2rem;
 
   text-align: center;
 }
@@ -126,7 +166,7 @@ nav {
 }
 
 #mainWindow {
-  top: 4rem;
+  bottom: 2.2rem;
   left: 50%;
   width: 95%;
   height: 10rem;
@@ -174,7 +214,7 @@ nav {
 
 .close-station-info-window {
   position: absolute;
-  bottom: -2.5rem;
+  top: -2.5rem;
   right: 0.5rem;
   background-color: white;
   border-radius: 1rem;

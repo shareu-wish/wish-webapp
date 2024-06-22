@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://api-maps.yandex.ru/v3/?apikey=122cc2d8-cfc2-4b95-8482-ab66964ffb28&lang=ru_RU"></script>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/static/css/station_map.css">
 
@@ -15,16 +16,32 @@
 </head>
 
 <body>
-  <img src="/static/img/logo.png" alt="logo" class="logo">
 
-  <div class="profile"><span id="name">Марк</span> <i class="bi bi-person-circle"></i></div>
+  <header>
+    <img src="/static/img/logo.png" alt="logo" class="logo">
+
+    <div class="right">
+      <div class="search-container">
+        <div class="search-btn"><i class="bi bi-search"></i></div>
+      </div>
+      <div class="header-login" id="headerLoginContainer">
+        Войти
+      </div>
+      <div class="profile" id="profileContainer" style="display: none;">
+        <span id="name">Александр</span> <i class="bi bi-person-circle"></i>
+      </div>
+    </div>
+  </header>
 
   <div id="map"></div>
 
   <nav>
-    <div class="nav-el"><i class="bi bi-list-ul"></i></div>
+    <!-- <div class="nav-el"><i class="bi bi-list-ul"></i></div> -->
     <div class="nav-el"><i class="bi bi-qr-code-scan"></i></div>
-    <!-- <div class="nav-el"><i class="bi bi-person-fill"></i></div> -->
+    <!-- <div class="nav-el"><i class="bi bi-search"></i></div> -->
+    <div class="nav-el nav-placeholder"><i class="bi bi-search"></i></div>
+    <div class="nav-el"><i class="bi bi-info-circle"></i></div>
+
   </nav>
 
   <div class="station-info-window" id="mainWindow"></div>

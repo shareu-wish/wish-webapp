@@ -104,7 +104,7 @@ async function initMap() {
 
   map.addChild(
     // Using YMapControls you can change the position of the control
-    new YMapControls({ position: "bottom left" })
+    new YMapControls({ position: "left" }) // bottom left
       // Add the geolocation control to the map
       .addChild(new YMapGeolocationControl({}))
   );
@@ -118,7 +118,7 @@ async function initMap() {
       address: "г. Санкт-Петербург, Набережная реки Мойки, 20",
       coords: [59.939936, 30.320801],
       image: "/static/img/pass.jpg",
-      umbrellas_count: 5,
+      umbrellas_count: 523,
     },
     {
       station_id: 2,
