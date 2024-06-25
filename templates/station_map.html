@@ -2,15 +2,10 @@
 <html lang="ru">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://api-maps.yandex.ru/v3/?apikey=122cc2d8-cfc2-4b95-8482-ab66964ffb28&lang=ru_RU"></script>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="/static/css/station_map.css">
+  {% include 'components/head_base.html' %}
 
-  <link rel="icon" href="/static/img/umbrella.svg" alt="logo" class="logo">
+  <script src="https://api-maps.yandex.ru/v3/?apikey=122cc2d8-cfc2-4b95-8482-ab66964ffb28&lang=ru_RU"></script>
+  <link rel="stylesheet" href="/static/css/station_map.css">
 
   <title>Карта | WISH</title>
 </head>
