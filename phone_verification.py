@@ -1,6 +1,7 @@
 import requests
 import config
 import db_helper
+import random
 
 
 url = "https://zvonok.com/manager/cabapi_external/api/v1/phones/flashcall/"
@@ -40,25 +41,38 @@ def verify_phone(phone: str) -> None:
     :param phone: Номер телефона, на который поступит звонок
     """
 
-    pincode = _init_call(phone)
-    db_helper.create_verify_phone_record(phone, pincode)
+    #pincode = _init_call(phone)
+    pincode = random.randint(1000, 9999)
+
+    if db_helper.get_verify_phone_record(phone):
+        db_helper.update_verify_phone_record(phone, pincode)
+    else:
+        db_helper.create_verify_phone_record(phone, pincode)
 
 
-def submit_pincode(phone: str, pincode: str) -> bool:
+def submit_pincode(phone: str, pincode: str) -> str:
     """
     Подтверждение номера телефона
     :param phone: Номер телефона, который мы верифицируем
     :param pincode: Пинкод, полученный пользователем на телефон
-    :return: True, если номер телефона успешно верифицирован, False в противном случае
+    :return: 
+        - `verified` - если веревикация успешна
+        - `incorrect` - если пинкод неверен
+        - `attempts_exceeded` - если попытки закончились
     """
 
     real_pincode = db_helper.get_verify_phone_record(phone)[1]
     if pincode != real_pincode:
-        return False
+        attempts = db_helper.increment_attempts(phone)
+        if attempts >= 3:
+            db_helper.delete_verify_phone_record(phone)
+            return 'attempts_exceeded', ''
+        
+        return 'incorrect', ''
     
     db_helper.delete_verify_phone_record(phone)
-    db_helper.create_raw_user(phone)
+    user_id = db_helper.create_raw_user(phone)
 
-    return True
+    return 'verified', user_id
 
 

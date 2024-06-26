@@ -40,10 +40,10 @@ function startFlashCall() {
     url: "/auth/start-flash-call",
     method: "post",
     data: {
-      phone: sessionStorage.getItem('phone'),
+      phone: sessionStorage.getItem("phone"),
     },
     success: function (data) {
-      if (data.status !== 'ok') alert('Произошла ошибка!')
+      if (data.status !== "ok") alert("Произошла ошибка!");
     },
   });
   setRestartTimer();
@@ -74,7 +74,6 @@ function showRestartTimer() {
 
 $("#phone").mask("+7 (999) 999 99-99");
 
-
 // Обработка поля ввода кода
 const ELS_pinEntry = document.querySelectorAll(".pinEntry");
 ELS_pinEntry.forEach((el) => {
@@ -85,30 +84,41 @@ ELS_pinEntry.forEach((el) => {
   el.addEventListener("input", (evt) => {
     const EL_input = evt.currentTarget;
     if (EL_input.value.length >= 4) {
-        EL_input.value = EL_input.value.slice(0, 4)
-        if (sessionStorage.getItem("startFlashCallTime") !== '0') {
-            $.ajax({
-                url: "/auth/check-code",
-                method: "post",
-                data: {
-                  code: EL_input.value,
-                  phone: sessionStorage.getItem('phone'),
-                },
-                success: function (data) {
-                  if (data.status === "ok" && data.is_verified) {
-                    window.location.href = "/station-map";
-                  } else {
-                    alert("Неверный код");
-                    EL_input.value = "";
-                  }
-                },
-              });
-            sessionStorage.setItem("startFlashCallTime", 0)
-        }
-    };
+      EL_input.value = EL_input.value.slice(0, 4);
+      if (sessionStorage.getItem("startFlashCallTime") !== "0") {
+        sessionStorage.setItem("startFlashCallTime", 0);
+        $.ajax({
+          url: "/auth/check-code",
+          method: "post",
+          data: {
+            code: EL_input.value,
+            phone: sessionStorage.getItem("phone"),
+          },
+          success: function (data) {
+            if (data.status === "ok" && data.is_verified) {
+              const urlParams = new URLSearchParams(window.location.search);
+              const from_url = urlParams.get("from_url");
+              if (from_url) {
+                window.location.href = from_url;
+              } else {
+                window.location.href = "/station-map";
+              }
+            } else {
+              if (data.attempts_exceeded) {
+                alert("Превышено количество попыток ввода кода");
+                location.reload();
+              } else {
+                alert("Неверный код");
+                EL_input.value = "";
+                sessionStorage.setItem("startFlashCallTime", 1);
+              }
+            }
+          },
+        });
+      }
+    }
   });
 });
-
 
 // Восстановить поле ввода кода, если минута не прошла, а страницу обновили
 if (

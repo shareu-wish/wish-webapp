@@ -39,6 +39,19 @@ def get_verify_phone_record(phone: str) -> tuple[str]:
     return result
 
 
+def update_verify_phone_record(phone: str, pincode: str) -> None:
+    """
+    Обновить запись в таблице user_verification
+    :param phone: Номер телефона
+    :param pincode: Пинкод
+    """
+
+    cur = conn.cursor()
+    cur.execute("UPDATE user_verification SET pincode = %s, attempts = 0 WHERE phone = %s", (pincode, phone))
+    conn.commit()
+    cur.close()
+
+
 def delete_verify_phone_record(phone: str) -> None:
     """
     Удалить запись из таблицы user_verification
@@ -51,16 +64,44 @@ def delete_verify_phone_record(phone: str) -> None:
     cur.close()
 
 
-def create_raw_user(phone: str) -> None:
+def create_raw_user(phone: str) -> int:
     """
     Создать запись в таблице users
     :param phone: Номер телефона
+    :return: ID пользователя
     """
 
     cur = conn.cursor()
     cur.execute("INSERT INTO users (phone) VALUES (%s)", (phone,))
     conn.commit()
     cur.close()
+
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM users WHERE phone = %s", (phone,))
+    user_id = cur.fetchone()[0]
+    cur.close()
+
+    return user_id
+
+
+def increment_attempts(phone: str) -> int:
+    """
+    Увеличить количество попыток в таблице user_verification
+    :param phone: Номер телефона
+    :return: Количество попыток
+    """
+
+    cur = conn.cursor()
+    cur.execute("UPDATE user_verification SET attempts = attempts + 1 WHERE phone = %s", (phone,))
+    conn.commit()
+    cur.close()
+
+    cur = conn.cursor()
+    cur.execute("SELECT attempts FROM user_verification WHERE phone = %s", (phone,))
+    attempts = cur.fetchone()[0]
+    cur.close()
+    
+    return attempts
 
 
 def _delete_old_data() -> None:
@@ -82,9 +123,31 @@ def _schedule_delete_old_data() -> None:
     Timer(60*2, _schedule_delete_old_data).start()
 
 
+def get_user(id: int):
+    """
+    Получить запись из таблицы users
+    :param id: ID пользователя
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT phone, name, gender, age FROM users WHERE id = %s", (id,))
+    data = cur.fetchone()
+    cur.close()
+
+    res = {
+        "phone": data[0],
+        "name": data[1],
+        "gender": data[2],
+        "age": data[3]
+    }
+
+    return res
+
+
 _schedule_delete_old_data()
 
 if __name__ == "__main__":
-    create_verify_phone_record("1234567890", "1234")
-    print(get_verify_phone_record("1234567890"))
-    delete_verify_phone_record("1234567890")
+    # create_verify_phone_record("1234567890", "1234")
+    # print(get_verify_phone_record("1234567890"))
+    # delete_verify_phone_record("1234567890")
+    print(get_user(1))
