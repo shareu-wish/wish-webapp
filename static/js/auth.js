@@ -42,7 +42,9 @@ function startFlashCall() {
     data: {
       phone: sessionStorage.getItem('phone'),
     },
-    success: function (data) {},
+    success: function (data) {
+      if (data.status !== 'ok') alert('Произошла ошибка!')
+    },
   });
   setRestartTimer();
 }
@@ -93,10 +95,11 @@ ELS_pinEntry.forEach((el) => {
                   phone: sessionStorage.getItem('phone'),
                 },
                 success: function (data) {
-                  if (data.status === "success") {
+                  if (data.status === "ok" && data.is_verified) {
                     window.location.href = "/station-map";
                   } else {
                     alert("Неверный код");
+                    EL_input.value = "";
                   }
                 },
               });

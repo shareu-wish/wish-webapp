@@ -1,60 +1,64 @@
-from cffi.backend_ctypes import unicode
-import hashlib
-import json
 import requests
-import time
 import config
+import db_helper
 
 
-REDSMS_LOGIN = config.REDSMS_LOGIN
-ts = unicode(time.time())
-REDSMS_KEY = config.REDSMS_KEY
-secret = hashlib.md5((ts + REDSMS_KEY).encode()).hexdigest()
-
-auth_headers = {
-    "login": REDSMS_LOGIN,
-    "ts": ts,
-    "secret": secret,
-    "Content-type": "application/json",
-}
+url = "https://zvonok.com/manager/cabapi_external/api/v1/phones/flashcall/"
 
 
-def _generate_code():
-    """Генерация случайного кода заданной длины"""
-    import random
+def clean_phone(phone: str) -> str:
+    """
+    Очистка номера телефона от лишних символов
+    :param phone: Номер телефона, который мы очищаем
+    :return: Очищенный номер телефона
+    """
 
-    return "".join(random.choice("0123456789") for i in range(4))
-
-
-def _init_call(phone, code):
-    """Инициализация звонка"""
-    data = {"route": "fcall", "to": phone, "text": code}
-
-    r = requests.post(
-        "https://cp.redsms.ru/api/message", headers=auth_headers, data=json.dumps(data)
-    )
-
-    return r.json()
+    return phone.strip().replace("-", "").replace("(", "").replace(")", "").replace(" ", "")
 
 
-def _is_delivered(uuid):
-    res = requests.get(f'https://cp.redsms.ru/api/message/{uuid}', headers=auth_headers).json()
-    return res['success'] and res['item']['status'] == 'delivered'
+def _init_call(phone: str) -> str:
+    """
+    Инициализация звонка
+    :param phone: Номер телефона, на который поступит звонок
+    :return: Пинкод, необходимый для верификации телефона
+    """
+
+    data = {
+        "public_key": config.ZVONOK_PUBLIC_KEY,
+        "campaign_id": config.ZVONOK_CAMPAIGN_ID,
+        "phone": phone,
+    }
+
+    r = requests.post(url, data=data)
+
+    return r.json()["data"]["pincode"]
 
 
-def verify_phone(phone):
-    """Верефикация номера телефона"""
+def verify_phone(phone: str) -> None:
+    """
+    Верефикация номера телефона
+    :param phone: Номер телефона, на который поступит звонок
+    """
 
-    while True:
-        code = _generate_code()
-        r = _init_call(phone, code)
-        
-        if r['success']:
-            is_deliv = _is_delivered(r['items'][0]['uuid'])
-            if is_deliv:
-                break
+    pincode = _init_call(phone)
+    db_helper.create_verify_phone_record(phone, pincode)
 
 
+def submit_pincode(phone: str, pincode: str) -> bool:
+    """
+    Подтверждение номера телефона
+    :param phone: Номер телефона, который мы верифицируем
+    :param pincode: Пинкод, полученный пользователем на телефон
+    :return: True, если номер телефона успешно верифицирован, False в противном случае
+    """
 
-    return _init_call(phone, code)
+    real_pincode = db_helper.get_verify_phone_record(phone)[1]
+    if pincode != real_pincode:
+        return False
+    
+    db_helper.delete_verify_phone_record(phone)
+    db_helper.create_raw_user(phone)
+
+    return True
+
 
