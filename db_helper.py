@@ -130,24 +130,52 @@ def get_user(id: int):
     """
 
     cur = conn.cursor()
-    cur.execute("SELECT phone, name, gender, age FROM users WHERE id = %s", (id,))
+    cur.execute("SELECT id, phone, name, gender, age FROM users WHERE id = %s", (id,))
     data = cur.fetchone()
     cur.close()
 
     res = {
-        "phone": data[0],
-        "name": data[1],
-        "gender": data[2],
-        "age": data[3]
+        "id": data[0],
+        "phone": data[1],
+        "name": data[2],
+        "gender": data[3],
+        "age": data[4]
     }
 
     return res
 
 
-_schedule_delete_old_data()
+def get_user_by_phone(phone: str):
+    """
+    Получить запись из таблицы users
+    :param phone: Номер телефона
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, phone, name, gender, age FROM users WHERE phone = %s", (phone, ))
+    data = cur.fetchone()
+    cur.close()
+
+    if data is None:
+        return None
+
+    res = {
+        "id": data[0],
+        "phone": data[1],
+        "name": data[2],
+        "gender": data[3],
+        "age": data[4]
+    }
+
+    return res
+
+
+if not config.DEBUG:
+    _schedule_delete_old_data()
+
 
 if __name__ == "__main__":
     # create_verify_phone_record("1234567890", "1234")
     # print(get_verify_phone_record("1234567890"))
     # delete_verify_phone_record("1234567890")
-    print(get_user(1))
+    print(get_user_by_phone('453'))

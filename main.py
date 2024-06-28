@@ -6,6 +6,7 @@ import phone_verification
 from flask import request
 import jwt
 import datetime
+import db_helper
 
 
 app = Flask(__name__)
@@ -53,9 +54,13 @@ def auth_start_flash_call():
 def auth_check_code():
     phone = phone_verification.clean_phone(request.form["phone"])
     pincode = request.form["code"]
-    res, user_id = phone_verification.submit_pincode(phone, pincode)
+    res = phone_verification.submit_pincode(phone, pincode)
 
     if res == 'verified':
+        user_id = db_helper.get_user_by_phone(phone)
+        if not user_id:
+            user_id = db_helper.create_raw_user(phone)
+
         exp = datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=365*10)
         encoded_jwt = jwt.encode({"id": user_id, "exp": exp}, config.JWT_SECRET)
         encoded_jwt = encoded_jwt.decode()
@@ -67,6 +72,15 @@ def auth_check_code():
         return {"status": "ok", "is_verified": False}
     elif res == 'attempts_exceeded':
         return {"status": "ok", "is_verified": False, "attempts_exceeded": True}
+    elif res == 'timeout_exceeded':
+        return {"status": "ok", "is_verified": False, "timeout_exceeded": True}
+
+
+@app.route("/logout")
+def logout():
+    resp = make_response(redirect('/'))
+    resp.set_cookie('authToken', '')
+    return resp
 
 
 # Аппараты на карте

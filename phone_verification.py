@@ -59,20 +59,25 @@ def submit_pincode(phone: str, pincode: str) -> str:
         - `verified` - если веревикация успешна
         - `incorrect` - если пинкод неверен
         - `attempts_exceeded` - если попытки закончились
+        - `timeout_exceeded` - если время ожидания истекло (запись удалена)
     """
 
-    real_pincode = db_helper.get_verify_phone_record(phone)[1]
+    real_pincode = db_helper.get_verify_phone_record(phone)
+    if not real_pincode:
+        return 'timeout_exceeded'
+    
+    real_pincode = real_pincode[1]
+
     if pincode != real_pincode:
         attempts = db_helper.increment_attempts(phone)
         if attempts >= 3:
             db_helper.delete_verify_phone_record(phone)
-            return 'attempts_exceeded', ''
+            return 'attempts_exceeded'
         
-        return 'incorrect', ''
+        return 'incorrect'
     
     db_helper.delete_verify_phone_record(phone)
-    user_id = db_helper.create_raw_user(phone)
 
-    return 'verified', user_id
+    return 'verified'
 
 

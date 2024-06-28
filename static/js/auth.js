@@ -63,10 +63,12 @@ function showRestartTimer() {
     $("#restartTimer").text(
       `Позвонить еще раз: ${Math.floor(-timeLeft / 1000)}`
     );
-    $("#restartTimer").css({ color: "gray" });
+    // $("#restartTimer").css({ color: "gray" });
+    $("#restartTimer").addClass("restartTimerDisabled");
     if (timeLeft > 0) {
       $("#restartTimer").text(`Позвонить еще раз`);
-      $("#restartTimer").css({ color: "#004daf" });
+      // $("#restartTimer").css({ color: "#004daf" });
+      $("#restartTimer").removeClass("restartTimerDisabled");
       clearInterval(timer);
     }
   }, 100);
@@ -106,6 +108,9 @@ ELS_pinEntry.forEach((el) => {
             } else {
               if (data.attempts_exceeded) {
                 alert("Превышено количество попыток ввода кода");
+                location.reload();
+              } else if (data.timeout_exceeded) {
+                alert("Время действия кода истекло");
                 location.reload();
               } else {
                 alert("Неверный код");

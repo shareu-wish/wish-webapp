@@ -37,10 +37,19 @@ body {
   width: 10rem;
 }
 
-.inputPhoneContainer, .preVerifyPhoneContainer, .verifyPhoneContainer {
+.inputPhoneContainer,
+.preVerifyPhoneContainer,
+.verifyPhoneContainer {
   width: 80%;
   display: flex;
   flex-direction: column;
+}
+
+.preVerifyPhoneContainer {
+  gap: 2rem;
+}
+
+.verifyPhoneContainer {
   gap: 1rem;
 }
 
@@ -72,7 +81,9 @@ body {
   outline: none;
 }
 
-.nextBtn, .startVerificationBtn {
+.nextBtn,
+.startVerificationBtn,
+.changePhoneBtn {
   width: 100%;
   padding: 0.7rem 1rem;
   border: none;
@@ -83,23 +94,33 @@ body {
   cursor: pointer;
 }
 
+.nextBtn {
+  margin-top: 1rem;
+}
 
 /* Pre verification */
-.textContainer {
+/* .textContainer {
   display: flex;
   flex-direction: column;
   width: 100%;
   gap: 0.5rem;
-}
+} */
 
 #yourPhone {
   font-weight: bold;
   white-space: nowrap;
+  font-size: 1.3rem;
+  text-align: center;
 }
 
-.preVerifyPhoneContainer p {
-  font-size: 0.8rem;
+.phoneSpelling {
+  font-size: 1rem;
+  text-align: center;
 }
+
+/* .preVerifyPhoneContainer p {
+  font-size: 0.8rem;
+} */
 
 .preVerifyPhoneContainer a {
   font-size: 0.8rem;
@@ -107,10 +128,15 @@ body {
   color: #004daf;
 }
 
-
-.startVerificationBtn {
+.startVerificationBtn, .changePhoneBtn {
   font-size: 0.9rem;
   padding: 0.5rem 1rem;
+}
+
+.changePhoneBtn {
+  margin-bottom: 0.5rem;
+  background-color: #e7edf4;
+  color: black;
 }
 
 .startVerificationBtn:disabled {
@@ -118,19 +144,17 @@ body {
   color: black;
 }
 
-
 /* Verification */
 .pinBox {
   --width: 100%;
   --height: 74px;
   --spacing: 2rem;
-  
+
   display: inline-block;
   position: relative;
   width: var(--width);
   height: var(--height);
   background-color: transparent;
-
 }
 
 .pinEntry {
@@ -167,7 +191,8 @@ body {
   margin-top: 1rem;
 }
 
-input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -175,4 +200,29 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
+}
+
+.usage-terms {
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.business-info-container {
+  margin-top: 1rem;
+}
+
+.business-info {
+  color: gray;
+  font-size: 0.6rem;
+  text-align: center;
+}
+
+#restartTimer {
+  color: #004daf;
+}
+
+#restartTimer.restartTimerDisabled {
+  color: gray;
+  pointer-events: none;
 }

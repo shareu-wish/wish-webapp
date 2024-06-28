@@ -20,10 +20,18 @@
     <div class="inputPhoneContainer">
       <input type="tel" id="phone" class="phoneInput" placeholder="+7 (999) 999 99-99">
       <button class="nextBtn" onclick="goToPreVerification()">Войти по телефону</button>
+
+      <p class="usage-terms">Выполняя вход, вы подтверждаете <a href="https://fig_tebe.ru/"
+          target="_blank">пользовательское соглашение</a></p>
+
+      <div class="business-info-container">
+        <p class="business-info">ИП "Щегольков Климентий Тимофеевич"</p>
+        <p class="business-info">ИНН 973302503446, ОГРН 32477460003353</p>
+      </div>
     </div>
 
     <div class="preVerifyPhoneContainer">
-      <div class="textContainer">
+      <!--<div class="textContainer">
         <p>На Ваш номер телефона <span id="yourPhone">+7 (952) 354 76-38</span> поступит звонок для его подтверждения.
         </p>
 
@@ -32,7 +40,16 @@
         <p>Вам нужно будет ввести последние 4 цифры номера, который Вам звонит.</p>
       </div>
 
-      <button class="startVerificationBtn" onclick="startFlashCall()">Позвонить</button>
+      <button class="startVerificationBtn" onclick="startFlashCall()">Позвонить</button>-->
+
+      <div>
+        <p class="phoneSpelling">Правильно ли указан номер?</p>
+        <p id="yourPhone"></p>
+      </div>
+      <div>
+        <button class="changePhoneBtn" onclick="openSection('inputPhone')">Нет, изменить номер</button>
+        <button class="startVerificationBtn" onclick="startFlashCall()">Да, все верно</button>
+      </div>
     </div>
 
     <div class="verifyPhoneContainer">
