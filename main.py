@@ -89,6 +89,11 @@ def station_map():
     return render_template("station_map.html")
 
 
+@app.route("/station-map/get-stations")
+def get_stations():
+    return db_helper.get_stations()
+
+
 # личный кабинет пользователя с информацией о нём и статистикой
 # @app.route('/profile')
 # def lk():

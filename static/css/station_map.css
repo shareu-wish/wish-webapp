@@ -90,14 +90,14 @@ header .right {
   background-color: rgb(242, 241, 241);
 }
 
-.search-btn {
+.search-btn, .profile-btn {
   font-size: 1.3rem;
   padding: 0.3rem 0.45rem;
 }
-
+/* 
 .profile {
   padding: 0.5rem 0.8rem;
-}
+} */
 
 .header-login {
   background-color: #ff815b;
@@ -166,7 +166,7 @@ header .right {
 }
 
 #mainWindow {
-  bottom: 2.2rem;
+  bottom: 5.2rem;
   left: 50%;
   width: 95%;
   height: 10rem;
@@ -174,10 +174,15 @@ header .right {
 }
 
 .station-info-window .windowContent {
-  display: grid;
   width: 100%;
   height: 100%;
   border-radius: 1rem;
+}
+
+.windowContent .left-right-container {
+  display: grid;
+  width: 100%;
+  height: 100%;
   grid-template-columns: 1fr 2fr;
 }
 
@@ -211,6 +216,11 @@ header .right {
     color: rgb(117, 117, 117);
 }
 
+.station-info-window .titleContainer .number {
+  font-size: 0.8rem;
+  color: rgb(117, 117, 117);
+}
+
 
 .close-station-info-window {
   position: absolute;
@@ -241,18 +251,37 @@ header .right {
   border-radius: 0.5rem;
   cursor: pointer;
   background-color: #f0f0f0;
+  font-size: 1.05rem;
 }
 
 .markerBtn:active {
   background-color: #dedede;
 }
 
-.take-umbrella {
-  background-color: #004eab;
-  color: #f2f2f2;
+.putTakeBtn {
+  padding: 0.5rem 0.6rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #fbf8f8;
+  font-size: 1.05rem;
 }
 
-.take-umbrella:active {
+
+.take-umbrella-btn {
+  margin-top: 0.5rem;
+  width: 100%;
+
+  background-color: #004eab;
+  color: #f2f2f2;
+  font-size: 1.1rem;
+
+  padding: 0.7rem 0.8rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.take-umbrella-btn:active {
   /* background-color: #0056c0; */
   background-color: #004293;
 }

@@ -170,6 +170,36 @@ def get_user_by_phone(phone: str):
     return res
 
 
+def get_stations() -> list[dict]:
+    """
+    Получить все записи из таблицы stations
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, title, address, latitude, longitude, opening_hours, capacity, can_put, can_take, picture, information, state FROM stations")
+    data = cur.fetchall()
+    cur.close()
+
+    res = []
+    for station in data:
+        res.append({
+            "id": station[0],
+            "title": station[1],
+            "address": station[2],
+            "latitude": station[3],
+            "longitude": station[4],
+            "opening_hours": station[5],
+            "capacity": station[6],
+            "can_put": station[7],
+            "can_take": station[8],
+            "picture": station[9],
+            "information": station[10],
+            "state": station[11]
+        })
+
+    return res
+
+
 if not config.DEBUG:
     _schedule_delete_old_data()
 

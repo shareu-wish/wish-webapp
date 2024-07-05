@@ -111,53 +111,42 @@ async function initMap() {
 
   document.getElementsByClassName("ymaps3x0--control-button")[0].click();
 
-  const stations = [
-    {
-      station_id: 1,
-      title: "Певческая капелла",
-      address: "г. Санкт-Петербург, Набережная реки Мойки, 20",
-      coords: [59.939936, 30.320801],
-      image: "/static/img/pass.jpg",
-      umbrellas_count: 523,
-    },
-    {
-      station_id: 2,
-      title: "Дом Таля",
-      address: "г. Санкт-Петербург, Невский проспект, 6",
-      coords: [59.936997, 30.314489],
-      image: "/static/img/pass.jpg",
-      umbrellas_count: 3,
-    },
-  ];
-
   for (const station of stations) {
     const markerElement = document.createElement("div");
     markerElement.className = "station-marker";
     markerElement.innerHTML = `
-      <div onclick="toggleStationWindow('${station.station_id}')">
-        <div class="umbrellas-count">${station.umbrellas_count}</div>
+      <div onclick="toggleStationWindow('${station.id}')">
+        <div class="umbrellas-count">${station.can_take}</div>
         <img src="/static/img/umbrella.svg">
       </div>
-      <div class="station-info-window" id="${station.station_id}Window">
+      <div class="station-info-window" id="${station.id}Window">
         <div class="windowContent">
-          <div class="left" style="background-image: url('${station.image}');"></div>
-          <div class="right">
-            <div class="titleContainer">
-              <span class="title">${station.title}</span>
-              <span class="address">${station.address}</span>
-            </div>
-            <div class="btnContainer">
-              <button class="markerBtn route" onclick="showRoute([${station.coords[0]}, ${station.coords[1]}])"><i class="bi bi-geo-alt-fill"></i> Маршрут</button>
-              <button class="markerBtn take-umbrella"><i class="bi bi-umbrella-fill"></i> Взять зонт</button>
+
+          <div class="left-right-container">
+            <div class="left" style="background-image: url('${station.picture}');"></div>
+            <div class="right">
+              <div class="titleContainer">
+                <span class="number">№${station.id}</span>
+                <span class="title">${station.title}</span>
+                <span class="address">${station.address}</span>
+              </div>
+              <div class="btnContainer">
+                <button class="putTakeBtn"><i class="bi bi-arrow-up-circle"></i> ${station.can_take}</button>
+                <button class="putTakeBtn"><i class="bi bi-arrow-down-circle"></i> ${station.can_put}</button>
+                <button class="markerBtn" onclick="showRoute([${station.latitude}, ${station.longitude}])"><i class="bi bi-geo-alt-fill"></i> Маршрут</button>
+              </div>
             </div>
           </div>
+
+          <button class="take-umbrella-btn"><i class="bi bi-umbrella-fill"></i> Взять зонт</button>
+
         </div>
       </div>
       `;
 
     const marker = new YMapMarker(
       {
-        coordinates: station.coords.reverse(),
+        coordinates: [station.longitude, station.latitude],
       },
       markerElement
     );
@@ -166,6 +155,42 @@ async function initMap() {
   }
 }
 
+
+function loadStations() {
+  return $.ajax({
+    type: "GET",
+    url: "/station-map/get-stations",
+    success: function (data) {
+      return data;
+    },
+  });
+}
+
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+  return null;
+}
+
+
+function checkAuth() {
+  if (getCookie("authToken") === null) {
+    $("#profile").hide()
+    $("#headerLoginContainer").show()
+  }
+}
+
+
+let stations = []
 let activeStationWindow = null;
 
-initMap();
+loadStations().then((data) => {
+  stations = data;
+  console.log(stations);
+  initMap();
+});
+// initMap();
+checkAuth()
+
