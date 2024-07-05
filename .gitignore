@@ -1,0 +1,4 @@
+config.py
+test1.py
+venv/
+__pycache__/

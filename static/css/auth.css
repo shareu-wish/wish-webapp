@@ -1,0 +1,228 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+
+  /* -webkit-tap-highlight-color: transparent; */
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #dde5f4;
+}
+
+.container {
+  background-color: #f1f7fe;
+  border-radius: 1rem;
+  width: 20rem;
+  height: 30rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 10rem;
+}
+
+.inputPhoneContainer,
+.preVerifyPhoneContainer,
+.verifyPhoneContainer {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.preVerifyPhoneContainer {
+  gap: 2rem;
+}
+
+.verifyPhoneContainer {
+  gap: 1rem;
+}
+
+.inputPhoneContainer {
+  margin-top: 4rem;
+  /* display: none; */
+}
+.preVerifyPhoneContainer {
+  margin-top: 3rem;
+  display: none;
+}
+
+.verifyPhoneContainer {
+  margin-top: 4rem;
+  display: none;
+}
+
+.phoneInput {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  font-size: 1.1rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  border: none;
+  box-shadow: 0 0 2em hsl(231deg 62% 94%);
+}
+
+.phoneInput:focus {
+  outline: none;
+}
+
+.nextBtn,
+.startVerificationBtn,
+.changePhoneBtn {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #004daf;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.nextBtn {
+  margin-top: 1rem;
+}
+
+/* Pre verification */
+/* .textContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.5rem;
+} */
+
+#yourPhone {
+  font-weight: bold;
+  white-space: nowrap;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.phoneSpelling {
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* .preVerifyPhoneContainer p {
+  font-size: 0.8rem;
+} */
+
+.preVerifyPhoneContainer a {
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: #004daf;
+}
+
+.startVerificationBtn, .changePhoneBtn {
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+}
+
+.changePhoneBtn {
+  margin-bottom: 0.5rem;
+  background-color: #e7edf4;
+  color: black;
+}
+
+.startVerificationBtn:disabled {
+  background-color: lightgray;
+  color: black;
+}
+
+/* Verification */
+.pinBox {
+  --width: 100%;
+  --height: 74px;
+  --spacing: 2rem;
+
+  display: inline-block;
+  position: relative;
+  width: var(--width);
+  height: var(--height);
+  background-color: transparent;
+}
+
+.pinEntry {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  padding-left: 2.2rem;
+  font-family: courier, monospaced;
+  font-size: var(--spacing);
+  height: var(--height);
+  letter-spacing: var(--spacing);
+  background-color: transparent;
+  outline: none;
+  clip: rect(0px, calc(var(--width) - 21px), var(--height), 0px);
+
+  border: 1px solid lightgray;
+  border-radius: 1rem;
+
+  color: #004daf;
+}
+
+.verifyPhoneContainer p {
+  font-size: 0.8rem;
+  text-align: center;
+  margin: 0 1rem;
+}
+
+.verifyPhoneContainer a {
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: #004daf;
+  margin-top: 1rem;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.usage-terms {
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.business-info-container {
+  margin-top: 1rem;
+}
+
+.business-info {
+  color: gray;
+  font-size: 0.6rem;
+  text-align: center;
+}
+
+#restartTimer {
+  color: #004daf;
+}
+
+#restartTimer.restartTimerDisabled {
+  color: gray;
+  pointer-events: none;
+}
