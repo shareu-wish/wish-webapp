@@ -123,7 +123,7 @@ def _schedule_delete_old_data() -> None:
     Timer(60*2, _schedule_delete_old_data).start()
 
 
-def get_user(id: int):
+def get_user(id: int) -> dict:
     """
     Получить запись из таблицы users
     :param id: ID пользователя
@@ -198,6 +198,53 @@ def get_stations() -> list[dict]:
         })
 
     return res
+
+
+def get_station(id: int) -> dict:
+    """
+    Получить запись из таблицы stations
+    :param id: ID станции
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, title, address, latitude, longitude, opening_hours, capacity, can_put, can_take, picture, information, state FROM stations WHERE id = %s", (id,))
+    data = cur.fetchone()
+    cur.close()
+
+    res = {
+        "id": data[0],
+        "title": data[1],
+        "address": data[2],
+        "latitude": data[3],
+        "longitude": data[4],
+        "opening_hours": data[5],
+        "capacity": data[6],
+        "can_put": data[7],
+        "can_take": data[8],
+        "picture": data[9],
+        "information": data[10],
+        "state": data[11]
+    }
+
+    return res
+
+
+def open_order(user_id: int, station_id: int, slot: int) -> int:
+    """
+    Создать запись в таблице orders
+    :param user_id: ID пользователя
+    :param station_id: ID станции
+    :param slot: номер слота на станции
+    :return: ID заказа
+    """
+
+    cur = conn.cursor()
+    cur.execute("INSERT INTO orders (user_id, state, station_take, slot_take) VALUES (%s, %s, %s, %s) RETURNING id", (user_id, 1, station_id, slot))
+    order_id = cur.fetchone()[0]
+    conn.commit()
+    cur.close()
+
+    return order_id
 
 
 if not config.DEBUG:

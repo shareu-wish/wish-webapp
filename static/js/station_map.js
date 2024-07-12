@@ -138,7 +138,7 @@ async function initMap() {
             </div>
           </div>
 
-          <button class="take-umbrella-btn"><i class="bi bi-umbrella-fill"></i> Взять зонт</button>
+          <button class="take-umbrella-btn" onclick="takeUmbrella('${station.id}')"><i class="bi bi-umbrella-fill"></i> Взять зонт</button>
 
         </div>
       </div>
@@ -180,6 +180,22 @@ function checkAuth() {
     $("#profile").hide()
     $("#headerLoginContainer").show()
   }
+}
+
+
+function takeUmbrella(stationId) {
+  $.ajax({
+    type: "POST",
+    url: `/station-map/take-umbrella`,
+    data: {
+      station_id: stationId
+    },
+    success: function (data) {
+      if (data.status === "ok") {
+        alert(`Заказ №${data.order_id}\nВы можете забрать зонт из ячейки ${data.slot}`)
+      }
+    },
+  });
 }
 
 

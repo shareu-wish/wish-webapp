@@ -25,7 +25,7 @@ def check_auth():
     except jwt.ExpiredSignatureError:
         return False
 
-    return True
+    return payload
 
 
 # Главная страница
@@ -61,6 +61,7 @@ def auth_check_code():
         if not user_id:
             user_id = db_helper.create_raw_user(phone)
 
+        user_id = user_id['id']
         exp = datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=365*10)
         encoded_jwt = jwt.encode({"id": user_id, "exp": exp}, config.JWT_SECRET)
         encoded_jwt = encoded_jwt.decode()
@@ -92,6 +93,30 @@ def station_map():
 @app.route("/station-map/get-stations")
 def get_stations():
     return db_helper.get_stations()
+
+
+@app.route("/station-map/take-umbrella", methods=["POST"])
+def take_umbrella():
+    auth_data = check_auth()
+    if not auth_data:
+        return {"status": "error", "message": "Unauthorized"}
+    
+    user_id = auth_data["id"]
+    station_id = request.form["station_id"]
+
+    can_take = db_helper.get_station(station_id)['can_take']
+    if can_take <= 0:
+        return {"status": "error", "message": "There are no umbrellas in this station"}
+
+    # Сложные манипуляции с банками...
+
+    # Сложные манипуляции с аппаратной частью станции... (функция должна вернуть номер слота, который был открыт для пользователя)
+    slot = 3
+
+    order_id = db_helper.open_order(user_id, station_id, slot)
+
+    return {"status": "ok", "slot": slot, "order_id": order_id}
+
 
 
 # личный кабинет пользователя с информацией о нём и статистикой
