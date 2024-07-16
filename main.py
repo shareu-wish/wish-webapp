@@ -25,7 +25,7 @@ def check_auth():
     except jwt.ExpiredSignatureError:
         return False
 
-    return True
+    return payload['id']
 
 
 # Главная страница
@@ -61,6 +61,7 @@ def auth_check_code():
         if not user_id:
             user_id = db_helper.create_raw_user(phone)
 
+        user_id = user_id['id']
         exp = datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=365*10)
         encoded_jwt = jwt.encode({"id": user_id, "exp": exp}, config.JWT_SECRET)
         encoded_jwt = encoded_jwt.decode()
@@ -94,10 +95,41 @@ def get_stations():
     return db_helper.get_stations()
 
 
-# личный кабинет пользователя с информацией о нём и статистикой
-# @app.route('/profile')
-# def lk():
-#     return render_template("lk.html")
+@app.route('/profile')
+def profile():
+    print(check_auth())
+    if not check_auth():
+        return redirect("/auth")
+    return render_template("profile.html")
+
+@app.route('/profile/get-user-info')
+def profile_get_user_info():
+    user_id = check_auth()
+    if not user_id:
+        return redirect("/auth")
+    
+    data = db_helper.get_user(user_id)
+    res = {
+        "id": data['id'],
+        "phone": data['phone'],
+        "name": data['name'],
+        "gender": data['gender'],
+        "age": data['age']
+    }
+    return res
+
+@app.route('/profile/update-user-info', methods=['POST'])
+def profile_update_user_info():
+    user_id = check_auth()
+    if not user_id:
+        return redirect("/auth")
+    
+    data = request.get_json(force=True)
+    db_helper.update_user_info(user_id, data)
+    
+    return {"status": "ok"}
+
+
 
 
 # Страница с бесконечной загрузкой, преднозначена для начальной страницы в station-map в навигаторе

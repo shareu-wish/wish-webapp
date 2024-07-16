@@ -170,6 +170,19 @@ def get_user_by_phone(phone: str):
     return res
 
 
+def update_user_info(id: int, data: dict) -> None:
+    """
+    Обновить запись в таблице users
+    :param id: ID пользователя
+    :param data: Данные пользователя (name, gender, age)
+    """
+
+    cur = conn.cursor()
+    cur.execute("UPDATE users SET name = %s, gender = %s, age = %s WHERE id = %s", (data["name"], data["gender"], data["age"], id))
+    conn.commit()
+    cur.close()
+
+
 def get_stations() -> list[dict]:
     """
     Получить все записи из таблицы stations

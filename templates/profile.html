@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  {% include 'components/head_base.html' %}
+
+  <link rel="stylesheet" href="/static/css/profile.css">
+
+  <!-- <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+  <script>eruda.init()</script> -->
+
+  <title>Профиль | WISH</title>
+</head>
+
+<body>
+    <header>
+        <img src="/static/img/logo.png" alt="logo" class="logo">
+        <button class="logout-btn" onclick="window.location.href='/logout'"><i class="bi bi-box-arrow-right"></i> Выйти</button>
+    </header>
+    <main>
+        <div class="card profile-card">
+            <h2>Обо мне</h2>
+            <p>Имя: <span id="name">Загрузка...</span></p>
+            <p>Пол: <span id="gender">Загрузка...</span></p>
+            <p>Возраст: <span id="age">Загрузка...</span></p>
+            <!-- <p>Электронная почта: <span id="email">ivan@example.com</span></p> -->
+            <p>Номер телефона: <span id="phone">Загрузка...</span></p>
+            <button class="edit-btn" onclick="openEditModal()"><i class="bi bi-pencil-square"></i> Изменить данные</button>
+        </div>
+        <div class="card">
+            <h2>Текущий заказ</h2>
+            <div id="current-order">
+                <!-- Содержимое будет подгружено с помощью JS -->
+            </div>
+            <button class="return-btn">Вернуть зонт</button>
+        </div>
+        <div class="card">
+            <h2>История заказов</h2>
+            <div id="order-history">
+                <!-- Содержимое будет подгружено с помощью JS -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно для редактирования данных -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()"><i class="bi bi-x-lg"></i></span>
+            <h2>Редактировать данные</h2>
+            <form id="edit-form">
+                <label for="edit-name">Имя:</label>
+                <input type="text" id="edit-name">
+                <label for="edit-gender">Пол:</label>
+                <!-- <input type="text" id="edit-gender"> -->
+                <div class="edit-gender-wrapper">
+                    <input type="radio" name="edit-gender" id="edit-gender-1" value="Мужской">
+                    <input type="radio" name="edit-gender" id="edit-gender-2" value="Женский">
+                    <label for="edit-gender-1" class="option edit-gender-1">
+                    <div class="dot"></div>
+                        <span>Мужской</span>
+                        </label>
+                    <label for="edit-gender-2" class="option edit-gender-2">
+                    <div class="dot"></div>
+                        <span>Женский</span>
+                    </label>
+                </div>
+                
+                <label for="edit-age">Возраст:</label>
+                <input type="number" id="edit-age">
+                <!-- <label for="edit-email">Электронная почта:</label>
+                <input type="email" id="edit-email"> -->
+                <button type="button" onclick="saveChanges()" class="save-btn">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно для подтверждения потери зонта -->
+    <div id="lost-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLostModal()">&times;</span>
+            <h2>Зонт действительно потерян?</h2>
+            <button type="button" onclick="confirmLoss()">Да</button>
+            <button type="button" onclick="closeLostModal()">Отмена</button>
+        </div>
+    </div>
+
+  <script src="/static/js/profile.js"></script>
+</body>
+
+</html>
