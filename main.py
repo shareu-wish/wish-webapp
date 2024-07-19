@@ -64,7 +64,8 @@ def auth_check_code():
         user_id = user_id['id']
         exp = datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=365*10)
         encoded_jwt = jwt.encode({"id": user_id, "exp": exp}, config.JWT_SECRET)
-        encoded_jwt = encoded_jwt.decode()
+        if str(type(encoded_jwt)) == "<class 'bytes'>":
+            encoded_jwt = encoded_jwt.decode()
         
         resp = make_response({"status": "ok", "is_verified": True})
         resp.set_cookie('authToken', encoded_jwt)
