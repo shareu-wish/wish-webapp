@@ -41,6 +41,7 @@ def verify_phone(phone: str) -> None:
     :param phone: Номер телефона, на который поступит звонок
     """
 
+    # DEV
     #pincode = _init_call(phone)
     pincode = random.randint(1000, 9999)
 

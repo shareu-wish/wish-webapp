@@ -96,6 +96,30 @@ def get_stations():
     return db_helper.get_stations()
 
 
+@app.route("/station-map/take-umbrella", methods=["POST"])
+def take_umbrella():
+    auth_data = check_auth()
+    if not auth_data:
+        return {"status": "error", "message": "Unauthorized"}
+    
+    user_id = auth_data["id"]
+    station_id = request.form["station_id"]
+
+    can_take = db_helper.get_station(station_id)['can_take']
+    if can_take <= 0:
+        return {"status": "error", "message": "There are no umbrellas in this station"}
+
+    # Сложные манипуляции с банками...
+
+    # Сложные манипуляции с аппаратной частью станции... (функция должна вернуть номер слота, который был открыт для пользователя)
+    slot = 3
+
+    order_id = db_helper.open_order(user_id, station_id, slot)
+
+    return {"status": "ok", "slot": slot, "order_id": order_id}
+
+
+
 @app.route('/profile')
 def profile():
     print(check_auth())
@@ -129,7 +153,6 @@ def profile_update_user_info():
     db_helper.update_user_info(user_id, data)
     
     return {"status": "ok"}
-
 
 
 
