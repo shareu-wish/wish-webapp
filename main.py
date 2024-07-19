@@ -102,7 +102,7 @@ def take_umbrella():
     if not auth_data:
         return {"status": "error", "message": "Unauthorized"}
     
-    user_id = auth_data["id"]
+    user_id = auth_data
     station_id = request.form["station_id"]
 
     can_take = db_helper.get_station(station_id)['can_take']
