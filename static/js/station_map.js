@@ -205,14 +205,24 @@ function getCookie(name) {
 
 
 function checkAuth() {
-  if (getCookie("authToken") === null) {
+  const authToken = getCookie("authToken");
+  if (authToken === null || authToken === '') {
+    hasAuth = false
     $("#profile").hide()
     $("#headerLoginContainer").show()
+  } else {
+    hasAuth = true
   }
 }
 
 
 function takeUmbrella(stationId) {
+  if (!hasAuth) {
+    console.log(123);
+    $("#auth-suggestion-modal").addClass("show")
+    return
+  }
+
   $.ajax({
     type: "POST",
     url: `/station-map/take-umbrella`,
@@ -255,6 +265,7 @@ function putUmbrella(stationId) {
 let stations = []
 let activeStationWindow = null;
 let hasActiveOrder = false;
+let hasAuth = false;
 
 loadStations().then((data) => {
   stations = data;

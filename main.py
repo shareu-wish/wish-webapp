@@ -61,7 +61,7 @@ def auth_check_code():
         if not user_id:
             user_id = db_helper.create_raw_user(phone)
 
-        user_id = user_id['id']
+        user_id = user_id
         exp = datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=365*10)
         encoded_jwt = jwt.encode({"id": user_id, "exp": exp}, config.JWT_SECRET)
         if str(type(encoded_jwt)) == "<class 'bytes'>":
@@ -149,7 +149,6 @@ def put_umbrella():
 
 @app.route('/profile')
 def profile():
-    print(check_auth())
     if not check_auth():
         return redirect("/auth")
     return render_template("profile.html")

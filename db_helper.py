@@ -310,7 +310,7 @@ def close_order(order_id: int, station_id: int, slot: int) -> None:
     """
 
     cur = conn.cursor()
-    cur.execute("UPDATE orders SET state = 0, station_put = %s, slot_put = %s, datetime_put = NOW() WHERE id = %s", (station_id, slot, order_id))
+    cur.execute("UPDATE orders SET state = 0, station_put = %s, slot_put = %s, datetime_put = now() WHERE id = %s", (station_id, slot, order_id))
     conn.commit()
     cur.close()
 

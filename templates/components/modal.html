@@ -1,0 +1,21 @@
+
+<!-- position='center', modal_color='lightblue' -->
+<!-- {{ position }} modal-color-{{ modal_color }} -->
+{% macro modal(title, id, close_func, action_text, action_func) -%}
+<div id="{{ id }}" class="modal">
+    <div class="modal-body">
+        <div class="modal-header">
+            <h2>{{ title }}</h2>
+            <span class="modal-close" onclick="{{ close_func }}"><i class="bi bi-x-lg"></i></span>
+        </div>
+
+        <div class="modal-content">
+            {{ caller() }}
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" onclick="{{ action_func }}" class="modal-action-btn">{{ action_text }}</button>
+        </div>
+    </div>
+</div>
+{%- endmacro %}

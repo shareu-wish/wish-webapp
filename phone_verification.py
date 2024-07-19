@@ -44,9 +44,10 @@ def verify_phone(phone: str) -> None:
     :param phone: Номер телефона, на который поступит звонок
     """
 
-    # DEV
-    #pincode = _init_call(phone)
-    pincode = random.randint(1000, 9999)
+    if not config.DEBUG:
+        pincode = _init_call(phone)
+    else:
+        pincode = random.randint(1000, 9999)
 
     if db_helper.get_verify_phone_record(phone):
         db_helper.update_verify_phone_record(phone, pincode)
