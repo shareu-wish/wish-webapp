@@ -14,16 +14,19 @@
 
 <body>
     <header>
-        <img src="/static/img/logo.png" alt="logo" class="logo">
+        <img src="/static/img/logo.png" alt="logo" class="logo" onclick="window.location.href='/station-map'">
         <button class="logout-btn" onclick="window.location.href='/logout'"><i class="bi bi-box-arrow-right"></i> Выйти</button>
     </header>
     <main>
+        <div class="sub-header">
+            <button class="back-to-map-btn" onclick="window.location.href='/station-map'"><i class="bi bi-chevron-left"></i> К карте</button>
+            <button class="return-btn">Вернуть найденный зонт</button>
+        </div>
         <div class="card profile-card">
             <h2>Обо мне</h2>
             <p>Имя: <span id="name">Загрузка...</span></p>
             <p>Пол: <span id="gender">Загрузка...</span></p>
             <p>Возраст: <span id="age">Загрузка...</span></p>
-            <!-- <p>Электронная почта: <span id="email">ivan@example.com</span></p> -->
             <p>Номер телефона: <span id="phone">Загрузка...</span></p>
             <button class="edit-btn" onclick="openEditModal()"><i class="bi bi-pencil-square"></i> Изменить данные</button>
         </div>
@@ -32,7 +35,6 @@
             <div id="current-order">
                 <!-- Содержимое будет подгружено с помощью JS -->
             </div>
-            <button class="return-btn">Вернуть зонт</button>
         </div>
         <div class="card">
             <h2>История заказов</h2>

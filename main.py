@@ -193,6 +193,22 @@ def get_active_order():
 
     return {"status": "ok", "order": order}
 
+@app.route("/profile/get-processed-orders")
+def get_processed_orders():
+    user_id = check_auth()
+    if not user_id:
+        return {"status": "ok", "orders": []}
+
+    orders = db_helper.get_processed_orders(user_id)
+    if not orders:
+        return {"status": "ok", "orders": []}
+    
+    for i in range(len(orders)):
+        orders[i]['station_take_address'] = db_helper.get_station(orders[i]['station_take'])['address']
+        orders[i]['station_put_address'] = db_helper.get_station(orders[i]['station_put'])['address']
+
+    return {"status": "ok", "orders": orders}
+
 
 
 # Страница с бесконечной загрузкой, преднозначена для начальной страницы в station-map в навигаторе

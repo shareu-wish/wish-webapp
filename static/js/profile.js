@@ -30,48 +30,88 @@ function loadUserInfo() {
 }
 
 
-function loadCurrentOrder() {
-    // Пример активного заказа
-    const activeOrder = true; // Здесь можно подгрузить состояние с сервера
-    const currentOrderDiv = document.getElementById('current-order');
-    
-    if (activeOrder) {
-        currentOrderDiv.innerHTML = `
-            <p>Зонт у вас уже: <span id="umbrella-time">2 часа</span></p>
-            <p>За сданный зонт вам вернётся: 700 рублей</p>
-            <button class="lost-btn" onclick="openLostModal()">Зонт потерян</button>
-        `;
-    } else {
-        currentOrderDiv.innerHTML = '<p>Нет активных заказов</p>';
-    }
+function loadActiveOrder() {
+    $.ajax({
+        url: '/profile/get-active-order',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            const currentOrderDiv = document.getElementById('current-order');
+            if (data.order) {
+                let datetimeTake = data.order.datetime_take
+
+                // The time that the umbrella is in the user's hands (current-time - datetimeTake)
+                // Should be displayed (ex.): `3 hours 42 minutes` or `52 hours 11 minures` or `38 minutes`
+                datetimeTake = new Date(datetimeTake)
+                // datetimeTake.setHours(datetimeTake.getHours() - 3)
+                const timeOnHands = new Date() - datetimeTake;
+                const hours = Math.floor(timeOnHands / (1000 * 60 * 60));
+                const minutes = Math.floor((timeOnHands % (1000 * 60 * 60)) / (1000 * 60));
+                let timeOnHandsFormatted = '';
+                if (hours > 0) {
+                    timeOnHandsFormatted = `${hours} часов ${minutes} минут`;
+                } else if (minutes > 0) {
+                    timeOnHandsFormatted = `${minutes} минут`;
+                } else {
+                    timeOnHandsFormatted = 'меньше минуты';
+                }
+            
+                currentOrderDiv.innerHTML = `
+                    <p>Зонт у вас уже: <span id="umbrella-time">${timeOnHandsFormatted}</span></p>
+                    <p>За сданный зонт вам вернётся: 700 рублей</p>
+                    <button class="lost-btn" onclick="openLostModal()">Зонт утерян</button>
+                `;
+            } else {
+                currentOrderDiv.innerHTML = '<p>Нет активного заказа</p>';
+            }
+        },
+        error: function (error) {
+            console.error('Error fetching active order:', error);
+        }
+    });
 }
 
 function loadOrderHistory() {
-    // Пример истории заказов
-    const orderHistory = [
-        {
-            startTime: '2023-01-01 10:00',
-            startStation: 'Станция А',
-            endTime: '2023-01-01 12:00',
-            endStation: 'Станция Б',
-            duration: '2 часа'
+    $.ajax({
+        url: '/profile/get-processed-orders',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            const orderHistory = data.orders;
+            orderHistory.reverse();
+            const orderHistoryDiv = document.getElementById('order-history');
+            orderHistoryDiv.innerHTML = '';
+            
+            orderHistory.forEach(order => {
+                const timeOnHands = new Date(order.datetime_put) - new Date(order.datetime_take);
+                const hours = Math.floor(timeOnHands / (1000 * 60 * 60));
+                const minutes = Math.floor((timeOnHands % (1000 * 60 * 60)) / (1000 * 60));
+                let timeOnHandsFormatted = '';
+                if (hours > 0) {
+                    timeOnHandsFormatted = `${hours} часов ${minutes} минут`;
+                } else if (minutes > 0) {
+                    timeOnHandsFormatted = `${minutes} минут`;
+                } else {
+                    timeOnHandsFormatted = 'меньше минуты';
+                }
+                const orderCard = document.createElement('div');
+                orderCard.className = 'order-card';
+                orderCard.innerHTML = `
+                    <p>Время начала: <span>${new Date(order.datetime_take).toLocaleString()}</span></p>
+                    <p>Адрес станции, откуда зонт был взят: <span>${order.station_take_address}</span></p>
+                    <p>Время конца: <span>${new Date(order.datetime_put).toLocaleString()}</span></p>
+                    <p>Адрес станции, куда зонт вернули: <span>${order.station_put_address}</span></p>
+                    <p>Продолжительность заказа: <span>${timeOnHandsFormatted}</span></p>
+                `;
+                orderHistoryDiv.appendChild(orderCard);
+            });
         },
-        // Добавьте больше заказов по мере необходимости
-    ];
-    
-    const orderHistoryDiv = document.getElementById('order-history');
-    orderHistory.forEach(order => {
-        const orderCard = document.createElement('div');
-        orderCard.className = 'order-card';
-        orderCard.innerHTML = `
-            <p>Время начала: ${order.startTime}</p>
-            <p>Адрес станции, откуда зонт был взят: ${order.startStation}</p>
-            <p>Время конца: ${order.endTime}</p>
-            <p>Адрес станции, куда зонт вернули: ${order.endStation}</p>
-            <p>Продолжительность заказа: ${order.duration}</p>
-        `;
-        orderHistoryDiv.appendChild(orderCard);
+        error: function (error) {
+            console.error('Error fetching active order:', error);
+        }
     });
+    
+    
 }
 
 function openEditModal() {
@@ -147,6 +187,6 @@ function confirmLoss() {
 
 $(document).ready(() => {
     loadUserInfo();
-    loadCurrentOrder();
+    loadActiveOrder();
     loadOrderHistory();
 });

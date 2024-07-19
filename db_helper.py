@@ -315,6 +315,35 @@ def close_order(order_id: int, station_id: int, slot: int) -> None:
     cur.close()
 
 
+def get_processed_orders(user_id: int) -> dict:
+    """
+    Получить все обработанные заказы пользователя
+
+    :param user_id: ID пользователя
+    :return: Список заказов
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, state, datetime_take, datetime_put, station_take, station_put, slot_take, slot_put FROM orders WHERE user_id = %s AND state = 0", (user_id, ))
+    data = cur.fetchall()
+    cur.close()
+
+    res = []
+    for order in data:
+        res.append({
+            "id": order[0],
+            "state": order[1],
+            "datetime_take": order[2],
+            "datetime_put": order[3],
+            "station_take": order[4],
+            "station_put": order[5],
+            "slot_take": order[6],
+            "slot_put": order[7]
+        })
+
+    return res
+
+
 if not config.DEBUG:
     _schedule_delete_old_data()
 
