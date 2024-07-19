@@ -90,24 +90,24 @@ def logout():
 def station_map():
     return render_template("station_map.html")
 
-
 @app.route("/station-map/get-stations")
 def get_stations():
     return db_helper.get_stations()
 
-
 @app.route("/station-map/take-umbrella", methods=["POST"])
 def take_umbrella():
-    auth_data = check_auth()
-    if not auth_data:
+    user_id = check_auth()
+    if not user_id:
         return {"status": "error", "message": "Unauthorized"}
     
-    user_id = auth_data
     station_id = request.form["station_id"]
 
     can_take = db_helper.get_station(station_id)['can_take']
     if can_take <= 0:
         return {"status": "error", "message": "There are no umbrellas in this station"}
+    
+    if db_helper.get_active_order(user_id):
+        return {"status": "error", "message": "You have an active order"}
 
     # Сложные манипуляции с банками...
 
@@ -117,6 +117,33 @@ def take_umbrella():
     order_id = db_helper.open_order(user_id, station_id, slot)
 
     return {"status": "ok", "slot": slot, "order_id": order_id}
+
+
+@app.route("/station-map/put-umbrella", methods=["POST"])
+def put_umbrella():
+    user_id = check_auth()
+    if not user_id:
+        return {"status": "error", "message": "Unauthorized"}
+    
+    station_id = request.form["station_id"]
+
+    can_put = db_helper.get_station(station_id)['can_put']
+    if can_put <= 0:
+        return {"status": "error", "message": "There are no empty slots in this station"}
+    
+    active_order = db_helper.get_active_order(user_id)
+    if not active_order:
+        return {"status": "error", "message": "You have no active orders"}
+    order_id = active_order['id']
+
+    # Сложные манипуляции с аппаратной частью станции... (функция должна вернуть номер слота, в который пользователь положил зонт)
+    slot = 2
+
+    # Сложные манипуляции с банками... Возврат залога
+
+    db_helper.close_order(order_id, station_id, slot)
+
+    return {"status": "ok", "order_id": order_id}
 
 
 
@@ -153,6 +180,18 @@ def profile_update_user_info():
     db_helper.update_user_info(user_id, data)
     
     return {"status": "ok"}
+
+@app.route("/profile/get-active-order")
+def get_active_order():
+    user_id = check_auth()
+    if not user_id:
+        return {"status": "ok", "order": None}
+
+    order = db_helper.get_active_order(user_id)
+    if not order:
+        return {"status": "ok", "order": None}
+
+    return {"status": "ok", "order": order}
 
 
 

@@ -14,6 +14,7 @@ conn = psycopg2.connect(
 def create_verify_phone_record(phone: str, pincode: str) -> None:
     """
     Создать запись в таблице user_verification
+
     :param phone: Номер телефона
     :param pincode: Пинкод
     """
@@ -27,6 +28,7 @@ def create_verify_phone_record(phone: str, pincode: str) -> None:
 def get_verify_phone_record(phone: str) -> tuple[str]:
     """
     Получить запись из таблицы user_verification
+
     :param phone: Номер телефона
     :return: tuple (phone, pincode)
     """
@@ -42,6 +44,7 @@ def get_verify_phone_record(phone: str) -> tuple[str]:
 def update_verify_phone_record(phone: str, pincode: str) -> None:
     """
     Обновить запись в таблице user_verification
+
     :param phone: Номер телефона
     :param pincode: Пинкод
     """
@@ -55,6 +58,7 @@ def update_verify_phone_record(phone: str, pincode: str) -> None:
 def delete_verify_phone_record(phone: str) -> None:
     """
     Удалить запись из таблицы user_verification
+
     :param phone: Номер телефона
     """
 
@@ -67,6 +71,7 @@ def delete_verify_phone_record(phone: str) -> None:
 def create_raw_user(phone: str) -> int:
     """
     Создать запись в таблице users
+
     :param phone: Номер телефона
     :return: ID пользователя
     """
@@ -87,6 +92,7 @@ def create_raw_user(phone: str) -> int:
 def increment_attempts(phone: str) -> int:
     """
     Увеличить количество попыток в таблице user_verification
+
     :param phone: Номер телефона
     :return: Количество попыток
     """
@@ -126,6 +132,7 @@ def _schedule_delete_old_data() -> None:
 def get_user(id: int) -> dict:
     """
     Получить запись из таблицы users
+
     :param id: ID пользователя
     """
 
@@ -148,6 +155,7 @@ def get_user(id: int) -> dict:
 def get_user_by_phone(phone: str):
     """
     Получить запись из таблицы users
+
     :param phone: Номер телефона
     """
 
@@ -173,6 +181,7 @@ def get_user_by_phone(phone: str):
 def update_user_info(id: int, data: dict) -> None:
     """
     Обновить запись в таблице users
+
     :param id: ID пользователя
     :param data: Данные пользователя (name, gender, age)
     """
@@ -186,6 +195,8 @@ def update_user_info(id: int, data: dict) -> None:
 def get_stations() -> list[dict]:
     """
     Получить все записи из таблицы stations
+
+    :return: Список станций
     """
 
     cur = conn.cursor()
@@ -216,6 +227,7 @@ def get_stations() -> list[dict]:
 def get_station(id: int) -> dict:
     """
     Получить запись из таблицы stations
+
     :param id: ID станции
     """
 
@@ -245,6 +257,7 @@ def get_station(id: int) -> dict:
 def open_order(user_id: int, station_id: int, slot: int) -> int:
     """
     Создать запись в таблице orders
+
     :param user_id: ID пользователя
     :param station_id: ID станции
     :param slot: номер слота на станции
@@ -260,6 +273,48 @@ def open_order(user_id: int, station_id: int, slot: int) -> int:
     return order_id
 
 
+def get_active_order(user_id: int) -> dict:
+    """
+    Получить активный заказ пользователя
+
+    :param user_id: ID пользователя
+    :return: dict с данными о заказе
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, state, datetime_take, station_take, slot_take FROM orders WHERE user_id = %s AND state = 1", (user_id,))
+    data = cur.fetchone()
+    cur.close()
+
+    if data is None:
+        return None
+
+    res = {
+        "id": data[0],
+        "state": data[1],
+        "datetime_take": data[2],
+        "station_take": data[3],
+        "slot_take": data[4]
+    }
+
+    return res
+
+
+def close_order(order_id: int, station_id: int, slot: int) -> None:
+    """
+    Закрыть заказ пользователя
+
+    :param order_id: ID заказа
+    :param station_id: ID станции, в которую был помещен зонт
+    :param slot: номер слота на станции, куда был помещен зонт
+    """
+
+    cur = conn.cursor()
+    cur.execute("UPDATE orders SET state = 0, station_put = %s, slot_put = %s, datetime_put = NOW() WHERE id = %s", (station_id, slot, order_id))
+    conn.commit()
+    cur.close()
+
+
 if not config.DEBUG:
     _schedule_delete_old_data()
 
@@ -268,4 +323,4 @@ if __name__ == "__main__":
     # create_verify_phone_record("1234567890", "1234")
     # print(get_verify_phone_record("1234567890"))
     # delete_verify_phone_record("1234567890")
-    print(get_user_by_phone('453'))
+    print(get_active_order(9))

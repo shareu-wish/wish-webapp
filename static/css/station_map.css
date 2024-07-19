@@ -267,7 +267,7 @@ header .right {
 }
 
 
-.take-umbrella-btn {
+.take-umbrella-btn, .put-umbrella-btn {
   margin-top: 0.5rem;
   width: 100%;
 
@@ -281,7 +281,7 @@ header .right {
   cursor: pointer;
 }
 
-.take-umbrella-btn:active {
+.take-umbrella-btn:active, .put-umbrella-btn:active {
   /* background-color: #0056c0; */
   background-color: #004293;
 }

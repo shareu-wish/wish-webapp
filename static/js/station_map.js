@@ -23,6 +23,15 @@ function toggleStationWindow(windowId) {
   if (activeStationWindow) {
     $(`#${activeStationWindow}Window`).hide();
   }
+
+  if (hasActiveOrder) {
+    $(".take-umbrella-btn").hide()
+    $(".put-umbrella-btn").show()
+  } else {
+    $(".take-umbrella-btn").show()
+    $(".put-umbrella-btn").hide()
+  }
+
   if (isMobileScreen) {
     $("#mainWindow").html($(`#${windowId}Window`).html() + 
         `<div class="close-station-info-window" onclick="$('#mainWindow').hide();activeStationWindow = null;"><i class="bi bi-x-lg"></i></div>`);
@@ -139,6 +148,7 @@ async function initMap() {
           </div>
 
           <button class="take-umbrella-btn" onclick="takeUmbrella('${station.id}')"><i class="bi bi-umbrella-fill"></i> Взять зонт</button>
+          <button class="put-umbrella-btn" onclick="putUmbrella('${station.id}')" style="display: none;"><i class="bi bi-arrow-down"></i> Вернуть зонт</button>
 
         </div>
       </div>
@@ -162,6 +172,25 @@ function loadStations() {
     url: "/station-map/get-stations",
     success: function (data) {
       return data;
+    },
+  });
+}
+
+
+function loadActiveOrder() {
+  $.ajax({
+    type: "GET",
+    url: "/profile/get-active-order",
+    success: function (data) {
+      hasActiveOrder = data.order !== null
+
+      if (hasActiveOrder) {
+        $(".take-umbrella-btn").hide()
+        $(".put-umbrella-btn").show()
+      } else {
+        $(".take-umbrella-btn").show()
+        $(".put-umbrella-btn").hide()
+      }
     },
   });
 }
@@ -194,6 +223,30 @@ function takeUmbrella(stationId) {
       if (data.status === "ok") {
         alert(`Заказ №${data.order_id}\nВы можете забрать зонт из ячейки ${data.slot}`)
       }
+      toggleStationWindow(stationId)
+      setTimeout(() => {
+        loadActiveOrder()
+      }, 1000)
+    },
+  });
+}
+
+
+function putUmbrella(stationId) {
+  $.ajax({
+    type: "POST",
+    url: `/station-map/put-umbrella`,
+    data: {
+      station_id: stationId
+    },
+    success: function (data) {
+      if (data.status === "ok") {
+        alert(`Заказ №${data.order_id} закрыт\nСпасибо за то, что пользуетесь нашим сервисом!`)
+      }
+      toggleStationWindow(stationId)
+      setTimeout(() => {
+        loadActiveOrder()
+      }, 1000)
     },
   });
 }
@@ -201,6 +254,7 @@ function takeUmbrella(stationId) {
 
 let stations = []
 let activeStationWindow = null;
+let hasActiveOrder = false;
 
 loadStations().then((data) => {
   stations = data;
@@ -209,4 +263,5 @@ loadStations().then((data) => {
 });
 // initMap();
 checkAuth()
+loadActiveOrder()
 
