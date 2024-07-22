@@ -57,7 +57,7 @@ def auth_check_code():
     res = phone_verification.submit_pincode(phone, pincode)
 
     if res == 'verified':
-        user_id = db_helper.get_user_by_phone(phone)
+        user_id = db_helper.get_user_by_phone(phone)['id']
         if not user_id:
             user_id = db_helper.create_raw_user(phone)
 

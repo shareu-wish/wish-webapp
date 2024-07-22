@@ -134,6 +134,12 @@ def get_user(id: int) -> dict:
     Получить запись из таблицы users
 
     :param id: ID пользователя
+    :return: Словарь с данными пользователя\n
+        - *id*: ID пользователя
+        - *phone*: Номер телефона
+        - *name*: Имя
+        - *gender*: Пол
+        - *age*: Возраст
     """
 
     cur = conn.cursor()
@@ -152,11 +158,17 @@ def get_user(id: int) -> dict:
     return res
 
 
-def get_user_by_phone(phone: str):
+def get_user_by_phone(phone: str) -> dict | None:
     """
     Получить запись из таблицы users
 
     :param phone: Номер телефона
+    :return: Словарь с данными пользователя или None, если пользователь не найден\n
+        - *id*: ID пользователя
+        - *phone*: Номер телефона
+        - *name*: Имя
+        - *gender*: Пол
+        - *age*: Возраст
     """
 
     cur = conn.cursor()
