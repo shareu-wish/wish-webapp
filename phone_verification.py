@@ -10,6 +10,7 @@ url = "https://zvonok.com/manager/cabapi_external/api/v1/phones/flashcall/"
 def clean_phone(phone: str) -> str:
     """
     Очистка номера телефона от лишних символов
+
     :param phone: Номер телефона, который мы очищаем
     :return: Очищенный номер телефона
     """
@@ -20,6 +21,7 @@ def clean_phone(phone: str) -> str:
 def _init_call(phone: str) -> str:
     """
     Инициализация звонка
+
     :param phone: Номер телефона, на который поступит звонок
     :return: Пинкод, необходимый для верификации телефона
     """
@@ -38,11 +40,14 @@ def _init_call(phone: str) -> str:
 def verify_phone(phone: str) -> None:
     """
     Верефикация номера телефона
+
     :param phone: Номер телефона, на который поступит звонок
     """
 
-    #pincode = _init_call(phone)
-    pincode = random.randint(1000, 9999)
+    if not config.DEBUG:
+        pincode = _init_call(phone)
+    else:
+        pincode = random.randint(1000, 9999)
 
     if db_helper.get_verify_phone_record(phone):
         db_helper.update_verify_phone_record(phone, pincode)
@@ -53,10 +58,11 @@ def verify_phone(phone: str) -> None:
 def submit_pincode(phone: str, pincode: str) -> str:
     """
     Подтверждение номера телефона
+
     :param phone: Номер телефона, который мы верифицируем
     :param pincode: Пинкод, полученный пользователем на телефон
     :return: 
-        - `verified` - если веревикация успешна
+        - `verified` - если веревикация успешна\n
         - `incorrect` - если пинкод неверен
         - `attempts_exceeded` - если попытки закончились
         - `timeout_exceeded` - если время ожидания истекло (запись удалена)

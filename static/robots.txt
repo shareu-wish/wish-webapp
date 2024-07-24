@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin
+Clean-param: station_id /auth
+Clean-param: from_url /auth
+Clean-param: station_id /station-map

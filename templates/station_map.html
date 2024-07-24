@@ -4,6 +4,10 @@
 <head>
   {% include 'components/head_base.html' %}
 
+  <!-- {% from 'components/modal.html' import modal %} -->
+  <link rel="stylesheet" href="/static/css/components/modal.css">
+
+
   <script src="https://api-maps.yandex.ru/v3/?apikey=122cc2d8-cfc2-4b95-8482-ab66964ffb28&lang=ru_RU"></script>
   <link rel="stylesheet" href="/static/css/station_map.css">
 
@@ -17,12 +21,12 @@
 
     <div class="right">
       <div class="search-container">
-        <div class="search-btn"><i class="bi bi-search"></i></div>
+        <div class="search-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"><i class="bi bi-search"></i></div>
       </div>
       <div class="header-login" id="headerLoginContainer" onclick="window.location.href='/auth'" style="display: none;">
         Войти
       </div>
-      <div class="profile" id="profile">
+      <div class="profile" id="profile" onclick="window.location.href='/profile'">
         <div class="profile-btn"><i class="bi bi-person-fill"></i></div>
       </div>
     </div>
@@ -46,6 +50,14 @@
     <div class="navigator-header">Навигатор</div>
     <iframe src="/loading" id="navigator"></iframe>
   </div>
+
+
+  <!-- {% call modal(title="Авторизуйтесь", id="auth-suggestion-modal", 
+      close_func="$('#auth-suggestion-modal').removeClass('show')", 
+      action_text='Авторизоваться', 
+      action_func="window.location.href='/auth?station_id='+activeStationWindow") %}
+    Пожалуйста, войдите в аккаунт, чтобы взять зонт.
+  {% endcall %} -->
 
   <script src="/static/js/station_map.js"></script>
 </body>

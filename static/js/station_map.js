@@ -10,6 +10,20 @@
 При повторном нажатии на метку, карточка закрывается.
 */
 
+
+function getUrlCurrentStation() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const stationId = urlParams.get('station_id');
+  return stationId;
+}
+
+function clearUrlCurrentStation() {
+  const url = new URL(window.location);
+  url.searchParams.delete('station_id');
+  window.history.replaceState({}, '', url);
+}
+
+
 const isMobileScreen = window.innerWidth <= 480;
 
 function toggleStationWindow(windowId) {
@@ -23,6 +37,15 @@ function toggleStationWindow(windowId) {
   if (activeStationWindow) {
     $(`#${activeStationWindow}Window`).hide();
   }
+
+  if (hasActiveOrder) {
+    $(".take-umbrella-btn").hide()
+    $(".put-umbrella-btn").show()
+  } else {
+    $(".take-umbrella-btn").show()
+    $(".put-umbrella-btn").hide()
+  }
+
   if (isMobileScreen) {
     $("#mainWindow").html($(`#${windowId}Window`).html() + 
         `<div class="close-station-info-window" onclick="$('#mainWindow').hide();activeStationWindow = null;"><i class="bi bi-x-lg"></i></div>`);
@@ -65,10 +88,20 @@ async function initMap() {
     "@yandex/ymaps3-controls@0.0.1"
   );
 
+  const urlCurrentStationId = getUrlCurrentStation();
+
+  let mapCenter = [37.617698, 55.755864] // Moscow
+  let zoom = 12;
+  if (urlCurrentStationId) {
+    const station = stations.find(station => station.id == urlCurrentStationId);
+    mapCenter = [station.longitude, station.latitude];
+    zoom = 16;
+  }
+
   const map = new YMap(document.getElementById("map"), {
     location: {
-      center: [37.617698, 55.755864],
-      zoom: 12,
+      center: mapCenter,
+      zoom: zoom,
     },
     controls: ["routeButtonControl"],
   });
@@ -109,7 +142,9 @@ async function initMap() {
       .addChild(new YMapGeolocationControl({}))
   );
 
-  document.getElementsByClassName("ymaps3x0--control-button")[0].click();
+  if (!urlCurrentStationId) {
+    document.getElementsByClassName("ymaps3x0--control-button")[0].click();
+  }
 
   for (const station of stations) {
     const markerElement = document.createElement("div");
@@ -138,7 +173,8 @@ async function initMap() {
             </div>
           </div>
 
-          <button class="take-umbrella-btn"><i class="bi bi-umbrella-fill"></i> Взять зонт</button>
+          <button class="take-umbrella-btn" onclick="takeUmbrella('${station.id}')"><i class="bi bi-umbrella-fill"></i> Взять зонт</button>
+          <button class="put-umbrella-btn" onclick="putUmbrella('${station.id}')" style="display: none;"><i class="bi bi-arrow-down"></i> Вернуть зонт</button>
 
         </div>
       </div>
@@ -152,6 +188,11 @@ async function initMap() {
     );
 
     map.addChild(marker);
+  }
+
+  if (urlCurrentStationId) {
+    toggleStationWindow(urlCurrentStationId);
+    clearUrlCurrentStation();
   }
 }
 
@@ -167,6 +208,25 @@ function loadStations() {
 }
 
 
+function loadActiveOrder() {
+  $.ajax({
+    type: "GET",
+    url: "/profile/get-active-order",
+    success: function (data) {
+      hasActiveOrder = data.order !== null
+
+      if (hasActiveOrder) {
+        $(".take-umbrella-btn").hide()
+        $(".put-umbrella-btn").show()
+      } else {
+        $(".take-umbrella-btn").show()
+        $(".put-umbrella-btn").hide()
+      }
+    },
+  });
+}
+
+
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -176,21 +236,72 @@ function getCookie(name) {
 
 
 function checkAuth() {
-  if (getCookie("authToken") === null) {
+  const authToken = getCookie("authToken");
+  if (authToken === null || authToken === '') {
+    hasAuth = false
     $("#profile").hide()
     $("#headerLoginContainer").show()
+  } else {
+    hasAuth = true
   }
+}
+
+
+function takeUmbrella(stationId) {
+  if (!hasAuth) {
+    // $("#auth-suggestion-modal").addClass("show")
+    return window.location.href = `/auth?station_id=${stationId}`
+  }
+
+  $.ajax({
+    type: "POST",
+    url: `/station-map/take-umbrella`,
+    data: {
+      station_id: stationId
+    },
+    success: function (data) {
+      if (data.status === "ok") {
+        alert(`Заказ №${data.order_id}\nВы можете забрать зонт из ячейки ${data.slot}`)
+      }
+      toggleStationWindow(stationId)
+      setTimeout(() => {
+        loadActiveOrder()
+      }, 1000)
+    },
+  });
+}
+
+
+function putUmbrella(stationId) {
+  $.ajax({
+    type: "POST",
+    url: `/station-map/put-umbrella`,
+    data: {
+      station_id: stationId
+    },
+    success: function (data) {
+      if (data.status === "ok") {
+        alert(`Заказ №${data.order_id} закрыт\nСпасибо за то, что пользуетесь нашим сервисом!`)
+      }
+      toggleStationWindow(stationId)
+      setTimeout(() => {
+        loadActiveOrder()
+      }, 1000)
+    },
+  });
 }
 
 
 let stations = []
 let activeStationWindow = null;
+let hasActiveOrder = false;
+let hasAuth = false;
 
 loadStations().then((data) => {
   stations = data;
-  console.log(stations);
   initMap();
 });
 // initMap();
 checkAuth()
+loadActiveOrder()
 
