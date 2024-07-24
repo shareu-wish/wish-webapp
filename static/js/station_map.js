@@ -10,6 +10,20 @@
 При повторном нажатии на метку, карточка закрывается.
 */
 
+
+function getUrlCurrentStation() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const stationId = urlParams.get('station_id');
+  return stationId;
+}
+
+function clearUrlCurrentStation() {
+  const url = new URL(window.location);
+  url.searchParams.delete('station_id');
+  window.history.replaceState({}, '', url);
+}
+
+
 const isMobileScreen = window.innerWidth <= 480;
 
 function toggleStationWindow(windowId) {
@@ -74,10 +88,20 @@ async function initMap() {
     "@yandex/ymaps3-controls@0.0.1"
   );
 
+  const urlCurrentStationId = getUrlCurrentStation();
+
+  let mapCenter = [37.617698, 55.755864] // Moscow
+  let zoom = 12;
+  if (urlCurrentStationId) {
+    const station = stations.find(station => station.id == urlCurrentStationId);
+    mapCenter = [station.longitude, station.latitude];
+    zoom = 16;
+  }
+
   const map = new YMap(document.getElementById("map"), {
     location: {
-      center: [37.617698, 55.755864],
-      zoom: 12,
+      center: mapCenter,
+      zoom: zoom,
     },
     controls: ["routeButtonControl"],
   });
@@ -118,7 +142,9 @@ async function initMap() {
       .addChild(new YMapGeolocationControl({}))
   );
 
-  document.getElementsByClassName("ymaps3x0--control-button")[0].click();
+  if (!urlCurrentStationId) {
+    document.getElementsByClassName("ymaps3x0--control-button")[0].click();
+  }
 
   for (const station of stations) {
     const markerElement = document.createElement("div");
@@ -162,6 +188,11 @@ async function initMap() {
     );
 
     map.addChild(marker);
+  }
+
+  if (urlCurrentStationId) {
+    toggleStationWindow(urlCurrentStationId);
+    clearUrlCurrentStation();
   }
 }
 
@@ -218,9 +249,8 @@ function checkAuth() {
 
 function takeUmbrella(stationId) {
   if (!hasAuth) {
-    console.log(123);
-    $("#auth-suggestion-modal").addClass("show")
-    return
+    // $("#auth-suggestion-modal").addClass("show")
+    return window.location.href = `/auth?station_id=${stationId}`
   }
 
   $.ajax({
@@ -269,7 +299,6 @@ let hasAuth = false;
 
 loadStations().then((data) => {
   stations = data;
-  console.log(stations);
   initMap();
 });
 // initMap();

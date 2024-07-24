@@ -1,4 +1,4 @@
-from flask import Flask, redirect, make_response
+from flask import Flask, redirect, make_response, send_from_directory
 from flask import render_template
 import config
 from waitress import serve
@@ -34,6 +34,12 @@ def index():
     return render_template("index.html")
 
 
+@app.route('/robots.txt')
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
+
+
 # Авторизация (вход + регистрация)
 @app.route("/auth")
 def auth():
@@ -57,11 +63,12 @@ def auth_check_code():
     res = phone_verification.submit_pincode(phone, pincode)
 
     if res == 'verified':
-        user_id = db_helper.get_user_by_phone(phone)['id']
+        user_id = db_helper.get_user_by_phone(phone)
         if not user_id:
             user_id = db_helper.create_raw_user(phone)
-
-        user_id = user_id
+        else:
+            user_id = user_id['id']
+        
         exp = datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=365*10)
         encoded_jwt = jwt.encode({"id": user_id, "exp": exp}, config.JWT_SECRET)
         if str(type(encoded_jwt)) == "<class 'bytes'>":

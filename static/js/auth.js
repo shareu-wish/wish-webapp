@@ -99,8 +99,11 @@ ELS_pinEntry.forEach((el) => {
           success: function (data) {
             if (data.status === "ok" && data.is_verified) {
               const urlParams = new URLSearchParams(window.location.search);
+              const station_id = urlParams.get("station_id");
               const from_url = urlParams.get("from_url");
-              if (from_url) {
+              if (station_id) {
+                window.location.href = `/station-map?station_id=${station_id}`;
+              } else if (from_url) {
                 window.location.href = from_url;
               } else {
                 window.location.href = "/station-map";
