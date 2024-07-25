@@ -98,7 +98,7 @@ async function initMap() {
     zoom = 16;
   }
 
-  const map = new YMap(document.getElementById("map"), {
+  map = new YMap(document.getElementById("map"), {
     location: {
       center: mapCenter,
       zoom: zoom,
@@ -292,6 +292,74 @@ function putUmbrella(stationId) {
 }
 
 
+function showStationInfo(stationId) {
+  const station = stations.find(station => station.id == stationId);
+  map.update({location: {center: [station.longitude, station.latitude], zoom: 16, duration: 2000}});
+  toggleStationWindow(stationId)
+}
+
+
+function showStationInfoFromSearch(stationId) {
+  hideSearch()
+  showStationInfo(stationId)
+}
+
+
+function initSearch(stations) {
+  const searchItemsContainer = document.getElementById("searchItemsContainer");
+  for (const station of stations) {
+    const searchItem = document.createElement("div");
+    searchItem.className = "search-item";
+    searchItem.innerHTML = `
+      <div class="search-station-info">
+        <div class="windowContent">
+
+          <div class="left-right-container">
+            <div class="left" style="background-image: url('${station.picture}');"></div>
+            <div class="right">
+              <div class="titleContainer">
+                <span class="number">№${station.id}</span>
+                <span class="title">${station.title}</span>
+                <span class="address">${station.address}</span>
+              </div>
+              <div class="btnContainer">
+                <button class="putTakeBtn"><i class="bi bi-arrow-up-circle"></i> ${station.can_take}</button>
+                <button class="putTakeBtn"><i class="bi bi-arrow-down-circle"></i> ${station.can_put}</button>
+                <button class="markerBtn" onclick="showStationInfoFromSearch('${station.id}')">Показать</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      `;
+
+      searchItemsContainer.appendChild(searchItem);
+  }
+
+  $("#search").on("input", function() {
+    const searchText = $(this).val().toLowerCase();
+    $(".search-item").each(function() {
+      const stationTitle = $(this).find(".titleContainer").text().toLowerCase();
+      if (stationTitle.includes(searchText)) {
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    });
+  });
+}
+
+
+function showSearch() {
+  $("#searchOffcanvas").addClass("show")
+}
+
+function hideSearch() {
+  $("#searchOffcanvas").removeClass("show")
+}
+
+
+let map = null;
 let stations = []
 let activeStationWindow = null;
 let hasActiveOrder = false;
@@ -300,6 +368,7 @@ let hasAuth = false;
 loadStations().then((data) => {
   stations = data;
   initMap();
+  initSearch(stations);
 });
 // initMap();
 checkAuth()

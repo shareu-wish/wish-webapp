@@ -21,7 +21,7 @@
 
     <div class="right">
       <div class="search-container">
-        <div class="search-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"><i class="bi bi-search"></i></div>
+        <div class="search-btn" onclick="showSearch()"><i class="bi bi-search"></i></div>
       </div>
       <div class="header-login" id="headerLoginContainer" onclick="window.location.href='/auth'" style="display: none;">
         Войти
@@ -58,6 +58,18 @@
       action_func="window.location.href='/auth?station_id='+activeStationWindow") %}
     Пожалуйста, войдите в аккаунт, чтобы взять зонт.
   {% endcall %} -->
+
+  <div class="search-offcanvas-container" id="searchOffcanvas">
+    <div class="search-offcanvas">
+      <div class="search-offcanvas-header-line">
+        <input type="search" id="search" autocomplete="off" placeholder="Поиск по станциям">
+        <span class="modal-close" onclick="hideSearch()"><i class="bi bi-x-lg"></i></span>
+      </div>
+      <div id="searchItemsContainer">
+        
+      </div>
+    </div>
+  </div>
 
   <script src="/static/js/station_map.js"></script>
 </body>
