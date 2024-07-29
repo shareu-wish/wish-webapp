@@ -7,6 +7,7 @@ from flask import request
 import jwt
 import datetime
 import db_helper
+import station_controller
 
 
 app = Flask(__name__)
@@ -119,7 +120,7 @@ def take_umbrella():
     # Сложные манипуляции с банками...
 
     # Сложные манипуляции с аппаратной частью станции... (функция должна вернуть номер слота, который был открыт для пользователя)
-    slot = 3
+    slot = station_controller.give_out_umbrella(station_id)
 
     order_id = db_helper.open_order(user_id, station_id, slot)
 

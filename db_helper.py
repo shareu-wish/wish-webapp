@@ -356,6 +356,25 @@ def get_processed_orders(user_id: int) -> dict:
     return res
 
 
+""" Station controller """
+TIME_TO_TAKE_UMBRELLA = config.TIME_TO_TAKE_UMBRELLA
+
+def set_station_take_umbrella_timeout(order_id:int, station_id: int, slot_id: int) -> None:
+    """
+    Установить таймаут для взятия зонта
+
+    :param order_id: ID заказа
+    :param station_id: ID станции
+    :param slot_id: ID слота
+    """
+
+    # Create 
+    cur = conn.cursor()
+    cur.execute("UPDATE orders SET lock_take_timeout = now() + interval '%s second' WHERE id = %s", (TIME_TO_TAKE_UMBRELLA, order_id))
+    conn.commit()
+    cur.close()
+
+
 if not config.DEBUG:
     _schedule_delete_old_data()
 

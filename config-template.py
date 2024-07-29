@@ -1,3 +1,6 @@
+# Общие настройки
+TIME_TO_TAKE_UMBRELLA = 30
+
 # База данных
 DB_HOST=""
 DB_NAME=""
@@ -10,6 +13,12 @@ ZVONOK_CAMPAIGN_ID=""
 
 # JWT
 JWT_SECRET=""
+
+# MQTT
+MQTT_HOST=""
+MQTT_PORT=0
+MQTT_USERNAME=""
+MQTT_PASSWORD=""
 
 # Debug
 DEBUG=True
