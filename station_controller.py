@@ -15,6 +15,13 @@ wish
 stations_data = {}
 
 
+def _monitor_take_umbrella_timeout():
+    Timer(2, _monitor_take_umbrella_timeout).start()
+    timeouts = db_helper.get_all_station_lock_timeouts()
+
+
+
+
 def on_connect(client, userdata, flags, reason_code, properties):
     print(f"Connected with result code {reason_code}")
     client.subscribe("wish/#")
@@ -46,7 +53,14 @@ def _init_station(station_id: int, slots_count: int) -> None:
         mqttc.publish(f"wish/station{station_id}/slot{slot_id}/has_umbrella", "n", qos=1, retain=True)
 
 
-def give_out_umbrella(station_id: int, success_func: callable, timeout_func: callable) -> int | None:
+def give_out_umbrella(order_id: int, station_id: int) -> int | None:
+    """
+    Выдать зонт пользователю
+
+    :param order_id: id заказа
+    :param station_id: id станции
+    :return: id слота, который был открыт
+    """
     if station_id not in stations_data:
         return None
     
@@ -62,7 +76,7 @@ def give_out_umbrella(station_id: int, success_func: callable, timeout_func: cal
     
     mqttc.publish(f"wish/station{station_id}/slot{slot_with_umbrella}/lock", "open", qos=1, retain=True)
 
-    db_helper
+    db_helper.set_station_take_umbrella_timeout(order_id, station_id, slot_with_umbrella)
 
     return slot_with_umbrella
 

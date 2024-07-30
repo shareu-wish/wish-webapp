@@ -285,12 +285,17 @@ def open_order(user_id: int, station_id: int, slot: int) -> int:
     return order_id
 
 
-def get_active_order(user_id: int) -> dict:
+def get_active_order(user_id: int) -> dict | None:
     """
     Получить активный заказ пользователя
 
     :param user_id: ID пользователя
-    :return: dict с данными о заказе
+    :return: dict с данными о заказе\n
+        - *id*: ID заказа
+        - *state*: Статус заказа
+        - *datetime_take*: Дата и время взятия зонтов
+        - *station_take*: ID станции, в которую был помещен зонт
+        - *slot_take*: номер слота на станции, куда был помещен зонт
     """
 
     cur = conn.cursor()
@@ -327,12 +332,20 @@ def close_order(order_id: int, station_id: int, slot: int) -> None:
     cur.close()
 
 
-def get_processed_orders(user_id: int) -> dict:
+def get_processed_orders(user_id: int) -> list[dict]:
     """
     Получить все обработанные заказы пользователя
 
     :param user_id: ID пользователя
-    :return: Список заказов
+    :return: Список заказов\n
+        - *id*: ID заказа
+        - *state*: Статус заказа
+        - *datetime_take*: Дата и время взятия зонтов
+        - *datetime_put*: Дата и время возврата зонтов
+        - *station_take*: ID станции, в которую был помещен зонт
+        - *station_put*: ID станции, из которой был взят зонт
+        - *slot_take*: номер слота на станции, куда был помещен зонт
+        - *slot_put*: номер слота на станции, из которой был взят зонт
     """
 
     cur = conn.cursor()
@@ -356,10 +369,48 @@ def get_processed_orders(user_id: int) -> dict:
     return res
 
 
+def get_last_order(user_id: int) -> dict | None:
+    """
+    Получить последний заказ пользователя
+
+    :param user_id: ID пользователя
+    :return: dict с данными о заказе\n
+        - *id*: ID заказа
+        - *state*: Статус заказа
+        - *datetime_take*: Дата и время взятия зонтов
+        - *datetime_put*: Дата и время возврата зонтов
+        - *station_take*: ID станции, в которую был помещен зонт
+        - *station_put*: ID станции, из которой был взят зонт
+        - *slot_take*: номер слота на станции, куда был помещен зонт
+        - *slot_put*: номер слота на станции, из которой был взят зонт
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, state, datetime_take, datetime_put, station_take, station_put, slot_take, slot_put FROM orders WHERE user_id = %s ORDER BY id DESC LIMIT 1", (user_id,))
+    data = cur.fetchone()
+    cur.close()
+
+    if data is None:
+        return None
+    
+    res = {
+        "id": data[0],
+        "state": data[1],
+        "datetime_take": data[2],
+        "datetime_put": data[3],
+        "station_take": data[4],
+        "station_put": data[5],
+        "slot_take": data[6],
+        "slot_put": data[7]
+    }
+    return res
+
+
 """ Station controller """
 TIME_TO_TAKE_UMBRELLA = config.TIME_TO_TAKE_UMBRELLA
 
-def set_station_take_umbrella_timeout(order_id:int, station_id: int, slot_id: int) -> None:
+
+def set_station_take_umbrella_timeout(order_id: int, station_id: int, slot_id: int) -> None:
     """
     Установить таймаут для взятия зонта
 
@@ -368,9 +419,78 @@ def set_station_take_umbrella_timeout(order_id:int, station_id: int, slot_id: in
     :param slot_id: ID слота
     """
 
-    # Create 
     cur = conn.cursor()
-    cur.execute("UPDATE orders SET lock_take_timeout = now() + interval '%s second' WHERE id = %s", (TIME_TO_TAKE_UMBRELLA, order_id))
+    cur.execute("INSERT INTO station_lock_timeouts (order_id, station_id, slot, datetime_opened, type) VALUES (%s, %s, %s, now(), %s)", (order_id, station_id, slot_id, 1))
+    conn.commit()
+    cur.close()
+
+
+def get_all_station_lock_timeouts() -> list[dict]:
+    """
+    Найти таймауты для открытия станций
+
+    :return: Список таймаутов
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, station_id, slot, datetime_opened, type FROM station_lock_timeouts WHERE datetime_opened + interval '%s second' < now()", (TIME_TO_TAKE_UMBRELLA,))
+    data = cur.fetchall()
+    cur.close()
+
+    res = []
+    for timeout in data:
+        res.append({
+            "id": timeout[0],
+            "station_id": timeout[1],
+            "slot": timeout[2],
+            "datetime_opened": timeout[3],
+            "type": timeout[4]
+        })
+
+    return res
+
+
+def get_station_lock_timeout_by_order_id(order_id: int) -> dict | None:
+    """
+    Найти таймаут открытия станции
+
+    :param order_id: ID заказа
+    :return: dict с данными о таймауте\n
+        - *id*: ID таймаута
+        - *station_id*: ID станции
+        - *slot*: ID слота
+        - *datetime_opened*: Дата и время открытия
+        - *type*: Тип таймаута (1 - взятие зонта, 2 - возврат зонта)
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, station_id, slot, datetime_opened, type FROM station_lock_timeouts WHERE order_id = %s", (order_id,))
+    data = cur.fetchone()
+    cur.close()
+
+    if data is None:
+        return None
+
+    res = {
+        "id": data[0],
+        "station_id": data[1],
+        "slot": data[2],
+        "datetime_opened": data[3],
+        "type": data[4]
+    }
+
+    return res
+
+
+def delete_station_lock_timeout(id: int) -> None:
+    """
+    Удалить таймаут открытия станции
+
+    :param id: ID таймаута
+    """
+
+    cur = conn.cursor()
+    cur.execute("DELETE FROM station_lock_timeouts WHERE id = %s", (id,))
     conn.commit()
     cur.close()
 

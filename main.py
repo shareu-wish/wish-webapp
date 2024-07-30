@@ -154,6 +154,46 @@ def put_umbrella():
     return {"status": "ok", "order_id": order_id}
 
 
+@app.route("/station-map/get-order-status")
+def get_order_status():
+    user_id = check_auth()
+    if not user_id:
+        return redirect("/auth")
+    
+    """
+    station_opened_to_take - слот открыт для взятия зонта
+    station_opened_to_put - слот открыт для возврата зонта
+    in_the_hands - зонт взят, находится у пользователя
+    closed_successfully - зонт возвращен, заказ закрыт
+    bank_error - ошибка банка, оплата не прошла
+    timeout_exceeded - время ожидания взятия зонта истекло
+    unknown - что-то пошло не так
+    """
+    
+    active_order = db_helper.get_active_order(user_id)
+    if active_order:
+        timeout = db_helper.get_station_lock_timeout_by_order_id(active_order['id'])
+        if timeout:
+            if timeout['type'] == 1:
+                return {"status": "ok", "station_status": "station_opened_to_take", "slot": timeout['slot']}
+            elif timeout['type'] == 2:
+                return {"status": "ok", "station_status": "station_opened_to_put", "slot": timeout['slot']}
+            else:
+                return {"status": "ok", "station_status": "unknown"}
+        else:
+            return {"status": "ok", "station_status": "in_the_hands"}
+    else:
+        last_order = db_helper.get_last_order(user_id)
+        station_status = ""
+        if last_order['status'] == 0:
+            station_status = "closed_successfully"
+        elif last_order['status'] == 2:
+            station_status = "bank_error"
+        elif last_order['status'] == 3:
+            station_status = "timeout_exceeded"
+        
+        return {"status": "ok", "station_status": station_status}
+
 
 @app.route('/profile')
 def profile():
