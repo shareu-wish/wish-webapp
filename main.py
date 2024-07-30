@@ -264,6 +264,11 @@ def loading():
     return render_template("loading.html")
 
 
+@app.route('/agreement')
+def agreement():
+    return send_from_directory(app.static_folder, "agreement.docx")
+
+
 if __name__ == "__main__":
     if config.DEBUG:
         app.run(port=5000, debug=True, host=config.DEBUG_HOST)
