@@ -17,6 +17,10 @@ function goToPreVerification() {
       .replaceAll("-", "").length !== 11
   )
     return alert("Введите номер телефона");
+
+  if (!$("#notificationAgreementCheckbox")[0].checked) 
+    return alert("Необходимо согласиться с получением важных уведомлений!");
+
   sessionStorage.setItem("phone", phone);
   $("#yourPhone").text(phone);
 
