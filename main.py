@@ -108,7 +108,7 @@ def take_umbrella():
     if not user_id:
         return {"status": "error", "message": "Unauthorized"}
     
-    station_id = request.form["station_id"]
+    station_id = int(request.form["station_id"])
 
     can_take = db_helper.get_station(station_id)['can_take']
     if can_take <= 0:
@@ -116,13 +116,16 @@ def take_umbrella():
     
     if db_helper.get_active_order(user_id):
         return {"status": "error", "message": "You have an active order"}
+    
+    order_id = db_helper.open_order(user_id, station_id)
 
     # Сложные манипуляции с банками...
 
     # Сложные манипуляции с аппаратной частью станции... (функция должна вернуть номер слота, который был открыт для пользователя)
-    slot = station_controller.give_out_umbrella(station_id)
+    print("give_out_umbrella")
+    slot = station_controller.give_out_umbrella(order_id, station_id)
 
-    order_id = db_helper.open_order(user_id, station_id, slot)
+    # TODO: Update slot in db
 
     return {"status": "ok", "slot": slot, "order_id": order_id}
 

@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 import config
 from threading import Timer
 import db_helper
+from time import sleep
 
 
 """
@@ -19,6 +20,13 @@ def _monitor_take_umbrella_timeout():
     Timer(2, _monitor_take_umbrella_timeout).start()
     timeouts = db_helper.get_all_station_lock_timeouts()
 
+    for timeout in timeouts:
+        if timeout['type'] == 1:
+            # TODO: Вернуть депозит пользователю
+            mqttc.publish(f"wish/station{timeout['station_id']}/slot{timeout['slot']}/lock", "close", qos=1, retain=True)
+            db_helper.close_order(timeout['order_id'], state=2)
+            db_helper.delete_station_lock_timeout(timeout['id'])
+
 
 
 
@@ -31,8 +39,8 @@ def on_message(client, userdata, msg):
     # print(msg.topic+" "+str(msg.payload))
     # wish/station2/slot17/lock
     topic_parts = msg.topic.split("/")
-    print(topic_parts[1][:7])
-    if topic_parts[1][:7] == "station" and topic_parts[2][4:] == "slot":
+    # print(topic_parts[1][:7])
+    if topic_parts[1][:7] == "station" and topic_parts[2][:4] == "slot" and topic_parts[3]:
         station_id = int(topic_parts[1][7:])
         slot_id = int(topic_parts[2][4:])
         if station_id not in stations_data:
@@ -41,9 +49,12 @@ def on_message(client, userdata, msg):
             stations_data[station_id][slot_id] = {}
         stations_data[station_id][slot_id][topic_parts[3]] = msg.payload.decode()
 
-    if topic_parts[1][:7] == "station":
-        pass
-
+        if topic_parts[3] == "has_umbrella" and msg.payload.decode() == "n":
+            timeout = db_helper.get_station_lock_timeout_by_station_and_slot(station_id, slot_id)
+            if timeout is not None:
+                db_helper.delete_station_lock_timeout(timeout['id'])
+                sleep(2)
+                mqttc.publish(f"wish/station{station_id}/slot{slot_id}/lock", "close", qos=1, retain=True)
 
 
 
@@ -112,6 +123,10 @@ mqttc.connect(config.MQTT_HOST, config.MQTT_PORT)
 # _init_station(2, 20)
 
 # mqttc.loop_start()
+
+# if not config.DEBUG:
+_monitor_take_umbrella_timeout()
+
 
 if __name__ == "__main__":
     # _init_station(2, 20)

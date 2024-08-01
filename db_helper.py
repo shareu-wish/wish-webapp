@@ -1,6 +1,8 @@
 import psycopg2
 import config
 from threading import Timer
+from datetime import datetime
+
 
 
 conn = psycopg2.connect(
@@ -116,7 +118,7 @@ def _delete_old_data() -> None:
     """
 
     cur = conn.cursor()
-    cur.execute("DELETE FROM user_verification WHERE created_at < NOW() - INTERVAL '10 minute'")
+    cur.execute("DELETE FROM user_verification WHERE created_at < %s - INTERVAL '10 minute'", (datetime.now(),))
     conn.commit()
     cur.close()
 
@@ -266,7 +268,7 @@ def get_station(id: int) -> dict:
     return res
 
 
-def open_order(user_id: int, station_id: int, slot: int) -> int:
+def open_order(user_id: int, station_id: int, slot: int = None) -> int:
     """
     Создать запись в таблице orders
 
@@ -317,17 +319,22 @@ def get_active_order(user_id: int) -> dict | None:
     return res
 
 
-def close_order(order_id: int, station_id: int, slot: int) -> None:
+def close_order(order_id: int = None, station_id: int = None, slot: int = None, state: int = 0) -> None:
     """
     Закрыть заказ пользователя
 
     :param order_id: ID заказа
     :param station_id: ID станции, в которую был помещен зонт
     :param slot: номер слота на станции, куда был помещен зонт
+    :param state: Статус заказа\n
+        + **0** - заказ закрыт (стандартно)
+        + **1** - заказ открыт
+        + **2** - заказ закрыт т. к. пользователь не взял зонт вовремя
+        + **3** - заказ закрыт из-за проблем с оплатой
     """
 
     cur = conn.cursor()
-    cur.execute("UPDATE orders SET state = 0, station_put = %s, slot_put = %s, datetime_put = now() WHERE id = %s", (station_id, slot, order_id))
+    cur.execute("UPDATE orders SET state = %s, station_put = %s, slot_put = %s, datetime_put = %s WHERE id = %s", (state, station_id, slot, datetime.now(), order_id))
     conn.commit()
     cur.close()
 
@@ -420,7 +427,7 @@ def set_station_take_umbrella_timeout(order_id: int, station_id: int, slot_id: i
     """
 
     cur = conn.cursor()
-    cur.execute("INSERT INTO station_lock_timeouts (order_id, station_id, slot, datetime_opened, type) VALUES (%s, %s, %s, now(), %s)", (order_id, station_id, slot_id, 1))
+    cur.execute("INSERT INTO station_lock_timeouts (order_id, station_id, slot, datetime_opened, type) VALUES (%s, %s, %s, %s, %s)", (order_id, station_id, slot_id, datetime.now(), 1))
     conn.commit()
     cur.close()
 
@@ -433,7 +440,7 @@ def get_all_station_lock_timeouts() -> list[dict]:
     """
 
     cur = conn.cursor()
-    cur.execute("SELECT id, station_id, slot, datetime_opened, type FROM station_lock_timeouts WHERE datetime_opened + interval '%s second' < now()", (TIME_TO_TAKE_UMBRELLA,))
+    cur.execute("SELECT id, order_id, station_id, slot, datetime_opened, type FROM station_lock_timeouts WHERE datetime_opened + interval '%s second' < %s", (TIME_TO_TAKE_UMBRELLA, datetime.now()))
     data = cur.fetchall()
     cur.close()
 
@@ -441,10 +448,11 @@ def get_all_station_lock_timeouts() -> list[dict]:
     for timeout in data:
         res.append({
             "id": timeout[0],
-            "station_id": timeout[1],
-            "slot": timeout[2],
-            "datetime_opened": timeout[3],
-            "type": timeout[4]
+            "order_id": timeout[1],
+            "station_id": timeout[2],
+            "slot": timeout[3],
+            "datetime_opened": timeout[4],
+            "type": timeout[5]
         })
 
     return res
@@ -482,6 +490,37 @@ def get_station_lock_timeout_by_order_id(order_id: int) -> dict | None:
     return res
 
 
+def get_station_lock_timeout_by_station_and_slot(station_id: int, slot: int) -> dict | None:
+    """
+    Найти таймаут открытия станции
+
+    :param station_id: ID станции
+    :param slot: ID слота
+    :return: dict с данными о таймауте\n
+        - *id*: ID таймаута
+        - *order_id*: ID заказа
+        - *datetime_opened*: Дата и время открытия
+        - *type*: Тип таймаута (1 - взятие зонта, 2 - возврат зонта)
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, order_id, datetime_opened, type FROM station_lock_timeouts WHERE station_id = %s AND slot = %s", (station_id, slot))
+    data = cur.fetchone()
+    cur.close()
+
+    if data is None:
+        return None
+
+    res = {
+        "id": data[0],
+        "order_id": data[1],
+        "datetime_opened": data[2],
+        "type": data[3]
+    }
+
+    return res
+
+
 def delete_station_lock_timeout(id: int) -> None:
     """
     Удалить таймаут открытия станции
@@ -500,7 +539,4 @@ if not config.DEBUG:
 
 
 if __name__ == "__main__":
-    # create_verify_phone_record("1234567890", "1234")
-    # print(get_verify_phone_record("1234567890"))
-    # delete_verify_phone_record("1234567890")
-    print(get_active_order(9))
+    print(get_all_station_lock_timeouts())
