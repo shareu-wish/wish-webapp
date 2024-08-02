@@ -26,6 +26,9 @@ def _monitor_take_umbrella_timeout():
             mqttc.publish(f"wish/station{timeout['station_id']}/slot{timeout['slot']}/lock", "close", qos=1, retain=True)
             db_helper.close_order(timeout['order_id'], state=2)
             db_helper.delete_station_lock_timeout(timeout['id'])
+        elif timeout['type'] == 2:
+            mqttc.publish(f"wish/station{timeout['station_id']}/slot{timeout['slot']}/lock", "close", qos=1, retain=True)
+            db_helper.delete_station_lock_timeout(timeout['id'])
 
 
 
@@ -55,6 +58,14 @@ def on_message(client, userdata, msg):
                 db_helper.delete_station_lock_timeout(timeout['id'])
                 sleep(2)
                 mqttc.publish(f"wish/station{station_id}/slot{slot_id}/lock", "close", qos=1, retain=True)
+        elif topic_parts[3] == "has_umbrella" and msg.payload.decode() == "y":
+            timeout = db_helper.get_station_lock_timeout_by_station_and_slot(station_id, slot_id)
+            if timeout is not None:
+                db_helper.delete_station_lock_timeout(timeout['id'])
+                # sleep(0.5)
+                mqttc.publish(f"wish/station{station_id}/slot{slot_id}/lock", "close", qos=1, retain=True)
+                db_helper.close_order(timeout['order_id'], station_id, slot_id)
+
 
 
 
@@ -76,7 +87,6 @@ def give_out_umbrella(order_id: int, station_id: int) -> int | None:
         return None
     
     slot_with_umbrella = None
-
     for slot_id, slot_data in stations_data[station_id].items():
         if slot_data['lock'] == 'closed' and slot_data['has_umbrella'] == 'y':
             slot_with_umbrella = slot_id
@@ -92,7 +102,14 @@ def give_out_umbrella(order_id: int, station_id: int) -> int | None:
     return slot_with_umbrella
 
 
-def put_umbrella(station_id: int) -> int | None:
+def put_umbrella(order_id: int, station_id: int) -> int | None:
+    """
+    Открыть ячейку для возврата зонта
+
+    :param order_id: id заказа
+    :param station_id:
+    :return: id слота, который был открыт
+    """
     if station_id not in stations_data:
         return None
     
@@ -106,6 +123,9 @@ def put_umbrella(station_id: int) -> int | None:
         return None
     
     mqttc.publish(f"wish/station{station_id}/slot{free_slot}/lock", "open", qos=1, retain=True)
+
+    db_helper.set_station_put_umbrella_timeout(order_id, station_id, free_slot)
+
     return free_slot
     
 

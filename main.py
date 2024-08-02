@@ -102,6 +102,7 @@ def station_map():
 def get_stations():
     return db_helper.get_stations()
 
+
 @app.route("/station-map/take-umbrella", methods=["POST"])
 def take_umbrella():
     user_id = check_auth()
@@ -119,13 +120,11 @@ def take_umbrella():
     
     order_id = db_helper.open_order(user_id, station_id)
 
-    # Сложные манипуляции с банками...
+    # TODO: Сложные манипуляции с банками...
 
     # Сложные манипуляции с аппаратной частью станции... (функция должна вернуть номер слота, который был открыт для пользователя)
-    print("give_out_umbrella")
     slot = station_controller.give_out_umbrella(order_id, station_id)
-
-    # TODO: Update slot in db
+    db_helper.update_order_take_slot(order_id, slot)
 
     return {"status": "ok", "slot": slot, "order_id": order_id}
 
@@ -136,7 +135,7 @@ def put_umbrella():
     if not user_id:
         return {"status": "error", "message": "Unauthorized"}
     
-    station_id = request.form["station_id"]
+    station_id = int(request.form["station_id"])
 
     can_put = db_helper.get_station(station_id)['can_put']
     if can_put <= 0:
@@ -148,13 +147,9 @@ def put_umbrella():
     order_id = active_order['id']
 
     # Сложные манипуляции с аппаратной частью станции... (функция должна вернуть номер слота, в который пользователь положил зонт)
-    slot = 2
+    slot = station_controller.put_umbrella(order_id, station_id)
 
-    # Сложные манипуляции с банками... Возврат залога
-
-    db_helper.close_order(order_id, station_id, slot)
-
-    return {"status": "ok", "order_id": order_id}
+    return {"status": "ok", "slot": slot, "order_id": order_id}
 
 
 @app.route("/station-map/get-order-status")

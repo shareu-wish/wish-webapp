@@ -131,6 +131,7 @@ def _schedule_delete_old_data() -> None:
     Timer(60*2, _schedule_delete_old_data).start()
 
 
+""" User """
 def get_user(id: int) -> dict:
     """
     Получить запись из таблицы users
@@ -206,6 +207,7 @@ def update_user_info(id: int, data: dict) -> None:
     cur.close()
 
 
+""" Stations """
 def get_stations() -> list[dict]:
     """
     Получить все записи из таблицы stations
@@ -268,6 +270,7 @@ def get_station(id: int) -> dict:
     return res
 
 
+""" Orders """
 def open_order(user_id: int, station_id: int, slot: int = None) -> int:
     """
     Создать запись в таблице orders
@@ -376,6 +379,20 @@ def get_processed_orders(user_id: int) -> list[dict]:
     return res
 
 
+def update_order_take_slot(order_id: int, slot: int) -> None:
+    """
+    Обновить запись в таблице orders
+
+    :param order_id: ID заказа
+    :param slot: номер слота на станции, куда был помещен зонт
+    """
+
+    cur = conn.cursor()
+    cur.execute("UPDATE orders SET slot_take = %s WHERE id = %s", (slot, order_id))
+    conn.commit()
+    cur.close()
+
+
 def get_last_order(user_id: int) -> dict | None:
     """
     Получить последний заказ пользователя
@@ -428,6 +445,21 @@ def set_station_take_umbrella_timeout(order_id: int, station_id: int, slot_id: i
 
     cur = conn.cursor()
     cur.execute("INSERT INTO station_lock_timeouts (order_id, station_id, slot, datetime_opened, type) VALUES (%s, %s, %s, %s, %s)", (order_id, station_id, slot_id, datetime.now(), 1))
+    conn.commit()
+    cur.close()
+
+
+def set_station_put_umbrella_timeout(order_id: int, station_id: int, slot_id: int) -> None:
+    """
+    Установить таймаут для возврата зонта
+
+    :param order_id: ID заказа
+    :param station_id: ID станции
+    :param slot_id: ID слота
+    """
+
+    cur = conn.cursor()
+    cur.execute("INSERT INTO station_lock_timeouts (order_id, station_id, slot, datetime_opened, type) VALUES (%s, %s, %s, %s, %s)", (order_id, station_id, slot_id, datetime.now(), 2))
     conn.commit()
     cur.close()
 
