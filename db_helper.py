@@ -270,6 +270,36 @@ def get_station(id: int) -> dict:
     return res
 
 
+def decrease_free_umbrellas_on_station(station_id: int) -> None:
+    """
+    Уменьшить количество свободных зонтов на станции
+
+    :param station_id: ID станции
+    """
+    
+    print("decrease_free_umbrellas_on_station")
+    cur = conn.cursor()
+    cur.execute("UPDATE stations SET can_take = can_take - 1 WHERE id = %s", (station_id,))
+    cur.execute("UPDATE stations SET can_put = can_put + 1 WHERE id = %s", (station_id,))
+    conn.commit()
+    cur.close()
+
+
+def increase_free_umbrellas_on_station(station_id: int) -> None:
+    """
+    Увеличить количество свободных зонтов на станции
+
+    :param station_id: ID станции
+    """
+
+    print("increase_free_umbrellas_on_station")
+    cur = conn.cursor()
+    cur.execute("UPDATE stations SET can_take = can_take + 1 WHERE id = %s", (station_id,))
+    cur.execute("UPDATE stations SET can_put = can_put - 1 WHERE id = %s", (station_id,))
+    conn.commit()
+    cur.close()
+
+
 """ Orders """
 def open_order(user_id: int, station_id: int, slot: int = None) -> int:
     """
@@ -322,7 +352,7 @@ def get_active_order(user_id: int) -> dict | None:
     return res
 
 
-def close_order(order_id: int = None, station_id: int = None, slot: int = None, state: int = 0) -> None:
+def close_order(order_id: int, station_id: int = None, slot: int = None, state: int = 0) -> None:
     """
     Закрыть заказ пользователя
 
@@ -334,6 +364,7 @@ def close_order(order_id: int = None, station_id: int = None, slot: int = None, 
         + **1** - заказ открыт
         + **2** - заказ закрыт т. к. пользователь не взял зонт вовремя
         + **3** - заказ закрыт из-за проблем с оплатой
+        + **4** - заказ закрыт из-за внутренней ошибки (например, нет свободных зонтов)
     """
 
     cur = conn.cursor()

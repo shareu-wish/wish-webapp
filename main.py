@@ -124,6 +124,11 @@ def take_umbrella():
 
     # Сложные манипуляции с аппаратной частью станции... (функция должна вернуть номер слота, который был открыт для пользователя)
     slot = station_controller.give_out_umbrella(order_id, station_id)
+    if slot is None:
+        db_helper.close_order(order_id, state=4)
+        print("Failed to take an umbrella")
+        return {"status": "error", "message": "Failed to take an umbrella"}
+    
     db_helper.update_order_take_slot(order_id, slot)
 
     return {"status": "ok", "slot": slot, "order_id": order_id}
