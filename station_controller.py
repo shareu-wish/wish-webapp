@@ -55,14 +55,14 @@ def on_message(client, userdata, msg):
         if topic_parts[3] == "has_umbrella" and msg.payload.decode() == "n":
             timeout = db_helper.get_station_lock_timeout_by_station_and_slot(station_id, slot_id)
             if timeout is not None:
-                # db_helper.decrease_free_umbrellas_on_station(station_id)
+                db_helper.decrease_free_umbrellas_on_station(station_id)
                 db_helper.delete_station_lock_timeout(timeout['id'])
                 sleep(2)
                 mqttc.publish(f"wish/station{station_id}/slot{slot_id}/lock", "close", qos=1, retain=True)
         elif topic_parts[3] == "has_umbrella" and msg.payload.decode() == "y":
             timeout = db_helper.get_station_lock_timeout_by_station_and_slot(station_id, slot_id)
             if timeout is not None:
-                # db_helper.increase_free_umbrellas_on_station(station_id)
+                db_helper.increase_free_umbrellas_on_station(station_id)
                 db_helper.delete_station_lock_timeout(timeout['id'])
                 # sleep(0.5)
                 mqttc.publish(f"wish/station{station_id}/slot{slot_id}/lock", "close", qos=1, retain=True)

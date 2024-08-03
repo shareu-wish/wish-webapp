@@ -274,6 +274,6 @@ def agreement():
 
 if __name__ == "__main__":
     if config.DEBUG:
-        app.run(port=5000, debug=True, host=config.DEBUG_HOST)
+        app.run(port=5000, debug=True, host=config.DEBUG_HOST, use_reloader=False)
     else:
         serve(app, host="0.0.0.0", port=5000, url_scheme="https", threads=100)
