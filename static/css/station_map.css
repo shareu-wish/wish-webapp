@@ -471,6 +471,10 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 
+.station-interaction-modal-header {
+  justify-content: flex-end;
+}
+
 
 @media (min-width: 320px) and (max-width: 480px) {
   .search-offcanvas {

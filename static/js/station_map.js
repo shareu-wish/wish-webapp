@@ -261,7 +261,8 @@ function takeUmbrella(stationId) {
     },
     success: function (data) {
       if (data.status === "ok") {
-        alert(`Заказ №${data.order_id}\nВы можете забрать зонт из ячейки ${data.slot}`)
+        // alert(`Заказ №${data.order_id}\nВы можете забрать зонт из ячейки ${data.slot}`)
+        setIsInteractingWithStation(true);
       }
       toggleStationWindow(stationId)
       setTimeout(() => {
@@ -281,7 +282,8 @@ function putUmbrella(stationId) {
     },
     success: function (data) {
       if (data.status === "ok") {
-        alert(`Заказ №${data.order_id} закрыт\nСпасибо за то, что пользуетесь нашим сервисом!`)
+        // alert(`Заказ №${data.order_id} закрыт\nСпасибо за то, что пользуетесь нашим сервисом!`)
+        setIsInteractingWithStation(true);
       }
       toggleStationWindow(stationId)
       setTimeout(() => {
@@ -359,11 +361,146 @@ function hideSearch() {
 }
 
 
+
+/* Получение статуса заказа во время взаимодействия со станцией */
+async function getOrderStatus() {
+  return await new Promise((resolve, reject) => {
+    $.ajax({
+      type: "GET",
+      url: `/station-map/get-order-status`,
+      success: function (data) {
+        if (data.status === "ok") {
+          console.log(data.order_status)
+          resolve(data)
+        }
+      },
+      error: function (e) {
+        reject(e)
+      }
+    });
+  });
+}
+
+
+function setIsInteractingWithStation(val) {
+  if (val) {
+    checkOrderStatusForUpdates();
+  }
+  localStorage.setItem("isInteractingWithStation", val);
+}
+
+
+function showStationInteractionModal(content) {
+  $("#stationInteractionModal").removeClass("show")
+
+  setTimeout(() => {
+    $("#stationInteractionModal").html(content)
+    $("#stationInteractionModal").addClass("show")
+  }, 300)
+}
+
+
+async function checkOrderStatusForUpdates() {
+  if (localStorage.getItem("isInteractingWithStation") === "true") {
+    const data = await getOrderStatus();
+
+    if (oldStationInteractionOrderStatus === data.order_status) {
+      return;
+    }
+    
+    switch (data.order_status) {
+      case "station_opened_to_take":
+        showStationInteractionModal(`
+          <div class="modal-body">
+            <div class="modal-content">
+              Возьмите зонт из ячейки №${data.slot}
+            </div>
+          </div>
+        `)
+        break;
+      case "in_the_hands":
+        if (oldStationInteractionOrderStatus === 'station_opened_to_take') {
+          showStationInteractionModal(`
+            <div class="modal-body">
+              <div class="modal-header station-interaction-modal-header">
+                <span class="modal-close" onclick="$('#stationInteractionModal').removeClass('show')"><i class="bi bi-x-lg"></i></span>
+              </div>
+              <div class="modal-content">
+                Приятного пользования и хорошей погоды!
+              </div>
+            </div>
+          `)
+        } else if(oldStationInteractionOrderStatus === 'station_opened_to_put') {
+          showStationInteractionModal(`
+            <div class="modal-body">
+              <div class="modal-header station-interaction-modal-header">
+                <span class="modal-close" onclick="$('#stationInteractionModal').removeClass('show')"><i class="bi bi-x-lg"></i></span>
+              </div>
+              <div class="modal-content">
+                Время для возврата зонта в станцию истекло.<br>
+                Попробуйте еще раз.
+              </div>
+            </div>
+          `)
+        }
+        setIsInteractingWithStation(false);
+        break;
+      case "timeout_exceeded":
+        showStationInteractionModal(`
+          <div class="modal-body">
+            <div class="modal-header station-interaction-modal-header">
+              <span class="modal-close" onclick="$('#stationInteractionModal').removeClass('show')"><i class="bi bi-x-lg"></i></span>
+            </div>
+            <div class="modal-content">
+              Время на взятие зонта истекло. Ваш депозит скоро Вам вернется.<br>
+              Мы можете попробовать взять зонт еще раз.
+            </div>
+          </div>
+        `)
+        setIsInteractingWithStation(false);
+        break;
+      case "station_opened_to_put":
+        showStationInteractionModal(`
+          <div class="modal-body">
+            <div class="modal-content">
+              Пожалуйста, положите зонт в ячейку №${data.slot}
+            </div>
+          </div>
+        `)
+        break;
+      case "closed_successfully":
+        showStationInteractionModal(`
+          <div class="modal-body">
+            <div class="modal-header station-interaction-modal-header">
+              <span class="modal-close" onclick="$('#stationInteractionModal').removeClass('show')"><i class="bi bi-x-lg"></i></span>
+            </div>
+            <div class="modal-content">
+              Спасибо за пользование нашим сервисом!
+            </div>
+          </div>
+        `)
+        setIsInteractingWithStation(false);
+        // TODO: feedback form
+        break;
+      default:
+        break;
+    }
+
+
+    oldStationInteractionOrderStatus = data.order_status;
+  }
+}
+
+setInterval(checkOrderStatusForUpdates, 1000);
+
+
 let map = null;
 let stations = []
 let activeStationWindow = null;
 let hasActiveOrder = false;
 let hasAuth = false;
+let oldStationInteractionOrderStatus = null;
+
 
 loadStations().then((data) => {
   stations = data;
