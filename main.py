@@ -7,6 +7,7 @@ from flask import request
 import jwt
 import datetime
 import db_helper
+import vk_id_auth as vk_id
 
 
 app = Flask(__name__)
@@ -75,7 +76,7 @@ def auth_check_code():
             encoded_jwt = encoded_jwt.decode()
         
         resp = make_response({"status": "ok", "is_verified": True})
-        resp.set_cookie('authToken', encoded_jwt)
+        resp.set_cookie('authToken', encoded_jwt, max_age=60*60*24*365*100)
         return resp
     elif res == 'incorrect':
         return {"status": "ok", "is_verified": False}
@@ -83,6 +84,23 @@ def auth_check_code():
         return {"status": "ok", "is_verified": False, "attempts_exceeded": True}
     elif res == 'timeout_exceeded':
         return {"status": "ok", "is_verified": False, "timeout_exceeded": True}
+
+
+@app.route("/auth/vk-id")
+def vk_id_auth():
+    code = request.args.get("code")
+    state = request.args.get("state")
+    device_id = request.args.get("device_id")
+    code_verifier = request.cookies.get("vkCodeVerifier")
+    print(code, state, device_id, code_verifier)
+
+    tokens = vk_id.exchange_code_for_tokens(code, state, device_id, code_verifier)
+    print(tokens)
+
+    return {"status": "ok"}
+    # return redirect("/station-map")
+
+    
 
 
 @app.route("/logout")
