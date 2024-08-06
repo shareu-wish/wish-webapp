@@ -18,7 +18,7 @@ def exchange_code_for_tokens(code, state, device_id, code_verifier):
     data = {
         "grant_type": "authorization_code",
         "code_verifier": code_verifier,
-        "redirect_uri": "https://0b0d-91-215-201-1.ngrok-free.app/auth/vk-id",
+        "redirect_uri": "https://shareu.ru/auth/vk-id",
         "code": code,
         "client_id": CLIENT_ID,
         "device_id": device_id,

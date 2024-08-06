@@ -185,7 +185,7 @@ async function generateCodeChallenge(codeVerifier) {
 
   VKID.Config.init({
     app: "52095189",
-    redirectUrl: "https://0b0d-91-215-201-1.ngrok-free.app/auth/vk-id",
+    redirectUrl: "https://shareu.ru/auth/vk-id",
     codeChallenge: codeChallenge,
     scope: 'phone',
     mode: VKID.ConfigAuthMode.InNewTab
