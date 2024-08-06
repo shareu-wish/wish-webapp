@@ -144,54 +144,68 @@ if (
   showRestartTimer();
 }
 
-// VK ID
+
+/* VK ID */
 const VKID = window.VKIDSDK;
 
-// GENERATING CODE VERIFIER
-// function dec2hex(dec) {
-//   return ("0" + dec.toString(16)).substr(-2);
-// }
-// function generateCodeVerifier() {
-//   var array = new Uint32Array(56 / 2);
-//   window.crypto.getRandomValues(array);
-//   return Array.from(array, dec2hex).join("");
-// }
+// Функция для генерации случайной строки в качестве code_verifier
 function generateCodeVerifier() {
-  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-';
-  const length = Math.floor(Math.random() * (129 - 43 + 1)) + 43;
-  let result = '';
-  for (let i = 0; i < length; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
+  const array = new Uint8Array(32);
+  window.crypto.getRandomValues(array);
+  return base64UrlEncode(array);
+}
+
+// Функция для кодирования в base64 URL безопасный формат
+function base64UrlEncode(arrayBuffer) {
+  return btoa(String.fromCharCode.apply(null, new Uint8Array(arrayBuffer)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+}
+
+// Функция для генерации SHA-256 хеша
+async function sha256(plain) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(plain);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return hash;
+}
+
+// Функция для создания code_challenge из code_verifier
+async function generateCodeChallenge(codeVerifier) {
+  const hash = await sha256(codeVerifier);
+  return base64UrlEncode(hash);
+}
+
+(async () => {
+
+  const codeVerifier = generateCodeVerifier();
+  document.cookie = `vkCodeVerifier=${codeVerifier}`;
+  const codeChallenge = await generateCodeChallenge(codeVerifier);
+
+  VKID.Config.init({
+    app: "52095189",
+    redirectUrl: "https://0b0d-91-215-201-1.ngrok-free.app/auth/vk-id",
+    codeChallenge: codeChallenge,
+    scope: 'phone',
+    mode: VKID.ConfigAuthMode.InNewTab
+  });
+
+  // Создание экземпляра кнопки
+  const oneTap = new VKID.OneTap();
+  const container = document.getElementById("VkIdSdkOneTap");
+
+  if (container) {
+    // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
+    oneTap
+      .render({
+        container: container,
+        scheme: VKID.Scheme.LIGHT,
+        lang: VKID.Languages.RUS,
+      })
+      .on(VKID.WidgetEvents.ERROR, (error) => {
+        console.error(error);
+      });
   }
-  return result;
-}
 
-/*  `code_verifier` - Случайно сгенерированная строка, новая на каждый запрос. 
-    Может состоять из следующих символов алфавита: a-z, A-Z, 0-9, _, -. Длина от 43 до 128 символов. */
-const codeVerifier = generateCodeVerifier()
-document.cookie = `vkCodeVerifier=${codeVerifier}`
-
-VKID.Config.init({
-  app: "52095189",
-  redirectUrl: "https://shareu.ru/auth/vk-id",
-  codeVerifier: codeVerifier,
-  // scope: 'phone',
-  mode: VKID.ConfigAuthMode.InNewTab
-});
-
-// Создание экземпляра кнопки
-const oneTap = new VKID.OneTap();
-const container = document.getElementById("VkIdSdkOneTap");
-
-if (container) {
-  // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
-  oneTap
-    .render({
-      container: container,
-      scheme: VKID.Scheme.LIGHT,
-      lang: VKID.Languages.RUS,
-    })
-    .on(VKID.WidgetEvents.ERROR, (error) => {
-      console.error(error);
-    });
-}
+})();
