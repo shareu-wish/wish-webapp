@@ -18,7 +18,7 @@ function goToPreVerification() {
   )
     return alert("Введите номер телефона");
 
-  if (!$("#notificationAgreementCheckbox")[0].checked) 
+  if (!$("#notificationAgreementCheckbox")[0].checked)
     return alert("Необходимо согласиться с получением важных уведомлений!");
 
   sessionStorage.setItem("phone", phone);
@@ -143,3 +143,69 @@ if (
   openSection("verifyPhone");
   showRestartTimer();
 }
+
+
+/* VK ID */
+const VKID = window.VKIDSDK;
+
+// Функция для генерации случайной строки в качестве code_verifier
+function generateCodeVerifier() {
+  const array = new Uint8Array(32);
+  window.crypto.getRandomValues(array);
+  return base64UrlEncode(array);
+}
+
+// Функция для кодирования в base64 URL безопасный формат
+function base64UrlEncode(arrayBuffer) {
+  return btoa(String.fromCharCode.apply(null, new Uint8Array(arrayBuffer)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+}
+
+// Функция для генерации SHA-256 хеша
+async function sha256(plain) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(plain);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return hash;
+}
+
+// Функция для создания code_challenge из code_verifier
+async function generateCodeChallenge(codeVerifier) {
+  const hash = await sha256(codeVerifier);
+  return base64UrlEncode(hash);
+}
+
+(async () => {
+
+  const codeVerifier = generateCodeVerifier();
+  document.cookie = `vkCodeVerifier=${codeVerifier}`;
+  const codeChallenge = await generateCodeChallenge(codeVerifier);
+
+  VKID.Config.init({
+    app: "52095189",
+    redirectUrl: "https://shareu.ru/auth/vk-id",
+    codeChallenge: codeChallenge,
+    scope: 'phone',
+    mode: VKID.ConfigAuthMode.InNewTab
+  });
+
+  // Создание экземпляра кнопки
+  const oneTap = new VKID.OneTap();
+  const container = document.getElementById("VkIdSdkOneTap");
+
+  if (container) {
+    // Отрисовка кнопки в контейнере с именем приложения APP_NAME, светлой темой и на русском языке.
+    oneTap
+      .render({
+        container: container,
+        scheme: VKID.Scheme.LIGHT,
+        lang: VKID.Languages.RUS,
+      })
+      .on(VKID.WidgetEvents.ERROR, (error) => {
+        console.error(error);
+      });
+  }
+
+})();
