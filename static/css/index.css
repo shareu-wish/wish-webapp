@@ -1,0 +1,111 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html,
+body {
+  width: 100%;
+}
+
+/* First section */
+.first-section {
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(to bottom, #dde5f4 2.5rem, #f1f7fe 4rem);
+}
+
+header {
+  width: 100%;
+  height: 3rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 2rem;
+}
+header .logo-header {
+  height: 2.4rem;
+}
+header .links {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+header .links a {
+  text-decoration: none;
+  color: #004daf;
+  font-weight: 600;
+}
+header .nav {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+header .nav a {
+  text-decoration: none;
+  color: #004daf;
+  font-weight: 600;
+}
+
+.first-section-content {
+  width: 80%;
+  margin: 5rem auto;
+  display: flex;
+  gap: 3rem;
+}
+.first-section-content .left {
+  width: 50%;
+  margin: auto;
+}
+.first-section-content .left h1 {
+  font-weight: 800;
+  font-size: 2rem;
+  line-height: 2rem;
+}
+.first-section-content .left h2 {
+  font-weight: 500;
+  font-size: 1.6rem;
+  margin-top: 1rem;
+}
+.first-section-content .left .btns-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.first-section-content .right {
+  width: 50%;
+}
+.first-section-content .right .illustration1 {
+  width: 100%;
+}
+
+.btn {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #004daf;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+.btn:hover {
+  background-color: #003f92;
+}
+
+.find-umbrella-1-btn {
+  font-size: 1.3rem;
+}
+
+.learn-more-btn {
+  font-size: 1.3rem;
+  background-color: #dde5f4;
+  color: black;
+}
+.learn-more-btn:hover {
+  background-color: #cbd3e1;
+}/*# sourceMappingURL=index.css.map */
