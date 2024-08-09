@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     {% include 'components/head_base.html' %}
@@ -46,8 +46,8 @@
         <div class="current-weather" id="current-weather" style="display: none;">
             <span class="current-weather-dot"></span>
             <div>
-                <span id="current-weather-city">Санкт-Петербург</span>:
-                <span id="current-weather-description">дождь</span>
+                <span id="current-weather-city">Загрузка...</span>:
+                <span id="current-weather-description">загрузка...</span>
             </div>
         </div>
     </section>
@@ -87,7 +87,33 @@
                 <img src="/static/img/index/illustration2.svg" alt="illustration" class="illustration2">
             </div>
             <div class="right">
-                Привет...
+                <div class="pricing-scheme-container">
+                    <div class="item">
+                        <div class="time">Сейчас</div>
+                        <div class="line-item"><i class="bi bi-caret-down-fill"></i></div>
+                        <div class="price">300 рублей депозит</div>
+                    </div>
+                    <div class="item">
+                        <div class="time">Первые 24 часа<br><small>в течение первых суток</small></div>
+                        <div class="line-item"><i class="bi bi-caret-down-fill"></i></div>
+                        <div class="price">Бесплатно</div>
+                    </div>
+                    <div class="item">
+                        <div class="time">48 часов<br><small>вторые сутки</small></div>
+                        <div class="line-item"><i class="bi bi-caret-down-fill"></i></div>
+                        <div class="price">300 рублей<br><small>спишется автоматически</small></div>
+                    </div>
+                    <div class="item">
+                        <div class="time">72 часов<br><small>третьи сутки</small></div>
+                        <div class="line-item"><i class="bi bi-caret-down-fill"></i></div>
+                        <div class="price">300 рублей<br><small>спишется автоматически</small></div>
+                    </div>
+                    <div class="item">
+                        <div class="time">Более 72 часов</div>
+                        <div class="line-item last"><i class="bi bi-x-lg"></i></div>
+                        <div class="price">Депозит сгорел<br><small>зонт можно не возвращать</small></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

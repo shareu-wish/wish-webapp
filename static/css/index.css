@@ -224,7 +224,7 @@ header .nav a {
 .pricing-section {
   width: 100%;
   background-color: #f1f7fe;
-  padding-top: 5rem;
+  padding: 5rem 0;
 }
 .pricing-section h2 {
   text-align: center;
@@ -247,4 +247,48 @@ header .nav a {
 .pricing-section .left-right-container .right {
   width: 50%;
   margin: auto;
+}
+
+.pricing-scheme-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.pricing-scheme-container .item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.pricing-scheme-container .item .time, .pricing-scheme-container .item .price {
+  width: 42%;
+  background-color: #dde5f4;
+  border-radius: 1rem;
+  padding: 0.7rem;
+  text-align: center;
+  align-content: center;
+}
+.pricing-scheme-container .item small {
+  color: gray;
+}
+.pricing-scheme-container .item .line-item {
+  align-content: center;
+  color: #004daf;
+  position: relative;
+  font-size: 1.7rem;
+}
+.pricing-scheme-container .item .line-item::before {
+  content: "";
+  position: absolute;
+  height: calc(100% + 1rem);
+  width: 2px;
+  background-color: #004daf;
+  top: 0;
+  left: calc(50% - 1px);
+}
+.pricing-scheme-container .item .line-item i {
+  position: relative;
+  z-index: 2;
+}
+.pricing-scheme-container .item .line-item.last::before {
+  height: 50%;
 }/*# sourceMappingURL=index.css.map */

@@ -1,3 +1,6 @@
+$primaryColor: #004daf;
+
+
 * {
   margin: 0;
   padding: 0;
@@ -56,7 +59,7 @@ header {
 
     a {
       text-decoration: none;
-      color: #004daf;
+      color: $primaryColor;
       font-weight: 600;
     }
   }
@@ -102,7 +105,7 @@ header {
   padding: 0.7rem 1rem;
   border: none;
   border-radius: 0.5rem;
-  background-color: #004daf;
+  background-color: $primaryColor;
   color: white;
   font-size: 1.1rem;
   cursor: pointer;
@@ -151,7 +154,7 @@ header {
     width: 1.2rem;
     height: 1.2rem;
     border-radius: 50%;
-    background: #004daf;
+    background: $primaryColor;
     position: absolute;
     left: 0;
     top: 0;
@@ -242,7 +245,7 @@ header {
 .pricing-section {
   width: 100%;
   background-color: #f1f7fe;
-  padding-top: 5rem;
+  padding: 5rem 0;
 
   h2 {
     text-align: center;
@@ -271,3 +274,58 @@ header {
   }
 }
 
+
+.pricing-scheme-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .time, .price {
+      width: 42%;
+      background-color: #dde5f4;
+      border-radius: 1rem;
+      padding: 0.7rem;
+      text-align: center;
+      align-content: center;
+      // color: $primaryColor;
+    }
+
+    small {
+      color: gray;
+    }
+
+    .line-item {
+      align-content: center;
+      color: $primaryColor;
+      position: relative;
+      font-size: 1.7rem;
+
+      &::before {
+        content: "";
+        position: absolute;
+        height: calc(100% + 1rem);
+        width: 2px;
+        // border-right: 2px solid $primaryColor;
+        background-color: $primaryColor;
+        top: 0;
+        left: calc(50% - 1px);
+      }
+
+      i {
+        position: relative;
+        z-index: 2;
+      }
+
+      &.last {
+        &::before {
+          height: 50%;
+        }
+      }
+    }
+  }
+}
