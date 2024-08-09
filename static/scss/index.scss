@@ -8,6 +8,7 @@
 html,
 body {
   width: 100%;
+  scroll-behavior: smooth;
 }
 
 
@@ -18,6 +19,7 @@ body {
 
   // background-color: #f1f7fe;
   background: linear-gradient(to bottom, #dde5f4 2.5rem, #f1f7fe 4rem);
+  border-bottom: 1px solid #dde5f4;
 }
 
 header {
@@ -40,7 +42,8 @@ header {
 
     a {
       text-decoration: none;
-      color: #004daf;
+      // color: #004daf;
+      color: black;
       font-weight: 600;
     }
   }
@@ -123,4 +126,148 @@ header {
   }
 }
 
+.current-weather {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  span {
+    font-weight: 500;
+  }
+
+  .current-weather-dot {
+    width: 1.2rem;
+    height: 1.2rem;
+    display: inline-block;
+    position: relative;
+  }
+  .current-weather-dot::after,
+  .current-weather-dot::before {
+    content: '';  
+    box-sizing: border-box;
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 50%;
+    background: #004daf;
+    position: absolute;
+    left: 0;
+    top: 0;
+    animation: anim-dot 2s linear infinite;
+  }
+  .current-weather-dot::after {
+    animation-delay: 1s;
+  }
+  
+  @keyframes anim-dot {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+}
+
+
+/* Short tutorial */
+.short-tutorial-section {
+  width: 100%;
+  position: relative;
+  background-color: #f1f7fe;
+  padding-top: 5rem;
+}
+
+
+.short-tutorial-ocean {
+  height: 50px; /* change the height of the waves here */
+  width: 100%;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-x: hidden;
+}
+
+.short-tutorial-wave {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 88.7'%3E%3Cpath d='M800 56.9c-155.5 0-204.9-50-405.5-49.9-200 0-250 49.9-394.5 49.9v31.8h800v-.2-31.6z' fill='%23003F7C'/%3E%3C/svg%3E");
+  position: absolute;
+  width: 200%;
+  height: 100%;
+  animation: short-tutorial-wave 100s -3s alternate infinite;
+  transform: translate3d(0, 0, 0);
+  opacity: 0.8;
+  right: 0;
+}
+
+.short-tutorial-wave:nth-of-type(2) {
+  bottom: 0;
+  animation: short-tutorial-wave 180s linear alternate-reverse infinite;
+  opacity: 0.5;
+}
+
+.short-tutorial-wave:nth-of-type(3) {
+  bottom: 0;
+  animation: short-tutorial-wave 200s -1s alternate infinite;
+  opacity: 0.5;
+}
+
+@keyframes short-tutorial-wave {
+    0%, 100% {transform: translateX(0);}
+    25%, 75% {transform: translateX(25%);}
+    50% {transform: translateX(50%);}
+}
+
+
+.short-tutorial-container {
+  padding: 2rem;
+  width: 100%;
+  background-color: #0c4882;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+
+  color: white;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+
+
+/* Pricing section */
+.pricing-section {
+  width: 100%;
+  background-color: #f1f7fe;
+  padding-top: 5rem;
+
+  h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+  }
+  
+  .left-right-container {
+    width: 80%;
+    margin: 5rem auto;
+    display: flex;
+    gap: 3rem;
+
+    .left {
+      width: 50%;
+      .illustration2 {
+        transform: scale(-1, 1);
+        width: 100%;
+      }
+    }
+
+    .right {
+      width: 50%;
+      margin: auto;
+    }
+  }
+}
 

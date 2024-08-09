@@ -23,7 +23,7 @@
 
             <div class="links">
                 <a href="/business"><i class="bi bi-briefcase-fill"></i> Бизнесу</a>
-                <a href="/login"><i class="bi bi-box-arrow-in-right"></i> Войти</a>
+                <a href="/auth"><i class="bi bi-box-arrow-in-right"></i> Войти</a>
             </div>
         </header>
 
@@ -32,15 +32,68 @@
                 <h1>WISH — сервис бесплатного шеринга зонтов в городе</h1>
                 <h2>Возьми зонт бесплатно и верни в ближайшем аппарате</h2>
                 <div class="btns-container">
-                    <button class="btn find-umbrella-1-btn" onclick="window.location.href='/station-map'">Найти зонт</button>
-                    <button class="btn learn-more-btn">Узнать больше</button>
+                    <button class="btn find-umbrella-1-btn" onclick="window.location.href='/station-map'">
+                        Найти зонт</button>
+                    <button class="btn learn-more-btn" onclick="window.location.href='#tutorial'">
+                        Узнать больше</button>
                 </div>
             </div>
             <div class="right">
                 <img src="/static/img/index/illustration1.png" alt="illustration" class="illustration1">
             </div>
         </div>
+
+        <div class="current-weather" id="current-weather" style="display: none;">
+            <span class="current-weather-dot"></span>
+            <div>
+                <span id="current-weather-city">Санкт-Петербург</span>:
+                <span id="current-weather-description">дождь</span>
+            </div>
+        </div>
     </section>
+
+    <section class="short-tutorial-section" id="tutorial">
+
+        <div class="short-tutorial-ocean">
+            <div class="short-tutorial-wave"></div>
+            <div class="short-tutorial-wave"></div>
+            <div class="short-tutorial-wave"></div>
+        </div>
+
+        <div class="short-tutorial-container">
+            <div class="step">
+                <i class="bi bi-person-circle"></i>
+                Войди в профиль
+            </div>
+            <i class="bi bi-chevron-right"></i>
+            <div class="step">
+                <i class="bi bi-qr-code-scan"></i>
+                Найди аппарат
+            </div>
+            <i class="bi bi-chevron-right"></i>
+            <div class="step">
+                <i class="bi bi-umbrella"></i>
+                Возьми зонт
+            </div>
+        </div>
+
+    </section>
+
+
+    <section class="pricing-section" id="pricing">
+        <h2>Верни зонт в течение суток и ничего не плати</h2>
+        <div class="left-right-container">
+            <div class="left">
+                <img src="/static/img/index/illustration2.svg" alt="illustration" class="illustration2">
+            </div>
+            <div class="right">
+                Привет...
+            </div>
+        </div>
+    </section>
+
+
+    <script src="/static/js/index.js"></script>
 </body>
 
 </html>
