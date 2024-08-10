@@ -1,4 +1,7 @@
 $primaryColor: #004daf;
+$bgColor1: #f1f7fe;
+$bgColor2: #dde5f4;
+$orangeColor: #ff815b;
 
 
 * {
@@ -15,14 +18,34 @@ body {
 }
 
 
+/* Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #b6c4dd $bgColor1;
+}
+
+*::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+*::-webkit-scrollbar-track {
+  background: $bgColor1;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #b6c4dd;
+  border-radius: 5px;
+  border: 3px solid $bgColor1;
+}
+
+
 /* First section */
 .first-section {
   width: 100%;
   height: 100vh;
 
-  // background-color: #f1f7fe;
-  background: linear-gradient(to bottom, #dde5f4 2.5rem, #f1f7fe 4rem);
-  border-bottom: 1px solid #dde5f4;
+  // background-color: $bgColor1;
+  background: linear-gradient(to bottom, $bgColor2 2.5rem, $bgColor1 4rem);
+  border-bottom: 1px solid $bgColor2;
 }
 
 header {
@@ -31,7 +54,7 @@ header {
   display: flex;
   justify-content: space-between;
   padding: 0.3rem 2rem;
-  // background-color: #dde5f4;
+  // background-color: $bgColor2;
 
   .logo-header {
     height: 2.4rem;
@@ -122,7 +145,7 @@ header {
 
 .learn-more-btn {
   font-size: 1.3rem;
-  background-color: #dde5f4;
+  background-color: $bgColor2;
   color: black;
   &:hover {
     background-color: #cbd3e1;
@@ -181,7 +204,7 @@ header {
 .short-tutorial-section {
   width: 100%;
   position: relative;
-  background-color: #f1f7fe;
+  background-color: $bgColor1;
   padding-top: 5rem;
 }
 
@@ -244,8 +267,8 @@ header {
 /* Pricing section */
 .pricing-section {
   width: 100%;
-  background-color: #f1f7fe;
-  padding: 5rem 0;
+  background-color: $bgColor1;
+  padding: 5rem 0 3rem;
 
   h2 {
     text-align: center;
@@ -263,7 +286,8 @@ header {
       width: 50%;
       .illustration2 {
         transform: scale(-1, 1);
-        width: 100%;
+        width: 80%;
+        margin: auto;
       }
     }
 
@@ -286,12 +310,14 @@ header {
     width: 100%;
 
     .time, .price {
+      display: flex;
+      flex-direction: column;
       width: 42%;
-      background-color: #dde5f4;
+      background-color: $bgColor2;
       border-radius: 1rem;
       padding: 0.7rem;
       text-align: center;
-      align-content: center;
+      justify-content: center;
       // color: $primaryColor;
     }
 
@@ -300,7 +326,11 @@ header {
     }
 
     .line-item {
-      align-content: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      // align-content: center;
+      justify-content: center;
       color: $primaryColor;
       position: relative;
       font-size: 1.7rem;
@@ -327,5 +357,106 @@ header {
         }
       }
     }
+  }
+}
+
+
+/* Faq section */
+.faq-section {
+  width: 100%;
+  background-color: $bgColor2;
+  padding: 5rem 0;
+
+  
+}
+
+.faq-headers {
+  width: 60%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+
+    &:last-child {
+      color: $orangeColor;
+    }
+  }
+}
+
+.faq-container {
+  width: 60%;
+  margin: 3rem auto;
+}
+
+
+.accordion {
+  .accordion-item {
+    .question-container {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-top: 1px solid $orangeColor;
+      cursor: pointer;
+      font-weight: 600;
+
+      i {
+        color: $orangeColor;
+      }
+
+      i.close {
+        display: none;
+      }
+    }
+
+    .content {
+      opacity: 0;
+      padding: 0 1rem;
+      max-height: 0;
+      // border-bottom: 1px solid #e5e5e5;
+      overflow: hidden;
+      clear: both;
+      transition: all 0.2s ease 0.15s;
+
+      p {
+        font-size: 1rem;
+        font-weight: 300;
+      }
+    }
+
+    // &.last {
+    //   .question-container {
+    //     border-bottom: 1px solid $orangeColor;
+    //   }
+    // }
+
+    &.active {
+      .content {
+        opacity: 1;
+        padding: 1rem;
+        max-height: 100%;
+        transition: all 0.35s ease;
+      }
+      .question-container {
+        i.open {
+          display: none;
+        }
+        i.close {
+          display: block;
+        }
+      }
+      // &.last {
+      //   .question-container {
+      //     border-bottom: none;
+      //   }
+      //   .content {
+      //     border-bottom: 1px solid $orangeColor;
+      //   }
+      // }
+    }
+
   }
 }

@@ -11,6 +11,27 @@ body {
   scroll-behavior: smooth;
 }
 
+/* Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #b6c4dd #f1f7fe;
+}
+
+*::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f7fe;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #b6c4dd;
+  border-radius: 5px;
+  border: 3px solid #f1f7fe;
+}
+
 /* First section */
 .first-section {
   width: 100%;
@@ -224,7 +245,7 @@ header .nav a {
 .pricing-section {
   width: 100%;
   background-color: #f1f7fe;
-  padding: 5rem 0;
+  padding: 5rem 0 3rem;
 }
 .pricing-section h2 {
   text-align: center;
@@ -242,7 +263,8 @@ header .nav a {
 }
 .pricing-section .left-right-container .left .illustration2 {
   transform: scale(-1, 1);
-  width: 100%;
+  width: 80%;
+  margin: auto;
 }
 .pricing-section .left-right-container .right {
   width: 50%;
@@ -260,18 +282,23 @@ header .nav a {
   width: 100%;
 }
 .pricing-scheme-container .item .time, .pricing-scheme-container .item .price {
+  display: flex;
+  flex-direction: column;
   width: 42%;
   background-color: #dde5f4;
   border-radius: 1rem;
   padding: 0.7rem;
   text-align: center;
-  align-content: center;
+  justify-content: center;
 }
 .pricing-scheme-container .item small {
   color: gray;
 }
 .pricing-scheme-container .item .line-item {
-  align-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   color: #004daf;
   position: relative;
   font-size: 1.7rem;
@@ -291,4 +318,70 @@ header .nav a {
 }
 .pricing-scheme-container .item .line-item.last::before {
   height: 50%;
+}
+
+/* Faq section */
+.faq-section {
+  width: 100%;
+  background-color: #dde5f4;
+  padding: 5rem 0;
+}
+
+.faq-headers {
+  width: 60%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
+.faq-headers h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+.faq-headers h2:last-child {
+  color: #ff815b;
+}
+
+.faq-container {
+  width: 60%;
+  margin: 3rem auto;
+}
+
+.accordion .accordion-item .question-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-top: 1px solid #ff815b;
+  cursor: pointer;
+  font-weight: 600;
+}
+.accordion .accordion-item .question-container i {
+  color: #ff815b;
+}
+.accordion .accordion-item .question-container i.close {
+  display: none;
+}
+.accordion .accordion-item .content {
+  opacity: 0;
+  padding: 0 1rem;
+  max-height: 0;
+  overflow: hidden;
+  clear: both;
+  transition: all 0.2s ease 0.15s;
+}
+.accordion .accordion-item .content p {
+  font-size: 1rem;
+  font-weight: 300;
+}
+.accordion .accordion-item.active .content {
+  opacity: 1;
+  padding: 1rem;
+  max-height: 100%;
+  transition: all 0.35s ease;
+}
+.accordion .accordion-item.active .question-container i.open {
+  display: none;
+}
+.accordion .accordion-item.active .question-container i.close {
+  display: block;
 }/*# sourceMappingURL=index.css.map */

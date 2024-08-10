@@ -26,3 +26,15 @@ function loadWeather() {
 
 
 loadWeather();
+
+
+$(document).ready(function() {
+    const faqs = document.querySelectorAll(".accordion .question-container");
+  
+    faqs.forEach(function(faq) {
+      faq.addEventListener("click", function() {
+        // this.classList.toggle('active');
+        this.parentNode.classList.toggle('active');
+      });
+    });
+  })
