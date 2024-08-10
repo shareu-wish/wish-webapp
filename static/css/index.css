@@ -324,7 +324,7 @@ header .nav a {
 .faq-section {
   width: 100%;
   background-color: #dde5f4;
-  padding: 5rem 0;
+  padding: 5rem 0 2.5rem;
 }
 
 .faq-headers {
@@ -367,7 +367,7 @@ header .nav a {
   max-height: 0;
   overflow: hidden;
   clear: both;
-  transition: all 0.2s ease 0.15s;
+  transition: all 0.2s ease;
 }
 .accordion .accordion-item .content p {
   font-size: 1rem;
@@ -384,4 +384,57 @@ header .nav a {
 }
 .accordion .accordion-item.active .question-container i.close {
   display: block;
+}
+
+/* Support section */
+.support-section {
+  width: 100%;
+  background-color: #dde5f4;
+  padding: 2.5rem 0 5rem;
+}
+.support-section .left-right-container {
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  gap: 3rem;
+}
+.support-section .left-right-container .left {
+  width: 50%;
+}
+.support-section .left-right-container .left h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+.support-section .left-right-container .left p {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+}
+.support-section .left-right-container .right {
+  width: 50%;
+  margin: auto;
+}
+
+.support-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.support-input, .support-textarea {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+}
+
+.support-textarea {
+  resize: none;
+}
+
+.support-send-btn {
+  background-color: #ff815b;
+}
+.support-send-btn:hover {
+  background-color: #f27b56;
 }/*# sourceMappingURL=index.css.map */
