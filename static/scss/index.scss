@@ -2,6 +2,7 @@ $primaryColor: #004daf;
 $bgColor1: #f1f7fe;
 $bgColor2: #dde5f4;
 $orangeColor: #ff815b;
+$purpleColor: #974f79;
 
 
 * {
@@ -269,6 +270,7 @@ header {
   width: 100%;
   background-color: $bgColor1;
   padding: 5rem 0 3rem;
+  border-bottom: 1px solid $bgColor2;
 
   h2 {
     text-align: center;
@@ -359,6 +361,87 @@ header {
     }
   }
 }
+
+
+
+/* About section */
+.about-section {
+  width: 100%;
+  background-color: $bgColor1;
+  padding: 5rem 0;
+}
+
+.founder-person-container {
+  display: flex;
+  justify-content: center;
+}
+
+.person-card {
+  border: 2px solid $purpleColor;
+  border-radius: 1rem;
+  padding: 2rem 1rem;
+  width: 18rem;
+
+  .photo {
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    border-radius: 50%;
+  }
+
+  .name, .position {
+    width: 100%;
+    text-align: center;
+  }
+  .name {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+  }
+  .position {
+    margin-top: 0.3rem;
+  }
+
+  &.no-border {
+    border: none;
+  }
+}
+
+.about-text {
+  margin: 1rem auto;
+  position: relative;
+  width: 60%;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+  font-style: italic;
+
+  background: linear-gradient(to right, $purpleColor 4px, transparent 4px) 0 100%, linear-gradient(to left, $purpleColor 4px, transparent 4px) 100% 0, linear-gradient(to bottom, $purpleColor 4px, transparent 4px) 100% 0, linear-gradient(to top, $purpleColor 4px, transparent 4px) 0 100%;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+
+  &:before {
+    content:"\F6B0";
+    position: absolute;
+    font-family: "bootstrap-icons";
+    top: -1.8rem;
+    left: -1.8rem;
+    color: $purpleColor;
+    font-size: 3rem;
+  }
+
+  &:after {
+    content:"\F6B0";
+    position: absolute;
+    font-family: "bootstrap-icons";
+    bottom: -1.8rem;
+    right: -1.8rem;
+    color: $purpleColor;
+    font-size: 3rem;
+    transform: rotate(180deg);
+  }
+}
+
 
 
 /* Faq section */

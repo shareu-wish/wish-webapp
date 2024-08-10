@@ -246,6 +246,7 @@ header .nav a {
   width: 100%;
   background-color: #f1f7fe;
   padding: 5rem 0 3rem;
+  border-bottom: 1px solid #dde5f4;
 }
 .pricing-section h2 {
   text-align: center;
@@ -318,6 +319,78 @@ header .nav a {
 }
 .pricing-scheme-container .item .line-item.last::before {
   height: 50%;
+}
+
+/* About section */
+.about-section {
+  width: 100%;
+  background-color: #f1f7fe;
+  padding: 5rem 0;
+}
+
+.founder-person-container {
+  display: flex;
+  justify-content: center;
+}
+
+.person-card {
+  border: 2px solid #974f79;
+  border-radius: 1rem;
+  padding: 2rem 1rem;
+  width: 18rem;
+}
+.person-card .photo {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+  border-radius: 50%;
+}
+.person-card .name, .person-card .position {
+  width: 100%;
+  text-align: center;
+}
+.person-card .name {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+.person-card .position {
+  margin-top: 0.3rem;
+}
+.person-card.no-border {
+  border: none;
+}
+
+.about-text {
+  margin: 1rem auto;
+  position: relative;
+  width: 60%;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+  font-style: italic;
+  background: linear-gradient(to right, #974f79 4px, transparent 4px) 0 100%, linear-gradient(to left, #974f79 4px, transparent 4px) 100% 0, linear-gradient(to bottom, #974f79 4px, transparent 4px) 100% 0, linear-gradient(to top, #974f79 4px, transparent 4px) 0 100%;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+}
+.about-text:before {
+  content: "\f6b0";
+  position: absolute;
+  font-family: "bootstrap-icons";
+  top: -1.8rem;
+  left: -1.8rem;
+  color: #974f79;
+  font-size: 3rem;
+}
+.about-text:after {
+  content: "\f6b0";
+  position: absolute;
+  font-family: "bootstrap-icons";
+  bottom: -1.8rem;
+  right: -1.8rem;
+  color: #974f79;
+  font-size: 3rem;
+  transform: rotate(180deg);
 }
 
 /* Faq section */
