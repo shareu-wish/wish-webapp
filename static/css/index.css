@@ -62,6 +62,9 @@ header .links a {
   color: black;
   font-weight: 600;
 }
+header .links a:hover {
+  color: #004daf;
+}
 header .nav {
   height: 100%;
   display: flex;
@@ -72,6 +75,9 @@ header .nav a {
   text-decoration: none;
   color: #004daf;
   font-weight: 600;
+}
+header .nav a:hover {
+  color: black;
 }
 
 .first-section-content {
@@ -622,7 +628,7 @@ header .nav a {
   text-align: center;
 }
 
-.find-umbrella-1-btn {
+.find-umbrella-2-btn {
   font-size: 1.3rem;
   font-weight: 600;
   margin-top: 1rem;
@@ -632,7 +638,7 @@ header .nav a {
   position: absolute;
   z-index: 5;
   left: -5%;
-  bottom: calc(100% - 15rem);
+  bottom: 75%;
   color: #974f79;
   width: 60%;
   scale: 100% 80%;
@@ -640,4 +646,48 @@ header .nav a {
 .take-umbrella-cloud.right {
   left: auto;
   right: -5%;
+}
+
+/* Footer */
+.footer-section {
+  width: 100%;
+  background: linear-gradient(to right, #0a002b, #0d0737, #0f0f42, #0e0b3e, #0a002b);
+  padding: 3rem 0 0;
+  border-top: 1px solid #974f79;
+}
+
+footer {
+  width: 80%;
+  background-color: #974f79;
+  margin: 0 auto;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+footer img {
+  width: 8rem;
+  filter: brightness(0) invert(1);
+}
+footer .row {
+  padding: 1rem;
+  border-bottom: 1px solid white;
+  color: white;
+}
+footer .row.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 2rem;
+  row-gap: 0.8rem;
+}
+footer .row.menu .item {
+  text-align: center;
+  font-size: 1.3rem;
+  color: white;
+  text-decoration: none;
+}
+footer .row.menu .item:hover {
+  color: lightgray;
+}
+footer .row.last {
+  border: none;
 }/*# sourceMappingURL=index.css.map */
