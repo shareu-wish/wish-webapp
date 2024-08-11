@@ -1,14 +1,11 @@
 function loadWeather() {
   $.getJSON("https://api.ipify.org?format=json", function (data) {
     $.getJSON(
-      `http://www.geoplugin.net/json.gp?ip=${data.ip}&lang=ru`,
+      `https://ipwho.is/${data.ip}?lang=ru`,
       function (data2) {
-        let city = data2.geoplugin_city;
-        if (!city) {
-          city = data2.geoplugin_region;
-        }
+        let city = data2.city;
         $.getJSON(
-          `https://api.open-meteo.com/v1/forecast?latitude=${data2.geoplugin_latitude}&longitude=${data2.geoplugin_longitude}&current=temperature_2m,is_day,weathercode`,
+          `https://api.open-meteo.com/v1/forecast?latitude=${data2.latitude}&longitude=${data2.longitude}&current=temperature_2m,is_day,weathercode`,
           function (data3) {
             $.getJSON("/static/weatherCodes.json", function (weatherCodes) {
               const weatherCode = data3.current.weathercode;
@@ -17,9 +14,11 @@ function loadWeather() {
                 weatherCodes[weatherCode][timeOfDay]["description"];
 
               if (city && weather) {
-                $("#current-weather").show();
+                // $("#current-weather").show();
                 $("#current-weather-city").text(city);
                 $("#current-weather-description").text(weather);
+              } else {
+                $("#current-weather").hide();
               }
             });
           }
@@ -93,6 +92,29 @@ function createRain() {
 }
 
 
+function waitImagesAndShowSite() {
+  let loading = [];
+
+  $("img").each(function() {
+    loading.push(new Promise(resolve => {
+      let url = $(this).attr('src');
+      let img = new Image();
+      img.src = url;
+      img.onload = () => {
+        resolve();
+      }
+    }));
+  });
+
+  Promise.all(loading).then(()=>{
+    setTimeout(() => {
+      $('#preloader').hide();
+    }, 300);
+  })
+}
+
+
+waitImagesAndShowSite()
 loadWeather();
 
 $(document).ready(function () {

@@ -10,6 +10,13 @@
 </head>
 
 <body>
+    <div class="preloader" id="preloader">
+        <div class="container">
+            <img src="/static/img/umbrella.svg" alt="umbrella">
+            <span class="loader"></span>
+        </div>
+    </div>
+
     <section class="first-section">
         <header>
             <img src="/static/img/logo.png" alt="logo" class="logo-header">
@@ -43,7 +50,7 @@
             </div>
         </div>
 
-        <div class="current-weather" id="current-weather" style="display: none;">
+        <div class="current-weather" id="current-weather">
             <span class="current-weather-dot"></span>
             <div>
                 <span id="current-weather-city">Загрузка...</span>:
@@ -309,7 +316,7 @@
                         <img src="/static/img/index/umbrella-filled-3.svg" alt="umbrella" id="take-umbrella-img">
                         <div class="take-umbrella-inner-content">
                             <h3>Возьми зонт прямо сейчас!</h3>
-                            <button class="btn find-umbrella-2-btn">Найти зонт</button>
+                            <button class="btn find-umbrella-2-btn" onclick="window.location.href='/station-map'">Найти зонт</button>
                         </div>
                     </div>
                 </div>
