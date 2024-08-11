@@ -68,6 +68,31 @@ function sendQuestion() {
 }
 
 
+function createRain() {
+  const coord = Math.random() * window.innerWidth
+  const umbrella = document.getElementById("take-umbrella-img");
+  const umbrellaRect = umbrella.getBoundingClientRect();
+  let TTL = 1000;
+
+  const drop = document.createElement("div");
+
+  if (coord >= umbrellaRect.left && coord <= umbrellaRect.right) {
+    drop.className = "drop on-umbrella";
+    TTL = 450
+  } else {
+    drop.className = "drop";
+  }
+
+  drop.style.left = coord + "px";
+  document.getElementById("take-umbrella-rain").appendChild(drop);
+  setTimeout(function () {
+    drop.remove();
+  }, TTL);
+  
+  setTimeout(createRain, 5);
+}
+
+
 loadWeather();
 
 $(document).ready(function () {
@@ -80,4 +105,5 @@ $(document).ready(function () {
   });
 });
 
+createRain();
 
