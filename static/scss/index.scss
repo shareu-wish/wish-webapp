@@ -369,6 +369,12 @@ header {
   width: 100%;
   background-color: $bgColor1;
   padding: 5rem 0;
+
+  h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+  }
 }
 
 .founder-person-container {
@@ -377,14 +383,9 @@ header {
 }
 
 .person-card {
-  border: 2px solid $purpleColor;
-  border-radius: 1rem;
-  padding: 2rem 1rem;
-  width: 18rem;
-
   .photo {
     display: block;
-    width: 80%;
+    width: 70%;
     margin: 0 auto;
     border-radius: 50%;
   }
@@ -399,16 +400,28 @@ header {
     margin-top: 1rem;
   }
   .position {
+    display: none;
     margin-top: 0.3rem;
   }
 
-  &.no-border {
-    border: none;
+  &.founder {
+    padding: 2rem 1rem;
+    border: 2px solid $purpleColor;
+    border-radius: 1rem;
+    width: 18rem;
+
+    .position {
+      display: block;
+    }
+
+    .photo {
+      width: 80%;
+    }
   }
 }
 
 .about-text {
-  margin: 1rem auto;
+  margin: 5rem auto 7rem;
   position: relative;
   width: 60%;
   padding: 1rem;
@@ -439,6 +452,20 @@ header {
     color: $purpleColor;
     font-size: 3rem;
     transform: rotate(180deg);
+  }
+}
+
+.team-container {
+  width: 90%;
+  margin: 3rem auto 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 2rem;
+
+  .person-card {
+    flex: 0 0 calc(100%/5);
+    // flex: 0 0 calc(100%/3);
   }
 }
 

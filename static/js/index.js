@@ -43,6 +43,9 @@ function sendQuestion() {
         return alert("Укажите хотя бы один контактный способ (email или номер телефона)!");
     }
 
+    // TODO: Убрать, когда будет готов сервер
+    return alert("К сожалению, эта форма сейчас не работает(");
+
     $.ajax({
         url: "/support",
         type: "POST",

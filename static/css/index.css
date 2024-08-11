@@ -327,21 +327,20 @@ header .nav a {
   background-color: #f1f7fe;
   padding: 5rem 0;
 }
+.about-section h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
 
 .founder-person-container {
   display: flex;
   justify-content: center;
 }
 
-.person-card {
-  border: 2px solid #974f79;
-  border-radius: 1rem;
-  padding: 2rem 1rem;
-  width: 18rem;
-}
 .person-card .photo {
   display: block;
-  width: 80%;
+  width: 70%;
   margin: 0 auto;
   border-radius: 50%;
 }
@@ -355,14 +354,24 @@ header .nav a {
   margin-top: 1rem;
 }
 .person-card .position {
+  display: none;
   margin-top: 0.3rem;
 }
-.person-card.no-border {
-  border: none;
+.person-card.founder {
+  padding: 2rem 1rem;
+  border: 2px solid #974f79;
+  border-radius: 1rem;
+  width: 18rem;
+}
+.person-card.founder .position {
+  display: block;
+}
+.person-card.founder .photo {
+  width: 80%;
 }
 
 .about-text {
-  margin: 1rem auto;
+  margin: 5rem auto 7rem;
   position: relative;
   width: 60%;
   padding: 1rem;
@@ -391,6 +400,18 @@ header .nav a {
   color: #974f79;
   font-size: 3rem;
   transform: rotate(180deg);
+}
+
+.team-container {
+  width: 90%;
+  margin: 3rem auto 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 2rem;
+}
+.team-container .person-card {
+  flex: 0 0 20%;
 }
 
 /* Faq section */
