@@ -131,4 +131,4 @@ createRain();
 
 
 // DEV
-// $('#preloader').hide();
+$('#preloader').hide();
