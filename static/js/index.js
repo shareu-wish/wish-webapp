@@ -129,6 +129,3 @@ $(document).ready(function () {
 
 createRain();
 
-
-// DEV
-$('#preloader').hide();

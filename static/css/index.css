@@ -300,6 +300,8 @@ header .nav a:hover {
   color: white;
   font-size: 1.6rem;
   font-weight: 600;
+  position: relative;
+  top: -1px;
 }
 .short-tutorial-container .arrow-down {
   display: none;
@@ -459,6 +461,8 @@ header .nav a:hover {
   width: 100%;
   background-color: #dde5f4;
   padding: 2.5rem 0 6rem;
+  position: relative;
+  top: -1px;
 }
 .support-section .left-right-container {
   width: 70%;
