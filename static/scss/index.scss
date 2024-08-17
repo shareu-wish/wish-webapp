@@ -1161,8 +1161,12 @@ footer {
       width: 70%;
     }
     .right {
-      width: 85%;
       margin: auto;
+      text-align: center;
+      .illustration1 {
+        width: auto;
+        height: 30svh;
+      }
     }
   }
 
@@ -1320,8 +1324,12 @@ footer {
       width: 70%;
     }
     .right {
-      width: 85%;
       margin: auto;
+      text-align: center;
+      .illustration1 {
+        width: auto;
+        height: 30svh;
+      }
     }
   }
 
@@ -1488,6 +1496,7 @@ footer {
     bottom: calc(100% - 19%);
   }
 }
+
 
 @media only screen and (min-width: 1601px) and (max-width: 2100px) {
   /* Take umbrella */

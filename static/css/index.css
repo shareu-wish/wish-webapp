@@ -991,8 +991,12 @@ footer .row.last {
     width: 70%;
   }
   .first-section-content .right {
-    width: 85%;
     margin: auto;
+    text-align: center;
+  }
+  .first-section-content .right .illustration1 {
+    width: auto;
+    height: 30svh;
   }
   /* Short tutorial */
   .short-tutorial-container {
@@ -1130,8 +1134,12 @@ footer .row.last {
     width: 70%;
   }
   .first-section-content .right {
-    width: 85%;
     margin: auto;
+    text-align: center;
+  }
+  .first-section-content .right .illustration1 {
+    width: auto;
+    height: 30svh;
   }
   /* Short tutorial */
   .short-tutorial-container {

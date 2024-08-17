@@ -129,3 +129,19 @@ $(document).ready(function () {
 
 createRain();
 
+
+/* Пасхалка) */
+let takeUmbrellaClicks = 0;
+$("#take-umbrella-img").on("click", function () {
+  takeUmbrellaClicks += 1;
+  if (takeUmbrellaClicks === 5) {
+    alert("Что ты делаешь?")
+  } else if (takeUmbrellaClicks === 15) {
+    alert("Прекрати!")
+  } else if (takeUmbrellaClicks === 30) {
+    alert("Я что тебе, хомяк что ли?")
+  } else if (takeUmbrellaClicks === 40) {
+    alert("Ладно, сам напросился!")
+    window.open("https://rutube.ru/video/c6cc4d620b1d4338901770a44b3e82f4/?t=0", "_blank");
+  }
+});
