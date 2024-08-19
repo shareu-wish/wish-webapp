@@ -40,11 +40,6 @@ def business():
     return render_template("business.html")
 
 
-# @app.route("/about")
-# def about():
-#     return render_template("about.html")
-
-
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')
 def static_from_root():
