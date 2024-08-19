@@ -2,220 +2,358 @@
 <html lang="ru">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/static/img/umbrella.svg" alt="logo" class="logo">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>WISH</title>
-    <style>
-        .tariff-section {
-            background-color: #f8f9fa;
-            padding: 60px 0;
-        }
+    {% include 'components/head_base.html' %}
+    {% include 'components/yandex_metrika.html' %}
 
-        .tariff-title {
-            margin-bottom: 40px;
-        }
+    <link rel="stylesheet" href="/static/css/index.css">
 
-        .tariff-img {
-            max-width: 100%;
-            height: auto;
-        }
-    </style>
+    <title>WISH — сервис бесплатного шеринга зонтов в городе</title>
 </head>
 
 <body>
-
-    <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img class="bi" height="45" src="static/img/logo.png" alt="Bootstrap Logo">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">WISH</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/business">Для
-                                бизнеса</a>
-                        </li>
-                        <!-- <li class="nav-item">
-                        <a class="nav-link" href="#">Тарифы</a>
-                    </li> -->
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="/about">О нас</a>
-                        </li> -->
-                        <!-- <li class="nav-item">
-                        <a class="nav-link" href="#">Поддержка</a>
-                    </li> -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container col-xxl-8 px-3">
-        <div class="row flex-lg-row-reverse align-items-center g-5">
-            <div class="col-10 col-sm-8 col-lg-6">
-                <img src="static/img/main.jpg" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700"
-                    height="500" loading="lazy">
-            </div>
-            <div class="col-lg-6">
-                <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">WISH - сервис бесплатного шеринга зонтов в
-                    городе</h1>
-                <p class="lead">Возьми зонт бесплатно и верни в любой точке города</p>
-                <a href="/station-map" style="background-color: #004eab; margin-top:1%; color: white; font-size: 25px"
-                    class="btn">Найти
-                    зонт</a>
-                <a href="/auth"
-                    style="background-color: white; margin-top:1%; color: black; border-color: black; font-size: 25px"
-                    class="btn">Войти в аккаунт</a>
-            </div>
+    <div class="preloader" id="preloader">
+        <div class="container">
+            <img src="/static/img/umbrella.svg" alt="umbrella">
+            <span class="loader"></span>
         </div>
     </div>
 
-    <div class="container px-4 py-4" id="featured-3">
-        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
-            <div class="feature col">
-                <h3 class="fs-2 text-body-emphasis">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
-                        class="bi bi-person-add" viewBox="0 0 16 16">
-                        <path
-                            d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
-                        <path
-                            d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
-                    </svg>
-                    Войди в ЛК
-                </h3>
-                <p style="color:#004eab"><a href="/auth">Авторизуйся</a> на нашем сайте и заполни профиль аккаунта</p>
+    <section class="first-section">
+        <header>
+            <img src="/static/img/logo.png" alt="logo" class="logo-header">
+
+            <div class="nav">
+                <a href="#pricing">Тарифы</a>
+                <a href="#about">О нас</a>
+                <a href="#FAQ">Вопросы</a>
+                <a href="#support">Поддержка</a>
             </div>
-            <div class="feature col">
-                <h3 style="color:#ff815b" class="fs-2 text-body-emphasis">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
-                        class="bi bi-qr-code-scan" viewBox="0 0 16 16">
-                        <path
-                            d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5M.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5M4 4h1v1H4z" />
-                        <path d="M7 2H2v5h5zM3 3h3v3H3zm2 8H4v1h1z" />
-                        <path d="M7 9H2v5h5zm-4 1h3v3H3zm8-6h1v1h-1z" />
-                        <path
-                            d="M9 2h5v5H9zm1 1v3h3V3zM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8zm2 2H9V9h1zm4 2h-1v1h-2v1h3zm-4 2v-1H8v1z" />
-                        <path d="M12 9h2V8h-2z" />
-                    </svg>
-                    Найди аппарат
-                </h3>
-                <p style="color:#004eab">Выбери ближайший аппарат и построй к нему маршрут, отсканируй QR, внеси депозит
-                </p>
+
+            <div class="links">
+                <a href="/business"><i class="bi bi-briefcase-fill"></i> Бизнесу</a>
+                <a href="/auth"><i class="bi bi-box-arrow-in-right"></i> Войти</a>
             </div>
-            <div class="feature col">
-                <h3 class="fs-2 text-body-emphasis">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-umbrella-fill" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                            d="M8 0a.5.5 0 0 1 .5.5v.514C12.625 1.238 16 4.22 16 8c0 0 0 .5-.5.5-.149 0-.352-.145-.352-.145l-.004-.004-.025-.023a3.5 3.5 0 0 0-.555-.394A3.17 3.17 0 0 0 13 7.5c-.638 0-1.178.213-1.564.434a3.5 3.5 0 0 0-.555.394l-.025.023-.003.003s-.204.146-.353.146-.352-.145-.352-.145l-.004-.004-.025-.023a3.5 3.5 0 0 0-.555-.394 3.3 3.3 0 0 0-1.064-.39V13.5H8h.5v.039l-.005.083a3 3 0 0 1-.298 1.102 2.26 2.26 0 0 1-.763.88C7.06 15.851 6.587 16 6 16s-1.061-.148-1.434-.396a2.26 2.26 0 0 1-.763-.88 3 3 0 0 1-.302-1.185v-.025l-.001-.009v-.003s0-.002.5-.002h-.5V13a.5.5 0 0 1 1 0v.506l.003.044a2 2 0 0 0 .195.726c.095.191.23.367.423.495.19.127.466.229.879.229s.689-.102.879-.229c.193-.128.328-.304.424-.495a2 2 0 0 0 .197-.77V7.544a3.3 3.3 0 0 0-1.064.39 3.5 3.5 0 0 0-.58.417l-.004.004S5.65 8.5 5.5 8.5s-.352-.145-.352-.145l-.004-.004a3.5 3.5 0 0 0-.58-.417A3.17 3.17 0 0 0 3 7.5c-.638 0-1.177.213-1.564.434a3.5 3.5 0 0 0-.58.417l-.004.004S.65 8.5.5 8.5C0 8.5 0 8 0 8c0-3.78 3.375-6.762 7.5-6.986V.5A.5.5 0 0 1 8 0" />
-                    </svg>
-                    Возьми зонт
-                </h3>
-                <p style="color:#004eab">Следуй инструкциям на экране аппарата и на сайте для получения зонта</p>
+        </header>
+
+        <div class="first-section-content">
+            <div class="left">
+                <h1>WISH — сервис бесплатного шеринга зонтов в&nbsp;городе</h1>
+                <h2>Возьми зонт бесплатно и верни в ближайшем аппарате</h2>
+                <div class="btns-container">
+                    <button class="btn find-umbrella-1-btn" onclick="window.location.href='/station-map'">
+                        Найти зонт</button>
+                    <button class="btn learn-more-btn" onclick="window.location.href='#tutorial'">
+                        Узнать больше</button>
+                </div>
+            </div>
+            <div class="right">
+                <img src="/static/img/index/illustration1.png" alt="illustration" class="illustration1">
             </div>
         </div>
-    </div>
 
-    <div class="container tariff-section" id="tariffs">
-        <div class="row text-center">
-            <h2 class="tariff-title">Тарифы</h2>
-            <div class="col-12">
-                <img src="static/img/Тарифы без фона.png" alt="Тарифы" class="tariff-img">
+        <div class="current-weather" id="current-weather">
+            <span class="current-weather-dot"></span>
+            <div>
+                <span id="current-weather-city">Загрузка...</span>:
+                <span id="current-weather-description">загрузка...</span>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div style="margin-top: -4%" class="accordion px-5 py-5" id="accordionExample">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                    aria-expanded="true" aria-controls="collapseOne">
-                    Как работает аренда зонта?
-                </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                    Чтобы взять зонт, нужно зарегистрироваться и внести данные банковской карты. При аренде зонта у вас
-                    спишется депозит — он вернётся, если взятый зонт окажется в нашем аппарате не позднее 24-х часов с
-                    момента взятия. Длительность заказа можно отследить в личном кабинете.
-                    Если не вернуть зонт, то мы удержим с Вас стоимость зонта. Подробнее об этом можно узнать в разделе
-                    "Тарифы"
+
+    <section class="short-tutorial-section" id="tutorial">
+
+        <div class="short-tutorial-ocean">
+            <div class="short-tutorial-wave"></div>
+            <div class="short-tutorial-wave"></div>
+            <div class="short-tutorial-wave"></div>
+        </div>
+
+        <div class="short-tutorial-container">
+            <div class="step">
+                <i class="bi bi-person-circle"></i>
+                Войди в профиль
+            </div>
+            <i class="bi bi-chevron-right arrow-right"></i>
+            <i class="bi bi-chevron-down arrow-down"></i>
+            <div class="step">
+                <i class="bi bi-qr-code-scan"></i>
+                Найди аппарат
+            </div>
+            <i class="bi bi-chevron-right arrow-right"></i>
+            <i class="bi bi-chevron-down arrow-down"></i>
+            <div class="step">
+                <i class="bi bi-umbrella"></i>
+                Возьми зонт
+            </div>
+        </div>
+
+    </section>
+
+
+    <section class="pricing-section" id="pricing">
+        <h2>Верни зонт в течение суток и ничего не&nbsp;плати</h2>
+        <div class="left-right-container">
+            <div class="left">
+                <img src="/static/img/index/illustration2.svg" alt="illustration" class="illustration2">
+            </div>
+            <div class="right">
+                <div class="pricing-scheme-container">
+                    <div class="item">
+                        <div class="time">Сейчас</div>
+                        <div class="line-item"><i class="bi bi-caret-down-fill"></i></div>
+                        <div class="price">300 рублей депозит</div>
+                    </div>
+                    <div class="item">
+                        <div class="time">Первые 24 часа<br><small>в течение первых суток</small></div>
+                        <div class="line-item"><i class="bi bi-caret-down-fill"></i></div>
+                        <div class="price">Бесплатно</div>
+                    </div>
+                    <div class="item">
+                        <div class="time">48 часов<br><small>вторые сутки</small></div>
+                        <div class="line-item"><i class="bi bi-caret-down-fill"></i></div>
+                        <div class="price">300 рублей<br><small>спишется автоматически</small></div>
+                    </div>
+                    <div class="item">
+                        <div class="time">72 часов<br><small>третьи сутки</small></div>
+                        <div class="line-item"><i class="bi bi-caret-down-fill"></i></div>
+                        <div class="price">300 рублей<br><small>спишется автоматически</small></div>
+                    </div>
+                    <div class="item">
+                        <div class="time">Более 72 часов</div>
+                        <div class="line-item last"><i class="bi bi-x-lg"></i></div>
+                        <div class="price">Депозит сгорел<br><small>зонт можно не возвращать</small></div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Где можно взять зонт
-                </button>
-            </h2>
-            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                    На карте вы можете найти ближайший аппарат выдачи зонтов Wish. В карточке аппарата есть описание его
-                    местоположения, фотография и информация о наличии зонтов.
+    </section>
+
+
+    <section class="faq-section" id="FAQ">
+        <div class="faq-headers">
+            <h2>Есть вопросы?</h2>
+            <h2>Есть ответы!</h2>
+        </div>
+
+        <div class="faq-container">
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="question-container">
+                        <a>Как работает аренда зонта?</a>
+                        <i class="bi bi-caret-down-fill open"></i>
+                        <i class="bi bi-x-lg close"></i>
+                    </div>
+                    <div class="content">
+                        <p>Чтобы взять зонт, нужно зарегистрироваться и внести данные банковской карты. При аренде зонта спишется депозит - он вернётся, если взятый зонт окажется в нашем аппарате не позднее 24-х часов с момента взятия. Длительность заказа можно отследить в личном кабинете.<br>
+                            Если не вернуть зонт, то мы удержим его стоимость. Подробнее об этом можно узнать в разделе "Тарифы".</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="question-container">
+                        <a>Где можно взять зонт?</a>
+                        <i class="bi bi-caret-down-fill open"></i>
+                        <i class="bi bi-x-lg close"></i>
+                    </div>
+                    <div class="content">
+                        <p>Кнопка "Найти зонт" на сайте ведёт на карту, где можно найти ближайший аппарат выдачи зонтов WISH. В карточке аппарата есть описание его местоположения, фотография и информация о наличии зонтов.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="question-container">
+                        <a>Как и куда возвращать зонт?</a>
+                        <i class="bi bi-caret-down-fill open"></i>
+                        <i class="bi bi-x-lg close"></i>
+                    </div>
+                    <div class="content">
+                        <p>Зонт можно вернуть в любой аппарат WISH, в котором есть свободные ячейки. Нужно выбрать аппарат на карте, отсканировав QR-код на нём или введя его номер в поиск. После этого нужно нажать "Вернуть зонт" и следовать дальнейшим инструкциям.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="question-container">
+                        <a>Что делать если зонт сломался?</a>
+                        <i class="bi bi-caret-down-fill open"></i>
+                        <i class="bi bi-x-lg close"></i>
+                    </div>
+                    <div class="content">
+                        <p>Ничего страшного. При возврате зонта нужно отметить "Зонт сломан" на сайте и поместить зонт в ячейку аппарата. Если из-за повреждений поместить зонт в ячейку не получается, то можно оставить зонт рядом с аппаратом, сфотографировать и отправить фото через форму ниже, заполнив необходимые поля и указав номер аппарата, рядом с которым оставлен зонт.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="question-container">
+                        <a>Что делать если зонт потерялся?</a>
+                        <i class="bi bi-caret-down-fill open"></i>
+                        <i class="bi bi-x-lg close"></i>
+                    </div>
+                    <div class="content">
+                        <p>Через 3 дня после взятия зонта заказ автоматически закроется, а мы удержим стоимость зонта. Подробнее об этом можно узнать в разделе "тарифы". Постарайтесь больше не терять зонты, ведь ими могут воспользоваться ещё сотни людей!</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="question-container">
+                        <a>Что делать, если нашёл зонт WISH?</a>
+                        <i class="bi bi-caret-down-fill open"></i>
+                        <i class="bi bi-x-lg close"></i>
+                    </div>
+                    <div class="content">
+                        <p>Нужно зайти в личный кабинет, нажать на кнопку "Вернуть зонт" и следовать инструкциям.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="question-container">
+                        <a>Почему с меня списываются деньги?</a>
+                        <i class="bi bi-caret-down-fill open"></i>
+                        <i class="bi bi-x-lg close"></i>
+                    </div>
+                    <div class="content">
+                        <p>Мы предоставляем бесплатную аренду на 24 часа, однако просим у пользователей депозит в размере 300 рублей. Также существуют штрафы за просроченный возврат зонта. Подробнее об этом можно узнать в разделе "Тарифы". Если заказ завершён, а деньги продолжают списываться, нужно заполнить форму ниже с указанием причины обращения. Мы оперативно разберёмся со всеми возникшими проблемами.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="question-container">
+                        <a>Сколько зонтов можно взять?</a>
+                        <i class="bi bi-caret-down-fill open"></i>
+                        <i class="bi bi-x-lg close"></i>
+                    </div>
+                    <div class="content">
+                        <p>На данный момент пользователь может взять только один зонт. Если вы идёте с семьёй или друзьями, то предложите им тоже зарегистрироваться в сервисе, тогда каждый окажется под своим зонтом.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="question-container">
+                        <a>Как вернуть зонт, если все ячейки в аппарате заняты?</a>
+                        <i class="bi bi-caret-down-fill open"></i>
+                        <i class="bi bi-x-lg close"></i>
+                    </div>
+                    <div class="content">
+                        <p>В карточке каждого аппарата указано количество свободных и занятых ячеек, поэтому на карте можно найти ближайший аппарат, в котором есть свободные ячейки для сдачи зонта.</p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingThree">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Как и куда возвращать зонт
-                </button>
-            </h2>
-            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                    Зонт можно вернуть в любой аппарат Wish, в котором есть свободные ячейки. Выберите аппарат на карте,
-                    отсканировав QR-код на нём или введя его номер в поиск. Нажмите "Вернуть зонт" и следуйте дальнейшим
-                    инструкциям.
+
+    </section>
+
+
+    <section class="support-section" id="support">
+        <div class="left-right-container">
+            <div class="left">
+                <h2>Не нашли ответ на свой вопрос?</h2>
+                <p>Заполните форму, мы поможем разобраться с любой проблемой. Ответ придёт письмом по электронной почте или звонком на контактный номер телефона.</p>
+            </div>
+            <div class="right">
+                <form class="support-form">
+                    <input class="support-input" type="text" name="name" id="supportName" placeholder="Имя*">
+                    <input class="support-input" type="text" name="city" id="supportCity" placeholder="Город*">
+                    <input class="support-input" type="email" name="email" id="supportEmail" placeholder="Электронная почта">
+                    <input class="support-input" type="tel" name="phone" id="supportPhone" placeholder="Номер телефона">
+                    <textarea class="support-textarea" rows="5" id="supportText" placeholder="Что случилось*"></textarea>
+                    <button type="button" class="btn support-send-btn" onclick="sendQuestion()">Отправить вопрос</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="about-section" id="about">
+        <div class="founder-person-container">
+            <div class="person-card founder">
+                <img src="/static/img/index/persons/Klim-Shchegolkov.jpg" alt="photo" class="photo">
+                <div class="name">Климентий Щегольков</div>
+                <div class="position">Основатель WISH</div>
+                <!-- <div class="quote"></div> -->
+            </div>
+        </div>
+
+        <div class="about-text">
+            Каждый человек хотя бы раз попадал под внезапный проливной дождь. Однажды это случилось и с нами. Высушив футболки и рубашки на батарее, мы решили создать сервис WISH. Наша цель в том, чтобы в городе можно было не носить с собой громоздкий зонт даже в дождливую погоду. Мы с командой верим, что в нужный момент наш аппарат окажется рядом и спасёт тебя от перспективы промокнуть.
+        </div>
+
+        <h2>Мы делаем шеринг зонтов бесплатным</h2>
+
+        <div class="team-container">
+            <div class="person-card">
+                <img src="/static/img/index/persons/Amir-Mamatshekhov.jpg" alt="photo" class="photo">
+                <div class="name">Амир Маматшехов</div>
+                <div class="position">Операционный директор</div>
+            </div>
+            <div class="person-card">
+                <img src="/static/img/index/persons/Egor-Zaitsev.jpg" alt="photo" class="photo">
+                <div class="name">Егор Зайцев</div>
+                <div class="position">Product manager</div>
+            </div>
+            <div class="person-card">
+                <img src="/static/img/index/persons/Artem-Moshenko.jpg" alt="photo" class="photo">
+                <div class="name">Артём Мошенко</div>
+                <div class="position">SEO - анализ</div>
+            </div>
+            <div class="person-card">
+                <img src="/static/img/index/persons/Mark-Meshcheryakov.jpg" alt="photo" class="photo">
+                <div class="name">Марк Мещеряков</div>
+                <div class="position">SEO - бэкенд</div>
+            </div>
+            <div class="person-card">
+                <img src="/static/img/index/persons/Yury-Konovalov.jpg" alt="photo" class="photo">
+                <div class="name">Юрий Коновалов</div>
+                <div class="position">Инженер-робототехник</div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="take-umbrella-section">
+        <div class="background-container">
+            <div class="background"></div>
+            <div class="background-cover">
+                <div class="rain" id="take-umbrella-rain">
+                    <div class="take-umbrella-content">
+                        <img src="/static/img/index/umbrella-filled-3.svg" alt="umbrella" id="take-umbrella-img">
+                        <div class="take-umbrella-inner-content">
+                            <h3>Возьми зонт прямо сейчас!</h3>
+                            <button class="btn find-umbrella-2-btn" onclick="window.location.href='/station-map'">Найти зонт</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingFour">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
-                    Зонт сломался
-                </button>
-            </h2>
-            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
-                data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                    Ничего страшного. При возврате зонта отметьте "Зонт сломан" на сайте и постарайтесь поместить зонт в
-                    ячейку аппарата. Если из-за повреждений поместить зонт в ячейку не получается, то оставьте зонт
-                    рядом с аппаратом, сфотографируйте и полученное фото отправьте через форму снизу </div>
+        <img src="/static/img/index/take-umbrella-cloud-1.svg" alt="cloud" class="take-umbrella-cloud">
+        <img src="/static/img/index/take-umbrella-cloud-2.svg" alt="cloud" class="take-umbrella-cloud right">
+    </section>
+
+
+    <section class="footer-section">
+        <footer>
+            <div class="row">
+                <img src="/static/img/logo.png" alt="logo">
             </div>
-        </div>
+            <div class="row menu">
+                <a class="item" href="/business">Бизнесу</a>
+                <a class="item" href="#pricing">Тарифы</a>
+                <a class="item" href="#about">О нас</a>
+                <a class="item" href="#FAQ">Вопросы</a>
+                <a class="item" href="#support">Поддержка</a>
+                <a class="item" href="/profile">Профиль</a>
+            </div>
+            <div class="row center">
+                <a class="item" href="mailto:help@shareu.ru"><i class="bi bi-envelope-fill"></i> help@shareu.ru</a>
+            </div>
+            <div class="row last">
+                © 2024 WISH, Все права защищены<br>
+                ИП&nbsp;"Щегольков&nbsp;Климентий&nbsp;Тимофеевич", ИНН&nbsp;973302503446, ОГРН&nbsp;32477460003353
+            </div>
+        </footer>
+    </section>
 
-
-    </div>
-
-    <nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-        <text class="q" style="text-align: left">
-            ИП "Щегольков Климентий Тимофеевич", ИНН 973302503446, ОГРН 32477460003353, <br> © 2024 WISH, Все права
-            защищены
-        </text>
-    </div>
-    </nav>
-
+    <script src="/static/js/index.js"></script>
 </body>
 
 </html>
