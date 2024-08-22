@@ -5,6 +5,13 @@
     {% include 'components/head_base.html' %}
     {% include 'components/yandex_metrika.html' %}
 
+    <meta name="description" content="Станьте партнёром WISH — сервиса бесплатного шеринга зонтов в городе. Устанавливайте нашу станцию в свои заведения и заказывайте рекламу на экране аппарата.">
+    <meta property="og:title" content="Бизнесу — WISH">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shareu.ru/business">
+    <meta property="og:image" content="https://shareu.ru/static/img/business/preview.png">
+    <meta property="og:description" content="Станьте партнёром WISH — сервиса бесплатного шеринга зонтов в городе. Устанавливайте нашу станцию в свои заведения и заказывайте рекламу на экране аппарата.">
+
     <link rel="stylesheet" href="/static/css/business.css">
 
     <title>Бизнесу — WISH</title>
@@ -32,7 +39,61 @@
     </section>
 
     <section class="install-station-section" id="install-station">
-
+        <h2>Мы привлекаем к вам посетителей в&nbsp;дождливый&nbsp;день</h2>
+        <div class="cards">
+            <div class="card">
+                <div>
+                    <img src="/static/img/business/station-installation.svg">
+                    Разместим аппарат с зонтиками в вашем заведении
+                </div>
+                <strong>Бесплатно</strong>
+            </div>
+            <div class="card">
+                <div>
+                    <img src="/static/img/business/umbrellas-delivery.svg">
+                    Организуем быструю автоматическую выдачу зонтов посетителям
+                </div>
+                <strong>Бесплатно</strong>
+            </div>
+            <div class="card">
+                <div>
+                    <img src="/static/img/business/station-maintenance.svg">
+                    Обеспечим обслуживание и поддержку аппарата
+                </div>
+                <strong>Бесплатно</strong>
+            </div>
+        </div>
+        <div class="install-station-form-container">
+            <div class="left">
+                <div class="form-header">Отправьте заявку на установку аппарата 
+                    <div id="installStationPlace">
+                        <div><div>в&nbsp;торговом&nbsp;центре</div></div>
+                        <div><div>на&nbsp;станции&nbsp;метро</div></div>
+                        <div><div>в&nbsp;кинотеатре</div></div>
+                        <div><div>в&nbsp;ВУЗе</div></div>
+                        <div><div>в&nbsp;коворкинге</div></div>
+                        <div><div>в&nbsp;ресторане</div></div>
+                        <div><div>в&nbsp;гостинице</div></div>
+                        <div><div>в&nbsp;магазине</div></div>
+                        <div><div>в&nbsp;офисе</div></div>
+                        <div><div>в&nbsp;кафе</div></div>
+                    </div>
+                </div>
+                <form class="install-station-form">
+                    <input type="text" name="name" id="installStationOrganization" placeholder="Организация*">
+                    <input type="text" name="city" id="installStationCity" placeholder="Город*">
+                    <input type="email" name="email" id="installStationEmail" placeholder="Электронная почта">
+                    <input type="tel" name="phone" id="installStationPhone" placeholder="Номер телефона">
+                    <textarea rows="3" id="installStationText" placeholder="Запрос"></textarea>
+                    <button type="button" class="btn" onclick="sendInstallStationRequest()">Отправить запрос</button>
+                </form>
+            </div>
+            <div class="right">
+                <div class="station-container">
+                    <img src="/static/img/business/station-1.png">
+                </div>
+            </div>
+        </div>
     </section>
 
     <script src="/static/js/business.js"></script>
