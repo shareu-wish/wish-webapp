@@ -24,12 +24,6 @@ body {
   overflow-x: hidden;
 }
 
-// DEV
-body {
-  padding-bottom: 10rem;
-  background-color: $bgColor1;
-}
-
 
 /* Scrollbar */
 * {
@@ -45,7 +39,7 @@ body {
   background: $bgColor1;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: #b6c4dd;
+  background-color: $orangeColor;
   border-radius: 5px;
   border: 3px solid $bgColor1;
 }
@@ -203,7 +197,7 @@ header {
 /* Install station section */
 .install-station-section {
   width: 100%;
-  padding-top: 6rem;
+  padding: 6rem 0 10rem;
   background-color: $bgColor1;
 
   h2 {
@@ -222,8 +216,13 @@ header {
 
     .card {
       width: 20%;
-      // height: 17rem;
-      background-color: $bgLightColor2;
+      background-color: $bgLightColor1;
+
+      // background-color: $bgColor1;
+      // border: 1px solid $bgColor3;
+      // color: white;
+      // display: flex;
+
       display: flex;
       flex-direction: column;
       text-align: center;
@@ -324,7 +323,7 @@ header {
     margin-bottom: $placeHeight;
   }
   & > div:first-child {
-    animation: changePlace 20s linear infinite;
+    animation: changePlace 25s linear infinite;
   }
 
   @keyframes changePlace {
@@ -364,7 +363,6 @@ header {
   }
 }
 
-
 .install-station-form {
   input, textarea {
     width: 100%;
@@ -379,3 +377,161 @@ header {
     resize: none;
   }
 }
+
+
+/* Place ad section */
+.place-ad-section {
+  width: 100%;
+  padding: 5rem 0 8rem;
+  background-color: $bgColor1;
+
+  h2 {
+    text-align: center;
+    font-size: 3rem;
+    color: $orangeColor;
+    padding: 0 2rem;
+  }
+
+  .pluses {
+    width: 50%;
+    margin: 4rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    .plus {
+      width: 60%;
+      padding: 1rem 2rem;
+      color: $bgLightColor1;
+      border: 1px solid $bgColor4;
+      border-radius: 1rem;
+      text-align: center;
+      &:last-child {
+        margin-left: auto;
+      }
+    }
+  }
+
+  .ad-vars {
+    margin: 5rem auto 0;
+    width: 50%;
+    background-color: $bgLightColor1;
+    border-radius: 1rem;
+    padding: 2rem 3rem;
+    h3 {
+      text-align: center;
+      font-size: 2rem;
+    }
+    .list-and-station-container {
+      width: 100%;
+      display: flex;
+      margin-top: 1rem;
+      .list {
+        flex: 2;
+        display: flex;
+        align-items: center;
+        padding-left: 2rem;
+        ul {
+          list-style-image: url('/static/img/business/drop.svg');
+        }
+        li {
+          margin-bottom: 1rem;
+        }
+      }
+      .station {
+        flex: 1;
+        img {
+          width: 70%;
+          position: relative;
+          left: 50%;
+          bottom: -2.3rem;
+          transform: translateX(-50%);
+        }
+      }
+    }
+  }
+
+  .contact {
+    width: 50%;
+    margin: 3rem auto;
+    background-color: $bgColor2;
+    border-radius: 1rem;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    font-size: 1.3rem;
+    span:first-child {
+      font-weight: bold;
+      color: $orangeColor;
+    }
+    i {
+      position: relative;
+      bottom: -2px;
+    }
+    a {
+      color: white;
+      text-decoration: none;
+      &:hover {
+        color: $orangeColor;
+      }
+    }
+  }
+}
+
+
+/* Footer */
+footer {
+  width: 100%;
+  background-color: $bgColor1;
+
+  img {
+    width: 8rem;
+    filter: brightness(0) invert(1);
+  }
+
+  .row {
+    padding: 1rem 15%;
+    border-bottom: 1px solid $bgColor4;
+    color: white;
+    &.menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      column-gap: 2rem;
+      row-gap: 0.8rem;
+      .item {
+        // flex: 0 0 calc(100%/6);
+        text-align: center;
+        font-size: 1.3rem;
+        color: white;
+        text-decoration: none;
+        &:hover {
+          color: lightgray;
+        }
+      }
+    }
+
+    &.center {
+      display: flex;
+      justify-content: center;
+      .item {
+        text-align: center;
+        font-size: 1.3rem;
+        color: white;
+        text-decoration: none;
+        &:hover {
+          color: lightgray;
+        }
+      }
+    }
+
+    &.first {
+      border-top: 1px solid $bgColor4;
+    }
+
+    &.last {
+      border: none;
+    }
+  }
+}
+

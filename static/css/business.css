@@ -12,11 +12,6 @@ body {
   overflow-x: hidden;
 }
 
-body {
-  padding-bottom: 10rem;
-  background-color: #1e1e1e;
-}
-
 /* Scrollbar */
 * {
   scrollbar-width: thin;
@@ -33,7 +28,7 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #b6c4dd;
+  background-color: #ff815b;
   border-radius: 5px;
   border: 3px solid #1e1e1e;
 }
@@ -151,7 +146,7 @@ header .links a:hover {
 /* Install station section */
 .install-station-section {
   width: 100%;
-  padding-top: 6rem;
+  padding: 6rem 0 10rem;
   background-color: #1e1e1e;
 }
 .install-station-section h2 {
@@ -169,7 +164,7 @@ header .links a:hover {
 }
 .install-station-section .cards .card {
   width: 20%;
-  background-color: #dde5f4;
+  background-color: #f1f7fe;
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -257,7 +252,7 @@ header .links a:hover {
   margin-bottom: 2.5rem;
 }
 #installStationPlace > div:first-child {
-  animation: changePlace 20s linear infinite;
+  animation: changePlace 25s linear infinite;
 }
 @keyframes changePlace {
   0% {
@@ -339,4 +334,149 @@ header .links a:hover {
 }
 .install-station-form textarea {
   resize: none;
+}
+
+/* Place ad section */
+.place-ad-section {
+  width: 100%;
+  padding: 5rem 0 8rem;
+  background-color: #1e1e1e;
+}
+.place-ad-section h2 {
+  text-align: center;
+  font-size: 3rem;
+  color: #ff815b;
+  padding: 0 2rem;
+}
+.place-ad-section .pluses {
+  width: 50%;
+  margin: 4rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.place-ad-section .pluses .plus {
+  width: 60%;
+  padding: 1rem 2rem;
+  color: #f1f7fe;
+  border: 1px solid #444444;
+  border-radius: 1rem;
+  text-align: center;
+}
+.place-ad-section .pluses .plus:last-child {
+  margin-left: auto;
+}
+.place-ad-section .ad-vars {
+  margin: 5rem auto 0;
+  width: 50%;
+  background-color: #f1f7fe;
+  border-radius: 1rem;
+  padding: 2rem 3rem;
+}
+.place-ad-section .ad-vars h3 {
+  text-align: center;
+  font-size: 2rem;
+}
+.place-ad-section .ad-vars .list-and-station-container {
+  width: 100%;
+  display: flex;
+  margin-top: 1rem;
+}
+.place-ad-section .ad-vars .list-and-station-container .list {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  padding-left: 2rem;
+}
+.place-ad-section .ad-vars .list-and-station-container .list ul {
+  list-style-image: url("/static/img/business/drop.svg");
+}
+.place-ad-section .ad-vars .list-and-station-container .list li {
+  margin-bottom: 1rem;
+}
+.place-ad-section .ad-vars .list-and-station-container .station {
+  flex: 1;
+}
+.place-ad-section .ad-vars .list-and-station-container .station img {
+  width: 70%;
+  position: relative;
+  left: 50%;
+  bottom: -2.3rem;
+  transform: translateX(-50%);
+}
+.place-ad-section .contact {
+  width: 50%;
+  margin: 3rem auto;
+  background-color: #2c2c2c;
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  font-size: 1.3rem;
+}
+.place-ad-section .contact span:first-child {
+  font-weight: bold;
+  color: #ff815b;
+}
+.place-ad-section .contact i {
+  position: relative;
+  bottom: -2px;
+}
+.place-ad-section .contact a {
+  color: white;
+  text-decoration: none;
+}
+.place-ad-section .contact a:hover {
+  color: #ff815b;
+}
+
+/* Footer */
+footer {
+  width: 100%;
+  background-color: #1e1e1e;
+}
+footer img {
+  width: 8rem;
+  filter: brightness(0) invert(1);
+}
+footer .row {
+  padding: 1rem 15%;
+  border-bottom: 1px solid #444444;
+  color: white;
+}
+footer .row.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 2rem;
+  row-gap: 0.8rem;
+}
+footer .row.menu .item {
+  text-align: center;
+  font-size: 1.3rem;
+  color: white;
+  text-decoration: none;
+}
+footer .row.menu .item:hover {
+  color: lightgray;
+}
+footer .row.center {
+  display: flex;
+  justify-content: center;
+}
+footer .row.center .item {
+  text-align: center;
+  font-size: 1.3rem;
+  color: white;
+  text-decoration: none;
+}
+footer .row.center .item:hover {
+  color: lightgray;
+}
+footer .row.first {
+  border-top: 1px solid #444444;
+}
+footer .row.last {
+  border: none;
 }/*# sourceMappingURL=business.css.map */
