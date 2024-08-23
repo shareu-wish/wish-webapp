@@ -114,7 +114,6 @@ header .right {
 /* Station marker */
 .station-marker {
   width: 3rem;
-  /* background-image: url('/static/img/umbrella-mini.svg'); */
   height: 3rem;
 
   transform: translateX(-50%) translateY(-50%);

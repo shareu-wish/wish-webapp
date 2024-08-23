@@ -18,9 +18,16 @@
 </head>
 
 <body>
+    <div class="preloader" id="preloader">
+        <div class="container">
+            <img src="/static/img/logos/umbrella-orange.svg" alt="umbrella">
+            <span class="loader"></span>
+        </div>
+    </div>
+
     <section class="first-section" id="firstSection">
         <header>
-            <img src="/static/img/logo.png" alt="logo" class="logo-header" onclick="window.location.href='/'">
+            <img src="/static/img/logos/logo.png" alt="logo" class="logo-header" onclick="window.location.href='/'">
 
             <div class="links">
                 <a href="/">Главная</a>
@@ -41,24 +48,30 @@
     <section class="install-station-section" id="install-station">
         <h2>Мы привлекаем к вам посетителей в&nbsp;дождливый&nbsp;день</h2>
         <div class="cards">
-            <div class="card">
+            <div class="card install-station-card">
                 <div>
-                    <img src="/static/img/business/station-installation.svg">
-                    Разместим аппарат с зонтиками в вашем заведении
+                    <img src="/static/img/business/station-installation.png" 
+                        data-anim="/static/img/business/station-installation.gif" 
+                        data-freeze="/static/img/business/station-installation.png">
+                    Разместим аппарат с зонтиками в&nbsp;вашем заведении
                 </div>
                 <strong>Бесплатно</strong>
             </div>
-            <div class="card">
+            <div class="card install-station-card">
                 <div>
-                    <img src="/static/img/business/umbrellas-delivery.svg">
+                    <img src="/static/img/business/umbrellas-delivery.png"
+                        data-anim="/static/img/business/umbrellas-delivery.gif" 
+                        data-freeze="/static/img/business/umbrellas-delivery.png">
                     Организуем быструю автоматическую выдачу зонтов посетителям
                 </div>
                 <strong>Бесплатно</strong>
             </div>
-            <div class="card">
+            <div class="card install-station-card">
                 <div>
-                    <img src="/static/img/business/station-maintenance.svg">
-                    Обеспечим обслуживание и поддержку аппарата
+                    <img src="/static/img/business/station-maintenance.png"
+                        data-anim="/static/img/business/station-maintenance.gif" 
+                        data-freeze="/static/img/business/station-maintenance.png">
+                    Обеспечим обслуживание и&nbsp;поддержку аппарата
                 </div>
                 <strong>Бесплатно</strong>
             </div>
@@ -128,7 +141,7 @@
 
     <footer>
         <div class="row first">
-            <img src="/static/img/logo.png" alt="logo">
+            <img src="/static/img/logos/logo.png" alt="logo">
         </div>
         <div class="row menu">
             <a class="item" href="/">Главная</a>

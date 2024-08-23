@@ -152,7 +152,7 @@ async function initMap() {
     markerElement.innerHTML = `
       <div onclick="toggleStationWindow('${station.id}')">
         <div class="umbrellas-count">${station.can_take}</div>
-        <img src="/static/img/umbrella-mini.svg">
+        <img src="/static/img/logos/umbrella-mini.svg">
       </div>
       <div class="station-info-window" id="${station.id}Window">
         <div class="windowContent">
