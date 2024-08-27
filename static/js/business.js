@@ -4,7 +4,7 @@ function sendInstallStationRequest() {
   const email = $("#installStationEmail").val().trim();
   const phone = $("#installStationPhone").val().trim();
   const text = $("#installStationText").val().trim();
-  if (organization === "" || city === "" || text === "") {
+  if (organization === "" || city === "") {
     return alert("Заполните все обязательные поля!");
   }
   if (email === "" && phone === "") {
@@ -13,11 +13,8 @@ function sendInstallStationRequest() {
     );
   }
 
-  // TODO: Убрать, когда будет готов сервер
-  return alert("К сожалению, эта форма сейчас не работает(");
-
   $.ajax({
-    url: "/support",
+    url: "/install-station-request",
     type: "POST",
     data: {
       organization: organization,
@@ -27,7 +24,7 @@ function sendInstallStationRequest() {
       text: text,
     },
     success: function (res) {
-      alert("Ваш вопрос отправлен!");
+      alert("Ваш запрос отправлен");
       $("#installStationOrganization").val("");
       $("#installStationCity").val("");
       $("#installStationEmail").val("");
