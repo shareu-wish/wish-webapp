@@ -10,6 +10,7 @@ body {
   width: 100%;
   scroll-behavior: smooth;
   overflow-x: hidden;
+  background-color: #1e1e1e;
 }
 
 /* Scrollbar */
@@ -207,7 +208,7 @@ header .links a:hover {
   padding: 0 2rem;
 }
 .install-station-section .cards {
-  margin-top: 5rem;
+  margin: 5rem auto 0;
   width: 95%;
   display: flex;
   justify-content: center;
@@ -394,6 +395,8 @@ header .links a:hover {
   width: 100%;
   padding: 5rem 0 8rem;
   background-color: #1e1e1e;
+  position: relative;
+  top: -1px;
 }
 .place-ad-section h2 {
   text-align: center;
@@ -488,13 +491,15 @@ header .links a:hover {
 footer {
   width: 100%;
   background-color: #1e1e1e;
+  position: relative;
+  top: -1px;
 }
 footer img {
   width: 8rem;
   filter: brightness(0) invert(1);
 }
 footer .row {
-  padding: 1rem 15%;
+  padding: 0.8rem 15%;
   border-bottom: 1px solid #444444;
   color: white;
 }
@@ -507,7 +512,7 @@ footer .row.menu {
 }
 footer .row.menu .item {
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1rem;
   color: white;
   text-decoration: none;
 }
@@ -520,7 +525,7 @@ footer .row.center {
 }
 footer .row.center .item {
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1rem;
   color: white;
   text-decoration: none;
 }
@@ -532,4 +537,297 @@ footer .row.first {
 }
 footer .row.last {
   border: none;
+}
+
+/* Responsive */
+@media only screen and (min-width: 320px) and (max-width: 640px) {
+  /* preloader */
+  .preloader .container img {
+    width: 6rem;
+  }
+  /* First section */
+  header {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  header .links {
+    gap: 0.8rem;
+  }
+  .first-section::before {
+    background: radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(255, 129, 91, 0.25), transparent 40%);
+  }
+  .first-section-content {
+    width: 90%;
+  }
+  .first-section-content h1 {
+    font-size: 3.5rem;
+  }
+  .first-section-content h2 {
+    font-size: 2rem;
+    margin-top: 1rem;
+  }
+  .first-section-content .btns {
+    padding: 0 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .first-section-content .btns button {
+    padding: 1rem;
+    font-size: 1.3rem;
+  }
+  /* Install station */
+  .install-station-section {
+    padding-bottom: 7rem;
+  }
+  .install-station-section h2 {
+    font-size: 2rem;
+    padding: 0 1rem;
+  }
+  .install-station-section .cards {
+    flex-direction: column;
+  }
+  .install-station-section .cards .card {
+    width: 80%;
+    margin: auto;
+  }
+  .install-station-form-container {
+    width: 90%;
+    flex-direction: column-reverse;
+    gap: 7rem;
+  }
+  .install-station-form-container .left {
+    width: 100%;
+  }
+  .install-station-form-container .right {
+    width: 100%;
+    height: 20rem;
+  }
+  .install-station-form-container .right::before {
+    width: 17rem;
+    bottom: 6rem;
+    left: 50%;
+  }
+  .install-station-form-container .right::after {
+    width: 22rem;
+    bottom: 13rem;
+    left: 35%;
+  }
+  /* Place ad */
+  .place-ad-section h2 {
+    font-size: 2rem;
+    padding: 0 1rem;
+  }
+  .place-ad-section .pluses {
+    width: 90%;
+  }
+  .place-ad-section .pluses .plus {
+    width: 80%;
+  }
+  .place-ad-section .ad-vars {
+    width: 90%;
+    padding: 1.5rem 1.5rem;
+  }
+  .place-ad-section .ad-vars h3 {
+    font-size: 1.5rem;
+  }
+  .place-ad-section .ad-vars .list-and-station-container {
+    margin-top: 1.5rem;
+    flex-direction: column;
+  }
+  .place-ad-section .ad-vars .list-and-station-container .station img {
+    bottom: -1.8rem;
+  }
+  .place-ad-section .contact {
+    width: 90%;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  /* Footer */
+  footer .row {
+    padding: 0.8rem 0.8rem;
+  }
+  footer .row.menu {
+    flex-direction: column;
+  }
+}
+@media only screen and (min-width: 481px) and (max-width: 640px) {
+  /* Install station */
+  .install-station-form-container .right::after {
+    width: 22rem;
+    bottom: 13rem;
+    left: 40%;
+  }
+  /* Place ad */
+  .place-ad-section .ad-vars .list-and-station-container {
+    margin-top: 1.5rem;
+    flex-direction: column;
+  }
+  .place-ad-section .ad-vars .list-and-station-container .station img {
+    width: 50%;
+    bottom: -1.8rem;
+  }
+}
+@media only screen and (min-width: 641px) and (max-width: 800px) {
+  /* First section */
+  .first-section::before {
+    background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 129, 91, 0.25), transparent 40%);
+  }
+  .first-section-content {
+    width: 90%;
+  }
+  .first-section-content h1 {
+    font-size: 4rem;
+  }
+  .first-section-content h2 {
+    font-size: 2.3rem;
+    margin-top: 1rem;
+  }
+  .first-section-content .btns {
+    padding: 0 5rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  /* Install station */
+  .install-station-section h2 {
+    font-size: 3rem;
+    padding: 0 1rem;
+  }
+  .install-station-section .cards {
+    flex-direction: column;
+  }
+  .install-station-section .cards .card {
+    width: 60%;
+    margin: auto;
+  }
+  .install-station-form-container {
+    width: 85%;
+    flex-direction: column-reverse;
+    gap: 7rem;
+  }
+  .install-station-form-container .left {
+    width: 100%;
+  }
+  .install-station-form-container .right {
+    width: 100%;
+    height: 20rem;
+  }
+  .install-station-form-container .right::before {
+    width: 17rem;
+    bottom: 6rem;
+    left: 50%;
+  }
+  .install-station-form-container .right::after {
+    width: 22rem;
+    bottom: 13rem;
+    left: 40%;
+  }
+  /* Place ad */
+  .place-ad-section h2 {
+    font-size: 3rem;
+    padding: 0 2rem;
+  }
+  .place-ad-section .pluses {
+    width: 85%;
+  }
+  .place-ad-section .pluses .plus {
+    width: 80%;
+  }
+  .place-ad-section .ad-vars {
+    width: 85%;
+    padding: 1.5rem 1.5rem;
+  }
+  .place-ad-section .ad-vars h3 {
+    font-size: 1.8rem;
+  }
+  .place-ad-section .ad-vars .list-and-station-container .station img {
+    bottom: -1.8rem;
+  }
+  .place-ad-section .contact {
+    width: 85%;
+  }
+  /* Footer */
+  footer .row {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+@media only screen and (min-width: 801px) and (max-width: 960px) {
+  /* Install station */
+  .install-station-section .cards {
+    flex-direction: column;
+  }
+  .install-station-section .cards .card {
+    width: 50%;
+    margin: auto;
+  }
+  .install-station-form-container {
+    width: 60%;
+    flex-direction: column-reverse;
+    gap: 7rem;
+  }
+  .install-station-form-container .left {
+    width: 100%;
+  }
+  .install-station-form-container .right {
+    width: 100%;
+    height: 20rem;
+  }
+  .install-station-form-container .right::before {
+    width: 17rem;
+    bottom: 6rem;
+    left: 50%;
+  }
+  .install-station-form-container .right::after {
+    width: 22rem;
+    bottom: 13rem;
+    left: 40%;
+  }
+  /* Place ad */
+  .place-ad-section .pluses {
+    width: 85%;
+  }
+  .place-ad-section .ad-vars {
+    width: 85%;
+  }
+  .place-ad-section .contact {
+    width: 85%;
+  }
+}
+@media only screen and (min-width: 961px) and (max-width: 1280px) {
+  /* Install station */
+  .install-station-section .cards .card {
+    width: 25%;
+  }
+  .install-station-form-container {
+    width: 60%;
+    flex-direction: column-reverse;
+    gap: 7rem;
+  }
+  .install-station-form-container .left {
+    width: 100%;
+  }
+  .install-station-form-container .right {
+    width: 100%;
+    height: 20rem;
+  }
+  .install-station-form-container .right::before {
+    width: 17rem;
+    bottom: 6rem;
+    left: 50%;
+  }
+  .install-station-form-container .right::after {
+    width: 22rem;
+    bottom: 13rem;
+    left: 40%;
+  }
+  /* Place ad */
+  .place-ad-section .pluses {
+    width: 75%;
+  }
+  .place-ad-section .ad-vars {
+    width: 75%;
+  }
+  .place-ad-section .contact {
+    width: 75%;
+  }
 }/*# sourceMappingURL=business.css.map */
