@@ -34,10 +34,43 @@ def check_auth():
 def index():
     return render_template("index.html")
 
+@app.route("/support", methods=["POST"])
+def support():
+    name = request.form["name"]
+    city = request.form["city"]
+    email = request.form["email"]
+    phone = request.form["phone"]
+    text = request.form["text"]
+
+    if not name or not city or not text:
+        return {"status": "error", "message": "Заполните обязательные поля!"}
+        
+    
+    db_helper.create_support_request(name, city, email, phone, text)
+
+    return {"status": "ok"}
+
 
 @app.route("/business")
 def business():
     return render_template("business.html")
+
+@app.route("/install-station-request", methods=["POST"])
+def install_station_request():
+    organization = request.form["organization"]
+    city = request.form["city"]
+    email = request.form["email"]
+    phone = request.form["phone"]
+    text = request.form["text"]
+
+    if not organization or not city:
+        return {"status": "error", "message": "Заполните обязательные поля!"}
+        
+    
+    db_helper.create_install_station_request(organization, city, email, phone, text)
+
+    return {"status": "ok"}
+
 
 
 @app.route('/robots.txt')

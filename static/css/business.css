@@ -1,0 +1,833 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html,
+body {
+  width: 100%;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  background-color: #1e1e1e;
+}
+
+/* Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #ff815b #1e1e1e;
+}
+
+*::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #ff815b;
+  border-radius: 5px;
+  border: 3px solid #1e1e1e;
+}
+
+.btn {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 1rem;
+  background-color: #ff815b;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+.btn:hover {
+  background-color: #f27b56;
+}
+
+/* Preloader */
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #1e1e1e;
+  z-index: 6;
+}
+.preloader .container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.preloader .container img {
+  width: 12rem;
+  filter: drop-shadow(0 0 20px #ff815b);
+}
+.preloader .container .loader {
+  margin-top: 2rem;
+  width: 100%;
+  height: 4.8px;
+  display: inline-block;
+  position: relative;
+  background: #2c2c2c;
+  overflow: hidden;
+}
+.preloader .container .loader::after {
+  content: "";
+  width: 100px;
+  height: 4.8px;
+  background: #ff815b;
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  animation: animloader 2s linear infinite;
+}
+@keyframes animloader {
+  0% {
+    left: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    left: 100%;
+    transform: translateX(0%);
+  }
+}
+
+/* First section */
+.first-section {
+  width: 100%;
+  height: 100svh;
+  min-height: 650px;
+  padding-top: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 2s;
+  border-bottom: 1px solid #383838;
+  background-color: #1e1e1e;
+}
+.first-section::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transition: opacity 0.5s;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 129, 91, 0.25), transparent 40%);
+  z-index: 2;
+}
+.first-section:hover::before {
+  opacity: 1;
+}
+
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 3rem;
+}
+header .logo-header {
+  height: 2.4rem;
+  filter: brightness(0) invert(1);
+  cursor: pointer;
+}
+header .links {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+header .links a {
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+}
+header .links a:hover {
+  color: #ff815b;
+}
+
+.first-section-content {
+  width: 70%;
+}
+.first-section-content h1 {
+  text-align: center;
+  font-size: 6rem;
+  color: #ff815b;
+}
+.first-section-content h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: white;
+}
+.first-section-content .btns {
+  margin-top: 5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+.first-section-content .btns button {
+  border: 1px solid #ff815b;
+  border-radius: 1rem;
+  padding: 0.5rem 3rem;
+  color: #ff815b;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background, color 0.3s;
+}
+.first-section-content .btns button:hover {
+  background-color: #ff815b;
+  color: white;
+}
+
+/* Install station section */
+.install-station-section {
+  width: 100%;
+  padding: 6rem 0 10rem;
+  background-color: #1e1e1e;
+}
+.install-station-section h2 {
+  text-align: center;
+  font-size: 3rem;
+  color: #ff815b;
+  padding: 0 2rem;
+}
+.install-station-section .cards {
+  margin: 5rem auto 0;
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+}
+.install-station-section .cards .card {
+  width: 20%;
+  background-color: #f1f7fe;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 1rem;
+  border-radius: 1rem;
+  gap: 1rem;
+}
+.install-station-section .cards .card div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.install-station-section .cards .card div img {
+  height: 5rem;
+  width: 5rem;
+}
+.install-station-section .cards .card strong {
+  font-size: 1.2rem;
+}
+
+.install-station-form-container {
+  width: 75%;
+  margin: 7rem auto 0;
+  display: flex;
+  gap: 3rem;
+}
+.install-station-form-container .left {
+  width: 50%;
+}
+.install-station-form-container .left .form-header {
+  font-size: 2rem;
+  color: white;
+  font-weight: bold;
+  line-height: 2.5rem;
+}
+.install-station-form-container .left form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.install-station-form-container .right {
+  position: relative;
+  width: 50%;
+}
+.install-station-form-container .right img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10rem;
+  z-index: 2;
+}
+.install-station-form-container .right::before, .install-station-form-container .right::after {
+  content: "";
+  position: absolute;
+  bottom: 14rem;
+  left: 50%;
+  width: 25rem;
+  height: 0;
+  border-bottom: 1px solid #383838;
+  transform: rotate(-33deg) translateX(-50%);
+  z-index: 0;
+}
+.install-station-form-container .right::after {
+  width: 31rem;
+  bottom: 21.5rem;
+  left: 40%;
+}
+
+#installStationPlace {
+  position: relative;
+  top: calc(0.625rem - 1px);
+  display: inline-block;
+  overflow: hidden;
+  height: 2.5rem;
+}
+#installStationPlace > div > div {
+  color: #ff815b;
+  height: 2.5rem;
+  display: inline-block;
+}
+#installStationPlace > div {
+  margin-bottom: 2.5rem;
+}
+#installStationPlace > div:first-child {
+  animation: changePlace 25s linear infinite;
+}
+@keyframes changePlace {
+  0% {
+    margin-top: -50rem;
+  }
+  2% {
+    margin-top: -45rem;
+  }
+  10% {
+    margin-top: -45rem;
+  }
+  12% {
+    margin-top: -40rem;
+  }
+  20% {
+    margin-top: -40rem;
+  }
+  22% {
+    margin-top: -35rem;
+  }
+  30% {
+    margin-top: -35rem;
+  }
+  32% {
+    margin-top: -30rem;
+  }
+  40% {
+    margin-top: -30rem;
+  }
+  42% {
+    margin-top: -25rem;
+  }
+  50% {
+    margin-top: -25rem;
+  }
+  52% {
+    margin-top: -20rem;
+  }
+  60% {
+    margin-top: -20rem;
+  }
+  62% {
+    margin-top: -15rem;
+  }
+  70% {
+    margin-top: -15rem;
+  }
+  72% {
+    margin-top: -10rem;
+  }
+  80% {
+    margin-top: -10rem;
+  }
+  82% {
+    margin-top: -5rem;
+  }
+  90% {
+    margin-top: -5rem;
+  }
+  92% {
+    margin-top: 0px;
+  }
+  99.99% {
+    margin-top: 0px;
+  }
+  100% {
+    margin-top: -50rem;
+  }
+}
+
+.install-station-form input, .install-station-form textarea {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #444444;
+  background-color: #1e1e1e;
+  color: white;
+}
+.install-station-form textarea {
+  resize: none;
+}
+
+/* Place ad section */
+.place-ad-section {
+  width: 100%;
+  padding: 5rem 0 8rem;
+  background-color: #1e1e1e;
+  position: relative;
+  top: -1px;
+}
+.place-ad-section h2 {
+  text-align: center;
+  font-size: 3rem;
+  color: #ff815b;
+  padding: 0 2rem;
+}
+.place-ad-section .pluses {
+  width: 50%;
+  margin: 4rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.place-ad-section .pluses .plus {
+  width: 60%;
+  padding: 1rem 2rem;
+  color: #f1f7fe;
+  border: 1px solid #444444;
+  border-radius: 1rem;
+  text-align: center;
+}
+.place-ad-section .pluses .plus:last-child {
+  margin-left: auto;
+}
+.place-ad-section .ad-vars {
+  margin: 5rem auto 0;
+  width: 50%;
+  background-color: #f1f7fe;
+  border-radius: 1rem;
+  padding: 2rem 3rem;
+}
+.place-ad-section .ad-vars h3 {
+  text-align: center;
+  font-size: 2rem;
+}
+.place-ad-section .ad-vars .list-and-station-container {
+  width: 100%;
+  display: flex;
+  margin-top: 1rem;
+}
+.place-ad-section .ad-vars .list-and-station-container .list {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  padding-left: 2rem;
+}
+.place-ad-section .ad-vars .list-and-station-container .list ul {
+  list-style-image: url("/static/img/business/drop.svg");
+}
+.place-ad-section .ad-vars .list-and-station-container .list li {
+  margin-bottom: 1rem;
+}
+.place-ad-section .ad-vars .list-and-station-container .station {
+  flex: 1;
+}
+.place-ad-section .ad-vars .list-and-station-container .station img {
+  width: 70%;
+  position: relative;
+  left: 50%;
+  bottom: -2.3rem;
+  transform: translateX(-50%);
+}
+.place-ad-section .contact {
+  width: 50%;
+  margin: 3rem auto;
+  background-color: #2c2c2c;
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  font-size: 1.3rem;
+}
+.place-ad-section .contact span:first-child {
+  font-weight: bold;
+  color: #ff815b;
+}
+.place-ad-section .contact i {
+  position: relative;
+  bottom: -2px;
+}
+.place-ad-section .contact a {
+  color: white;
+  text-decoration: none;
+}
+.place-ad-section .contact a:hover {
+  color: #ff815b;
+}
+
+/* Footer */
+footer {
+  width: 100%;
+  background-color: #1e1e1e;
+  position: relative;
+  top: -1px;
+}
+footer img {
+  width: 8rem;
+  filter: brightness(0) invert(1);
+}
+footer .row {
+  padding: 0.8rem 15%;
+  border-bottom: 1px solid #444444;
+  color: white;
+}
+footer .row.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 2rem;
+  row-gap: 0.8rem;
+}
+footer .row.menu .item {
+  text-align: center;
+  font-size: 1rem;
+  color: white;
+  text-decoration: none;
+}
+footer .row.menu .item:hover {
+  color: lightgray;
+}
+footer .row.center {
+  display: flex;
+  justify-content: center;
+}
+footer .row.center .item {
+  text-align: center;
+  font-size: 1rem;
+  color: white;
+  text-decoration: none;
+}
+footer .row.center .item:hover {
+  color: lightgray;
+}
+footer .row.first {
+  border-top: 1px solid #444444;
+}
+footer .row.last {
+  border: none;
+}
+
+/* Responsive */
+@media only screen and (min-width: 320px) and (max-width: 640px) {
+  /* preloader */
+  .preloader .container img {
+    width: 6rem;
+  }
+  /* First section */
+  header {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  header .links {
+    gap: 0.8rem;
+  }
+  .first-section::before {
+    background: radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(255, 129, 91, 0.25), transparent 40%);
+  }
+  .first-section-content {
+    width: 90%;
+  }
+  .first-section-content h1 {
+    font-size: 3.5rem;
+  }
+  .first-section-content h2 {
+    font-size: 2rem;
+    margin-top: 1rem;
+  }
+  .first-section-content .btns {
+    padding: 0 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .first-section-content .btns button {
+    padding: 1rem;
+    font-size: 1.3rem;
+  }
+  /* Install station */
+  .install-station-section {
+    padding-bottom: 7rem;
+  }
+  .install-station-section h2 {
+    font-size: 2rem;
+    padding: 0 1rem;
+  }
+  .install-station-section .cards {
+    flex-direction: column;
+  }
+  .install-station-section .cards .card {
+    width: 80%;
+    margin: auto;
+  }
+  .install-station-form-container {
+    width: 90%;
+    flex-direction: column-reverse;
+    gap: 7rem;
+  }
+  .install-station-form-container .left {
+    width: 100%;
+  }
+  .install-station-form-container .right {
+    width: 100%;
+    height: 20rem;
+  }
+  .install-station-form-container .right::before {
+    width: 17rem;
+    bottom: 6rem;
+    left: 50%;
+  }
+  .install-station-form-container .right::after {
+    width: 22rem;
+    bottom: 13rem;
+    left: 35%;
+  }
+  /* Place ad */
+  .place-ad-section h2 {
+    font-size: 2rem;
+    padding: 0 1rem;
+  }
+  .place-ad-section .pluses {
+    width: 90%;
+  }
+  .place-ad-section .pluses .plus {
+    width: 80%;
+  }
+  .place-ad-section .ad-vars {
+    width: 90%;
+    padding: 1.5rem 1.5rem;
+  }
+  .place-ad-section .ad-vars h3 {
+    font-size: 1.5rem;
+  }
+  .place-ad-section .ad-vars .list-and-station-container {
+    margin-top: 1.5rem;
+    flex-direction: column;
+  }
+  .place-ad-section .ad-vars .list-and-station-container .station img {
+    bottom: -1.8rem;
+  }
+  .place-ad-section .contact {
+    width: 90%;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  /* Footer */
+  footer .row {
+    padding: 0.8rem 0.8rem;
+  }
+  footer .row.menu {
+    flex-direction: column;
+  }
+}
+@media only screen and (min-width: 481px) and (max-width: 640px) {
+  /* Install station */
+  .install-station-form-container .right::after {
+    width: 22rem;
+    bottom: 13rem;
+    left: 40%;
+  }
+  /* Place ad */
+  .place-ad-section .ad-vars .list-and-station-container {
+    margin-top: 1.5rem;
+    flex-direction: column;
+  }
+  .place-ad-section .ad-vars .list-and-station-container .station img {
+    width: 50%;
+    bottom: -1.8rem;
+  }
+}
+@media only screen and (min-width: 641px) and (max-width: 800px) {
+  /* First section */
+  .first-section::before {
+    background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 129, 91, 0.25), transparent 40%);
+  }
+  .first-section-content {
+    width: 90%;
+  }
+  .first-section-content h1 {
+    font-size: 4rem;
+  }
+  .first-section-content h2 {
+    font-size: 2.3rem;
+    margin-top: 1rem;
+  }
+  .first-section-content .btns {
+    padding: 0 5rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  /* Install station */
+  .install-station-section h2 {
+    font-size: 3rem;
+    padding: 0 1rem;
+  }
+  .install-station-section .cards {
+    flex-direction: column;
+  }
+  .install-station-section .cards .card {
+    width: 60%;
+    margin: auto;
+  }
+  .install-station-form-container {
+    width: 85%;
+    flex-direction: column-reverse;
+    gap: 7rem;
+  }
+  .install-station-form-container .left {
+    width: 100%;
+  }
+  .install-station-form-container .right {
+    width: 100%;
+    height: 20rem;
+  }
+  .install-station-form-container .right::before {
+    width: 17rem;
+    bottom: 6rem;
+    left: 50%;
+  }
+  .install-station-form-container .right::after {
+    width: 22rem;
+    bottom: 13rem;
+    left: 40%;
+  }
+  /* Place ad */
+  .place-ad-section h2 {
+    font-size: 3rem;
+    padding: 0 2rem;
+  }
+  .place-ad-section .pluses {
+    width: 85%;
+  }
+  .place-ad-section .pluses .plus {
+    width: 80%;
+  }
+  .place-ad-section .ad-vars {
+    width: 85%;
+    padding: 1.5rem 1.5rem;
+  }
+  .place-ad-section .ad-vars h3 {
+    font-size: 1.8rem;
+  }
+  .place-ad-section .ad-vars .list-and-station-container .station img {
+    bottom: -1.8rem;
+  }
+  .place-ad-section .contact {
+    width: 85%;
+  }
+  /* Footer */
+  footer .row {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+@media only screen and (min-width: 801px) and (max-width: 960px) {
+  /* Install station */
+  .install-station-section .cards {
+    flex-direction: column;
+  }
+  .install-station-section .cards .card {
+    width: 50%;
+    margin: auto;
+  }
+  .install-station-form-container {
+    width: 60%;
+    flex-direction: column-reverse;
+    gap: 7rem;
+  }
+  .install-station-form-container .left {
+    width: 100%;
+  }
+  .install-station-form-container .right {
+    width: 100%;
+    height: 20rem;
+  }
+  .install-station-form-container .right::before {
+    width: 17rem;
+    bottom: 6rem;
+    left: 50%;
+  }
+  .install-station-form-container .right::after {
+    width: 22rem;
+    bottom: 13rem;
+    left: 40%;
+  }
+  /* Place ad */
+  .place-ad-section .pluses {
+    width: 85%;
+  }
+  .place-ad-section .ad-vars {
+    width: 85%;
+  }
+  .place-ad-section .contact {
+    width: 85%;
+  }
+}
+@media only screen and (min-width: 961px) and (max-width: 1280px) {
+  /* Install station */
+  .install-station-section .cards .card {
+    width: 25%;
+  }
+  .install-station-form-container {
+    width: 60%;
+    flex-direction: column-reverse;
+    gap: 7rem;
+  }
+  .install-station-form-container .left {
+    width: 100%;
+  }
+  .install-station-form-container .right {
+    width: 100%;
+    height: 20rem;
+  }
+  .install-station-form-container .right::before {
+    width: 17rem;
+    bottom: 6rem;
+    left: 50%;
+  }
+  .install-station-form-container .right::after {
+    width: 22rem;
+    bottom: 13rem;
+    left: 40%;
+  }
+  /* Place ad */
+  .place-ad-section .pluses {
+    width: 75%;
+  }
+  .place-ad-section .ad-vars {
+    width: 75%;
+  }
+  .place-ad-section .contact {
+    width: 75%;
+  }
+}/*# sourceMappingURL=business.css.map */
