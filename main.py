@@ -57,6 +57,7 @@ def business():
 
 @app.route("/install-station-request", methods=["POST"])
 def install_station_request():
+    name = request.form["name"]
     organization = request.form["organization"]
     city = request.form["city"]
     email = request.form["email"]
@@ -67,7 +68,7 @@ def install_station_request():
         return {"status": "error", "message": "Заполните обязательные поля!"}
         
     
-    db_helper.create_install_station_request(organization, city, email, phone, text)
+    db_helper.create_install_station_request(name, organization, city, email, phone, text)
 
     return {"status": "ok"}
 
