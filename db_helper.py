@@ -143,10 +143,11 @@ def get_user(id: int) -> dict:
         - *name*: Имя
         - *gender*: Пол
         - *age*: Возраст
+        - *payment_card_last_four*: Последние 4 цифры платежной карты
     """
 
     cur = conn.cursor()
-    cur.execute("SELECT id, phone, name, gender, age FROM users WHERE id = %s", (id,))
+    cur.execute("SELECT id, phone, name, gender, age, payment_card_last_four, FROM users WHERE id = %s", (id,))
     data = cur.fetchone()
     cur.close()
 
@@ -155,7 +156,8 @@ def get_user(id: int) -> dict:
         "phone": data[1],
         "name": data[2],
         "gender": data[3],
-        "age": data[4]
+        "age": data[4],
+        "payment_card_last_four": data[5]
     }
 
     return res
@@ -172,10 +174,11 @@ def get_user_by_phone(phone: str) -> dict | None:
         - *name*: Имя
         - *gender*: Пол
         - *age*: Возраст
+        - *payment_card_last_four*: Последние 4 цифры платежной карты
     """
 
     cur = conn.cursor()
-    cur.execute("SELECT id, phone, name, gender, age FROM users WHERE phone = %s", (phone, ))
+    cur.execute("SELECT id, phone, name, gender, age, payment_card_last_four FROM users WHERE phone = %s", (phone, ))
     data = cur.fetchone()
     cur.close()
 
@@ -187,7 +190,8 @@ def get_user_by_phone(phone: str) -> dict | None:
         "phone": data[1],
         "name": data[2],
         "gender": data[3],
-        "age": data[4]
+        "age": data[4],
+        "payment_card_last_four": data[5]
     }
 
     return res
@@ -195,7 +199,7 @@ def get_user_by_phone(phone: str) -> dict | None:
 
 def update_user_info(id: int, data: dict) -> None:
     """
-    Обновить запись в таблице users
+    Обновить имя, пол, возраст пользователя
 
     :param id: ID пользователя
     :param data: Данные пользователя (name, gender, age)
@@ -205,6 +209,51 @@ def update_user_info(id: int, data: dict) -> None:
     cur.execute("UPDATE users SET name = %s, gender = %s, age = %s WHERE id = %s", (data["name"], data["gender"], data["age"], id))
     conn.commit()
     cur.close()
+
+
+def get_user_payment_token(id: int) -> str:
+    """
+    Получить токен платежа пользователя
+
+    :param id: ID пользователя
+    :return: Токен платежа
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT payment_token FROM users WHERE id = %s", (id,))
+    data = cur.fetchone()
+    cur.close()
+
+    return data[0]
+
+
+def update_user_payment_token(id: int, token: str) -> None:
+    """
+    Обновить токен платежа пользователя
+
+    :param id: ID пользователя
+    :param token: Токен платежа
+    """
+
+    cur = conn.cursor()
+    cur.execute("UPDATE users SET payment_token = %s WHERE id = %s", (token, id))
+    conn.commit()
+    cur.close()
+
+
+def update_user_payment_card_last_four(id: int, last_four: str) -> None:
+    """
+    Обновить последние 4 цифры платежной карты пользователя
+
+    :param id: ID пользователя
+    :param last_four: Последние 4 цифры платежной карты
+    """
+
+    cur = conn.cursor()
+    cur.execute("UPDATE users SET payment_card_last_four = %s WHERE id = %s", (last_four, id))
+    conn.commit()
+    cur.close()
+
 
 
 """ Stations """
@@ -331,10 +380,11 @@ def get_active_order(user_id: int) -> dict | None:
         - *datetime_take*: Дата и время взятия зонтов
         - *station_take*: ID станции, в которую был помещен зонт
         - *slot_take*: номер слота на станции, куда был помещен зонт
+        - *deposit_tx_id*: ID транзакции, в которой был сделан депозит
     """
 
     cur = conn.cursor()
-    cur.execute("SELECT id, state, datetime_take, station_take, slot_take FROM orders WHERE user_id = %s AND state = 1", (user_id,))
+    cur.execute("SELECT id, state, datetime_take, station_take, slot_take, deposit_tx_id FROM orders WHERE user_id = %s AND state = 1", (user_id,))
     data = cur.fetchone()
     cur.close()
 
@@ -346,7 +396,8 @@ def get_active_order(user_id: int) -> dict | None:
         "state": data[1],
         "datetime_take": data[2],
         "station_take": data[3],
-        "slot_take": data[4]
+        "slot_take": data[4],
+        "deposit_tx_id": data[5]
     }
 
     return res
@@ -424,6 +475,20 @@ def update_order_take_slot(order_id: int, slot: int) -> None:
     cur.close()
 
 
+def set_order_deposit_tx_id(order_id: int, tx_id: int) -> None:
+    """
+    Установить ID транзакции депозита для заказа
+
+    :param order_id: ID заказа
+    :param tx_id: ID транзакции, в которой был сделан депозит
+    """
+
+    cur = conn.cursor()
+    cur.execute("UPDATE orders SET deposit_tx_id = %s WHERE id = %s", (tx_id, order_id))
+    conn.commit()
+    cur.close()
+
+
 def get_last_order(user_id: int) -> dict | None:
     """
     Получить последний заказ пользователя
@@ -459,6 +524,20 @@ def get_last_order(user_id: int) -> dict | None:
         "slot_put": data[7]
     }
     return res
+
+
+def set_order_deposit_tx_id(order_id: int, tx_id: str) -> None:
+    """
+    Установить ID транзакции для заказа
+
+    :param order_id: ID заказа
+    :param tx_id: ID транзакции
+    """
+
+    cur = conn.cursor()
+    cur.execute("UPDATE orders SET deposit_tx_id = %s WHERE id = %s", (tx_id, order_id))
+    conn.commit()
+    cur.close()
 
 
 """ Station controller """
@@ -595,6 +674,26 @@ def delete_station_lock_timeout(id: int) -> None:
     cur.execute("DELETE FROM station_lock_timeouts WHERE id = %s", (id,))
     conn.commit()
     cur.close()
+
+
+""" Payment """
+def get_user_payment_token(user_id: int) -> str | None:
+    """
+    Получить токен оплаты пользователя
+
+    :param user_id: ID пользователя
+    :return: Токен оплаты
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT payment_token FROM users WHERE id = %s", (user_id, ))
+    data = cur.fetchone()
+    cur.close()
+
+    if data is None:
+        return None
+
+    return data[0]
 
 
 if not config.DEBUG:

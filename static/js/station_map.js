@@ -262,7 +262,11 @@ function takeUmbrella(stationId) {
     success: function (data) {
       if (data.status === "ok") {
         // alert(`Заказ №${data.order_id}\nВы можете забрать зонт из ячейки ${data.slot}`)
-        setIsInteractingWithStation(true);
+        if (data.payment_mode === "auto") {
+          setIsInteractingWithStation(true);
+        } else {
+          showPayment(data.user_id, data.order_id)
+        }
       }
       toggleStationWindow(stationId)
       setTimeout(() => {
@@ -492,6 +496,38 @@ async function checkOrderStatusForUpdates() {
 }
 
 setInterval(checkOrderStatusForUpdates, 1000);
+
+
+/* Payments */
+function showPayment(user_id, order_id) {
+  let widget = new cp.CloudPayments();
+  widget.pay('auth', {
+    publicId: 'pk_dbf527223bbda31ff8805e8316148', //id из личного кабинета
+    description: 'Депозит за зонт — WISH', //назначение
+    amount: 300, //сумма
+    currency: 'RUB', //валюта
+    accountId: user_id, //идентификатор плательщика (необязательно)
+    invoiceId: order_id, //номер заказа  (необязательно)
+    skin: "mini", //дизайн виджета (необязательно)
+    autoClose: 3, //время в секундах до авто-закрытия виджета (необязательный)
+    data: {
+      paymentMode: 'manual'
+    },
+  },
+  {
+      onSuccess: function (options) { // success
+        //действие при успешной оплате
+      },
+      onFail: function (reason, options) { // fail
+        //действие при неуспешной оплате
+      },
+      onComplete: function (paymentResult, options) { //Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
+        //например вызов вашей аналитики
+      }
+  }
+  )
+};
+
 
 
 let map = null;

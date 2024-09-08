@@ -8,6 +8,8 @@ import jwt
 import datetime
 import db_helper
 import station_controller
+import payments
+import json
 
 
 app = Flask(__name__)
@@ -120,9 +122,51 @@ def take_umbrella():
     
     order_id = db_helper.open_order(user_id, station_id)
 
-    # TODO: Сложные манипуляции с банками...
+    # Манипуляции с банками
+    payment_token = db_helper.get_user_payment_token(user_id)
+    if payment_token:
+        got_deposit = payments.make_deposit(user_id)
 
-    # Сложные манипуляции с аппаратной частью станции... (функция должна вернуть номер слота, который был открыт для пользователя)
+        if got_deposit:
+            return {"status": "ok", "payment_mode": "auto", "user_id": user_id, "order_id": order_id}
+    
+    return {"status": "ok", "payment_mode": "manual", "user_id": user_id, "order_id": order_id}
+
+
+@app.route("/station-map/take-umbrella/success-payment", methods=["POST"])
+def take_umbrella_success_payment():
+    raw_data = request.get_data().decode()
+    if not payments.is_notification_valid(request.headers.get('Content-HMAC'), raw_data):
+        return {"code": 1}
+
+    data = request.form
+    # print(data.data)
+    user_id = data.get("AccountId")
+    order_id = data.get("InvoiceId")
+    currency = data.get("PaymentCurrency")
+    amount = data.get("PaymentAmount")
+    tx_id = data.get("TransactionId")
+    token = data.get("Token")
+    card_last_four = data.get("CardLastFour")
+    # custom_data = data.get("Data")
+    # if custom_data:
+    #     custom_data = json.loads(custom_data)
+    #     payment_mode = custom_data["paymentMode"]
+    
+    
+    if currency != "RUB" or float(amount) != 300:
+        return {"code": 0}
+    
+    real_active_order = db_helper.get_active_order(user_id)
+    if not real_active_order or real_active_order['id'] != int(order_id):
+        return {"code": 0}
+
+    db_helper.update_user_payment_token(user_id, token)
+    db_helper.update_user_payment_card_last_four(user_id, card_last_four)
+    db_helper.set_order_deposit_tx_id(order_id, tx_id)
+    
+    # Манипуляции с аппаратной частью станции
+    station_id = real_active_order['station_take']
     slot = station_controller.give_out_umbrella(order_id, station_id)
     if slot is None:
         db_helper.close_order(order_id, state=4)
@@ -131,7 +175,7 @@ def take_umbrella():
     
     db_helper.update_order_take_slot(order_id, slot)
 
-    return {"status": "ok", "slot": slot, "order_id": order_id}
+    return {"code": 0}
 
 
 @app.route("/station-map/put-umbrella", methods=["POST"])
