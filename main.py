@@ -129,6 +129,9 @@ def take_umbrella():
 
         if got_deposit:
             return {"status": "ok", "payment_mode": "auto", "user_id": user_id, "order_id": order_id}
+        else:
+            db_helper.update_user_payment_token(user_id, None)
+            db_helper.update_user_payment_card_last_four(user_id, None)
     
     return {"status": "ok", "payment_mode": "manual", "user_id": user_id, "order_id": order_id}
 
@@ -154,11 +157,15 @@ def take_umbrella_success_payment():
     #     payment_mode = custom_data["paymentMode"]
     
     
-    if currency != "RUB" or float(amount) != 300:
+    if currency != "RUB" or float(amount) != config.DEPOSIT_AMOUNT:
+        print("Invalid payment")
+        payments.refund_deposit_by_tx_id(tx_id)
         return {"code": 0}
     
     real_active_order = db_helper.get_active_order(user_id)
     if not real_active_order or real_active_order['id'] != int(order_id):
+        print("Invalid order")
+        payments.refund_deposit_by_tx_id(tx_id)
         return {"code": 0}
 
     db_helper.update_user_payment_token(user_id, token)
@@ -174,6 +181,32 @@ def take_umbrella_success_payment():
         return {"status": "error", "message": "Failed to take an umbrella"}
     
     db_helper.update_order_take_slot(order_id, slot)
+
+    return {"code": 0}
+
+
+@app.route("/station-map/take-umbrella/fail-payment", methods=["POST"])
+def take_umbrella_fail_payment():
+    print("take_umbrella_fail_payment")
+    raw_data = request.get_data().decode()
+    if not payments.is_notification_valid(request.headers.get('Content-HMAC'), raw_data):
+        return {"code": 1}
+
+    data = request.form
+    user_id = data.get("AccountId")
+    order_id = data.get("InvoiceId")
+    print(order_id)
+
+    real_active_order = db_helper.get_active_order(user_id)
+    if not real_active_order or real_active_order['id'] != int(order_id):
+        return {"code": 1}
+    
+    if real_active_order['deposit_tx_id']:
+        return {"code": 1}
+    
+    db_helper.close_order(order_id, state=3)
+    db_helper.update_user_payment_token(user_id, None)
+    db_helper.update_user_payment_card_last_four(user_id, None)
 
     return {"code": 0}
 
@@ -195,7 +228,7 @@ def put_umbrella():
         return {"status": "error", "message": "You have no active orders"}
     order_id = active_order['id']
 
-    # Сложные манипуляции с аппаратной частью станции... (функция должна вернуть номер слота, в который пользователь положил зонт)
+    # Манипуляции с аппаратной частью станции
     slot = station_controller.put_umbrella(order_id, station_id)
 
     return {"status": "ok", "slot": slot, "order_id": order_id}

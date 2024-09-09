@@ -13,13 +13,19 @@ CLOUD_PAYMENTS_BASIC_AUTH = config.CLOUD_PAYMENTS_BASIC_AUTH
 DEPOSIT_AMOUNT = config.DEPOSIT_AMOUNT
 
 
-def is_notification_valid(val_code, raw_data):
+def is_notification_valid(val_code, raw_data) -> bool:
+    """
+    Проверяет подлинность pay-уведомления
+    """
     code = hmac.new(CLOUD_PAYMENTS_SECRET_KEY.encode('utf-8'), raw_data.encode('utf-8'), hashlib.sha256).digest()
     code = base64.b64encode(code).decode()
     return val_code == code
 
 
-def make_deposit(user_id):
+def make_deposit(user_id) -> bool:
+    """
+    Создать депозит от конктерного пользователя
+    """
     payment_token = db_helper.get_user_payment_token(user_id)
 
     order = db_helper.get_active_order(user_id)
@@ -55,7 +61,7 @@ def make_deposit(user_id):
         return False
 
 
-def burn_deposit(user_id):
+def burn_deposit(user_id) -> bool:
     order = db_helper.get_active_order(user_id)
     deposit_tx_id = order['deposit_tx_id']
     if not deposit_tx_id:
@@ -76,19 +82,17 @@ def burn_deposit(user_id):
     return data['Success']
 
 
-def refund_deposit(user_id):
-    order = db_helper.get_active_order(user_id)
-    deposit_tx_id = order['deposit_tx_id']
-    if not deposit_tx_id:
-        return
-
+def refund_deposit_by_tx_id(tx_id) -> bool:
+    """
+    Вернуть депозит (по ID транзакции)
+    """
     r = requests.post(
         "https://api.cloudpayments.ru/payments/void",
         headers={
             "Authorization": f"Basic {CLOUD_PAYMENTS_BASIC_AUTH}"
         },
         data={
-            "TransactionId": deposit_tx_id
+            "TransactionId": tx_id
         },
     )
 
@@ -96,7 +100,24 @@ def refund_deposit(user_id):
     return data['Success']
 
 
-def write_off_for_delay(user_id, order_id):
+def refund_deposit(user_id) -> bool:
+    """
+    Вернуть депозит пользователю
+    """
+    order = db_helper.get_active_order(user_id)
+    if not order:
+        return False
+    deposit_tx_id = order['deposit_tx_id']
+    if not deposit_tx_id:
+        return False
+
+    return refund_deposit_by_tx_id(deposit_tx_id)
+
+
+def write_off_for_delay(user_id, order_id) -> bool:
+    """
+    Списать штраф за несданный зонт
+    """
     payment_token = db_helper.get_user_payment_token(user_id)
 
     r = requests.post(
@@ -119,4 +140,3 @@ def write_off_for_delay(user_id, order_id):
     data = r.json()
     return data['Success']
     
-

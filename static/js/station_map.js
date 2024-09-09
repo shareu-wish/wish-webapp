@@ -253,6 +253,14 @@ function takeUmbrella(stationId) {
     return window.location.href = `/auth?station_id=${stationId}`
   }
 
+  showStationInteractionModal(`
+    <div class="modal-body">
+    <div class="modal-content">
+      Подключение к банку...
+    </div>
+  </div>
+  `)
+
   $.ajax({
     type: "POST",
     url: `/station-map/take-umbrella`,
@@ -265,6 +273,7 @@ function takeUmbrella(stationId) {
         if (data.payment_mode === "auto") {
           setIsInteractingWithStation(true);
         } else {
+          $('#stationInteractionModal').removeClass('show')
           showPayment(data.user_id, data.order_id)
         }
       }
@@ -390,6 +399,7 @@ function setIsInteractingWithStation(val) {
   if (val) {
     checkOrderStatusForUpdates();
   }
+  oldStationInteractionOrderStatus = null;
   localStorage.setItem("isInteractingWithStation", val);
 }
 
@@ -407,6 +417,7 @@ function showStationInteractionModal(content) {
 async function checkOrderStatusForUpdates() {
   if (localStorage.getItem("isInteractingWithStation") === "true") {
     const data = await getOrderStatus();
+    console.log(data);
 
     if (oldStationInteractionOrderStatus === data.order_status) {
       return;
@@ -434,7 +445,7 @@ async function checkOrderStatusForUpdates() {
               </div>
             </div>
           `)
-        } else if(oldStationInteractionOrderStatus === 'station_opened_to_put') {
+        } else if (oldStationInteractionOrderStatus === 'station_opened_to_put') {
           showStationInteractionModal(`
             <div class="modal-body">
               <div class="modal-header station-interaction-modal-header">
@@ -446,8 +457,18 @@ async function checkOrderStatusForUpdates() {
               </div>
             </div>
           `)
+        } else if (oldStationInteractionOrderStatus === null) {
+          showStationInteractionModal(`
+            <div class="modal-body">
+            <div class="modal-content">
+              Взаимодействие с банком...
+            </div>
+          </div>
+          `)
         }
-        setIsInteractingWithStation(false);
+        if (oldStationInteractionOrderStatus !== null) {
+          setIsInteractingWithStation(false);
+        }
         break;
       case "timeout_exceeded":
         showStationInteractionModal(`
@@ -463,6 +484,20 @@ async function checkOrderStatusForUpdates() {
         `)
         setIsInteractingWithStation(false);
         break;
+      case "bank_error":
+          showStationInteractionModal(`
+            <div class="modal-body">
+              <div class="modal-header station-interaction-modal-header">
+                <span class="modal-close" onclick="$('#stationInteractionModal').removeClass('show')"><i class="bi bi-x-lg"></i></span>
+              </div>
+              <div class="modal-content">
+                Произошла ошибка с созданием депозита.<br>
+                Попробуйте еще раз.
+              </div>
+            </div>
+          `)
+          setIsInteractingWithStation(false);
+          break;
       case "station_opened_to_put":
         showStationInteractionModal(`
           <div class="modal-body">

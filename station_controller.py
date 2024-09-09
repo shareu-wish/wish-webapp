@@ -3,6 +3,7 @@ import config
 from threading import Timer
 import db_helper
 from time import sleep
+import payments
 
 
 """
@@ -22,7 +23,14 @@ def _monitor_take_umbrella_timeout():
 
     for timeout in timeouts:
         if timeout['type'] == 1:
-            # TODO: Вернуть депозит пользователю
+            # Вернуть депозит пользователю
+            try:
+                payments.refund_deposit(db_helper.get_order(timeout['order_id'])['user_id'])
+                print("Отзываем депозит (tx_id):", db_helper.get_order(timeout['order_id'])['user_id'])
+            except Exception as e:
+                print("timeout: refund_deposit:")
+                print(e)
+            
             mqttc.publish(f"wish/station{timeout['station_id']}/slot{timeout['slot']}/lock", "close", qos=1, retain=True)
             db_helper.close_order(timeout['order_id'], state=2)
             db_helper.delete_station_lock_timeout(timeout['id'])

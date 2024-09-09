@@ -147,7 +147,7 @@ def get_user(id: int) -> dict:
     """
 
     cur = conn.cursor()
-    cur.execute("SELECT id, phone, name, gender, age, payment_card_last_four, FROM users WHERE id = %s", (id,))
+    cur.execute("SELECT id, phone, name, gender, age, payment_card_last_four FROM users WHERE id = %s", (id,))
     data = cur.fetchone()
     cur.close()
 
@@ -227,16 +227,16 @@ def get_user_payment_token(id: int) -> str:
     return data[0]
 
 
-def update_user_payment_token(id: int, token: str) -> None:
+def update_user_payment_token(user_id: int, token: str) -> None:
     """
     Обновить токен платежа пользователя
 
-    :param id: ID пользователя
+    :param user_id: ID пользователя
     :param token: Токен платежа
     """
 
     cur = conn.cursor()
-    cur.execute("UPDATE users SET payment_token = %s WHERE id = %s", (token, id))
+    cur.execute("UPDATE users SET payment_token = %s WHERE id = %s", (token, user_id))
     conn.commit()
     cur.close()
 
@@ -475,7 +475,7 @@ def update_order_take_slot(order_id: int, slot: int) -> None:
     cur.close()
 
 
-def set_order_deposit_tx_id(order_id: int, tx_id: int) -> None:
+def set_order_deposit_tx_id(order_id: int, tx_id: str) -> None:
     """
     Установить ID транзакции депозита для заказа
 
@@ -526,18 +526,40 @@ def get_last_order(user_id: int) -> dict | None:
     return res
 
 
-def set_order_deposit_tx_id(order_id: int, tx_id: str) -> None:
+def get_order(order_id: int) -> dict | None:
     """
-    Установить ID транзакции для заказа
+    Получить заказ по ID
 
     :param order_id: ID заказа
-    :param tx_id: ID транзакции
+    :return: dict с данными о заказе\n
+        - *id*: ID заказа
+        - *user_id*: ID пользователя
+        - *state*: Статус заказа
+        - *datetime_take*: Дата и время взятия зонтов
+        - *station_take*: ID станции, в которую был помещен зонт
+        - *slot_take*: номер слота на станции, куда был помещен зонт
+        - *deposit_tx_id*: ID транзакции, в которой был сделан депозит
     """
 
     cur = conn.cursor()
-    cur.execute("UPDATE orders SET deposit_tx_id = %s WHERE id = %s", (tx_id, order_id))
-    conn.commit()
+    cur.execute("SELECT id, user_id, state, datetime_take, station_take, slot_take, deposit_tx_id FROM orders WHERE id = %s", (order_id,))
+    data = cur.fetchone()
     cur.close()
+
+    if data is None:
+        return None
+
+    res = {
+        "id": data[0],
+        "user_id": data[1],
+        "state": data[2],
+        "datetime_take": data[3],
+        "station_take": data[4],
+        "slot_take": data[5],
+        "deposit_tx_id": data[6]
+    }
+
+    return res
 
 
 """ Station controller """
