@@ -22,14 +22,14 @@ def is_notification_valid(val_code, raw_data) -> bool:
     return val_code == code
 
 
-def make_deposit(user_id) -> bool:
+def make_deposit(user_id, station_id) -> bool:
     """
     Создать депозит от конктерного пользователя
     """
     payment_token = db_helper.get_user_payment_token(user_id)
 
     order = db_helper.get_active_order(user_id)
-    if order['deposit_tx_id']:
+    if order:
         return
     
     r = requests.post(
@@ -42,22 +42,22 @@ def make_deposit(user_id) -> bool:
             "Currency": "RUB",
             "Description": "Депозит за зонт — WISH",
             "AccountId": user_id,
-            "InvoiceId": order['id'],
+            # "InvoiceId": order['id'],
             "TrInitiatorCode": 0,
             "PaymentScheduled": 0,
             "Token": payment_token,
             "JsonData": json.dumps({
-                "paymentMode": "manual"
+                "stationTake": station_id,
+                "paymentMode": "auto"
             }),
         },
     )
 
     data = r.json()
     if data['Success']:
-        db_helper.set_order_deposit_tx_id(order['id'], data['Model']['TransactionId'])
+        # db_helper.set_order_deposit_tx_id(order['id'], data['Model']['TransactionId'])
         return True
     else:
-        # db_helper.close_order(order['id'], state=3)
         return False
 
 

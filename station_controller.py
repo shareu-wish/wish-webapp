@@ -26,7 +26,7 @@ def _monitor_take_umbrella_timeout():
             # Вернуть депозит пользователю
             try:
                 payments.refund_deposit(db_helper.get_order(timeout['order_id'])['user_id'])
-                print("Отзываем депозит (tx_id):", db_helper.get_order(timeout['order_id'])['user_id'])
+                print("Отзываем депозит из-за таймаута, user_id:", db_helper.get_order(timeout['order_id'])['user_id'])
             except Exception as e:
                 print("timeout: refund_deposit:")
                 print(e)

@@ -120,20 +120,20 @@ def take_umbrella():
     if db_helper.get_active_order(user_id):
         return {"status": "error", "message": "You have an active order"}
     
-    order_id = db_helper.open_order(user_id, station_id)
+    # order_id = db_helper.open_order(user_id, station_id)
 
     # Манипуляции с банками
     payment_token = db_helper.get_user_payment_token(user_id)
     if payment_token:
-        got_deposit = payments.make_deposit(user_id)
+        got_deposit = payments.make_deposit(user_id, station_id)
 
         if got_deposit:
-            return {"status": "ok", "payment_mode": "auto", "user_id": user_id, "order_id": order_id}
+            return {"status": "ok", "payment_mode": "auto", "user_id": user_id, "station_id": station_id}
         else:
             db_helper.update_user_payment_token(user_id, None)
             db_helper.update_user_payment_card_last_four(user_id, None)
-    
-    return {"status": "ok", "payment_mode": "manual", "user_id": user_id, "order_id": order_id}
+        
+    return {"status": "ok", "payment_mode": "manual", "user_id": user_id, "station_id": station_id}
 
 
 @app.route("/station-map/take-umbrella/success-payment", methods=["POST"])
@@ -145,16 +145,17 @@ def take_umbrella_success_payment():
     data = request.form
     # print(data.data)
     user_id = data.get("AccountId")
-    order_id = data.get("InvoiceId")
+    # order_id = data.get("InvoiceId")
     currency = data.get("PaymentCurrency")
     amount = data.get("PaymentAmount")
     tx_id = data.get("TransactionId")
     token = data.get("Token")
     card_last_four = data.get("CardLastFour")
-    # custom_data = data.get("Data")
-    # if custom_data:
-    #     custom_data = json.loads(custom_data)
-    #     payment_mode = custom_data["paymentMode"]
+    custom_data = data.get("Data")
+    if custom_data:
+        custom_data = json.loads(custom_data)
+        # payment_mode = custom_data["paymentMode"]
+        station_take = custom_data["stationTake"]
     
     
     if currency != "RUB" or float(amount) != config.DEPOSIT_AMOUNT:
@@ -162,19 +163,25 @@ def take_umbrella_success_payment():
         payments.refund_deposit_by_tx_id(tx_id)
         return {"code": 0}
     
+    if not station_take and station_take != 0:
+        print("Invalid station_take")
+        payments.refund_deposit_by_tx_id(tx_id)
+        return {"code": 0}
+    
     real_active_order = db_helper.get_active_order(user_id)
-    if not real_active_order or real_active_order['id'] != int(order_id):
+    if real_active_order:
         print("Invalid order")
         payments.refund_deposit_by_tx_id(tx_id)
         return {"code": 0}
+    
+    order_id = db_helper.open_order(user_id, station_take)
 
     db_helper.update_user_payment_token(user_id, token)
     db_helper.update_user_payment_card_last_four(user_id, card_last_four)
     db_helper.set_order_deposit_tx_id(order_id, tx_id)
     
     # Манипуляции с аппаратной частью станции
-    station_id = real_active_order['station_take']
-    slot = station_controller.give_out_umbrella(order_id, station_id)
+    slot = station_controller.give_out_umbrella(order_id, station_take)
     if slot is None:
         db_helper.close_order(order_id, state=4)
         print("Failed to take an umbrella")
@@ -194,17 +201,16 @@ def take_umbrella_fail_payment():
 
     data = request.form
     user_id = data.get("AccountId")
-    order_id = data.get("InvoiceId")
-    print(order_id)
+    # order_id = data.get("InvoiceId")
 
-    real_active_order = db_helper.get_active_order(user_id)
-    if not real_active_order or real_active_order['id'] != int(order_id):
-        return {"code": 1}
+    # real_active_order = db_helper.get_active_order(user_id)
+    # if not real_active_order or real_active_order['id'] != int(order_id):
+    #     return {"code": 1}
     
-    if real_active_order['deposit_tx_id']:
-        return {"code": 1}
+    # if real_active_order['deposit_tx_id']:
+    #     return {"code": 1}
     
-    db_helper.close_order(order_id, state=3)
+    #db_helper.close_order(order_id, state=3)
     db_helper.update_user_payment_token(user_id, None)
     db_helper.update_user_payment_card_last_four(user_id, None)
 

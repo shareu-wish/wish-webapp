@@ -274,7 +274,7 @@ function takeUmbrella(stationId) {
           setIsInteractingWithStation(true);
         } else {
           $('#stationInteractionModal').removeClass('show')
-          showPayment(data.user_id, data.order_id)
+          showPayment(data.user_id, data.station_id)
         }
       }
       toggleStationWindow(stationId)
@@ -534,7 +534,7 @@ setInterval(checkOrderStatusForUpdates, 1000);
 
 
 /* Payments */
-function showPayment(user_id, order_id) {
+function showPayment(user_id, station_id) {
   let widget = new cp.CloudPayments();
   widget.pay('auth', {
     publicId: 'pk_dbf527223bbda31ff8805e8316148', //id из личного кабинета
@@ -542,19 +542,31 @@ function showPayment(user_id, order_id) {
     amount: 300, //сумма
     currency: 'RUB', //валюта
     accountId: user_id, //идентификатор плательщика (необязательно)
-    invoiceId: order_id, //номер заказа  (необязательно)
+    // invoiceId: order_id, //номер заказа  (необязательно)
     skin: "mini", //дизайн виджета (необязательно)
     autoClose: 3, //время в секундах до авто-закрытия виджета (необязательный)
     data: {
+      stationTake: station_id,
       paymentMode: 'manual'
     },
   },
   {
       onSuccess: function (options) { // success
-        //действие при успешной оплате
+        setIsInteractingWithStation(true);
       },
       onFail: function (reason, options) { // fail
-        //действие при неуспешной оплате
+        showStationInteractionModal(`
+          <div class="modal-body">
+            <div class="modal-header station-interaction-modal-header">
+              <span class="modal-close" onclick="$('#stationInteractionModal').removeClass('show')"><i class="bi bi-x-lg"></i></span>
+            </div>
+            <div class="modal-content">
+              Произошла ошибка с созданием депозита.<br>
+              Попробуйте еще раз.
+            </div>
+          </div>
+        `)
+        setIsInteractingWithStation(false);
       },
       onComplete: function (paymentResult, options) { //Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
         //например вызов вашей аналитики
