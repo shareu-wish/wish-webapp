@@ -5,6 +5,7 @@ import base64
 import db_helper
 import requests
 import json
+from threading import Timer
 
 
 CLOUD_PAYMENTS_PUBLIC_ID = config.CLOUD_PAYMENTS_PUBLIC_ID
@@ -47,6 +48,7 @@ def make_deposit(user_id, station_id) -> bool:
             "PaymentScheduled": 0,
             "Token": payment_token,
             "JsonData": json.dumps({
+                "paymentType": "deposit",
                 "stationTake": station_id,
                 "paymentMode": "auto"
             }),
@@ -139,4 +141,29 @@ def write_off_for_delay(user_id, order_id) -> bool:
 
     data = r.json()
     return data['Success']
-    
+
+
+def _check_for_delays() -> None:
+    """
+    Проверить на несданные зонты и списать штраф
+    """
+    orders = db_helper.get_orders_with_delays()
+    print(orders)
+    for order in orders:
+        res = write_off_for_delay(order['user_id'], order['id'])
+        if res:
+            db_helper.set_order_delay_paid(order['id'])
+
+
+
+def _schedule_check_for_delays() -> None:
+    """
+    Запланировать проверку на несданные зонты
+    """
+    _check_for_delays()
+    Timer(60*5, _schedule_check_for_delays).start()
+
+
+# if not config.DEBUG:
+_schedule_check_for_delays()
+

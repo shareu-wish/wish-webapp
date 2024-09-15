@@ -74,6 +74,11 @@ def on_message(client, userdata, msg):
                 db_helper.delete_station_lock_timeout(timeout['id'])
                 # sleep(0.5)
                 mqttc.publish(f"wish/station{station_id}/slot{slot_id}/lock", "close", qos=1, retain=True)
+
+                # Вернуть депозит
+                payments.refund_deposit(db_helper.get_order(timeout['order_id'])['user_id'])
+                print("Возвращаем депозит, user_id:", db_helper.get_order(timeout['order_id'])['user_id'])
+
                 db_helper.close_order(timeout['order_id'], station_id, slot_id)
 
 

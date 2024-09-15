@@ -546,6 +546,7 @@ function showPayment(user_id, station_id) {
     skin: "mini", //дизайн виджета (необязательно)
     autoClose: 3, //время в секундах до авто-закрытия виджета (необязательный)
     data: {
+      paymentType: 'deposit',
       stationTake: station_id,
       paymentMode: 'manual'
     },

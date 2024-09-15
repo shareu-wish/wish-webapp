@@ -377,9 +377,9 @@ def get_active_order(user_id: int) -> dict | None:
     :return: dict с данными о заказе\n
         - *id*: ID заказа
         - *state*: Статус заказа
-        - *datetime_take*: Дата и время взятия зонтов
-        - *station_take*: ID станции, в которую был помещен зонт
-        - *slot_take*: номер слота на станции, куда был помещен зонт
+        - *datetime_take*: Дата и время взятия зонта
+        - *station_take*: ID станции, из которой был взят зонт
+        - *slot_take*: номер слота на станции, откуда был взят зонт
         - *deposit_tx_id*: ID транзакции, в которой был сделан депозит
     """
 
@@ -432,12 +432,12 @@ def get_processed_orders(user_id: int) -> list[dict]:
     :return: Список заказов\n
         - *id*: ID заказа
         - *state*: Статус заказа
-        - *datetime_take*: Дата и время взятия зонтов
-        - *datetime_put*: Дата и время возврата зонтов
-        - *station_take*: ID станции, в которую был помещен зонт
-        - *station_put*: ID станции, из которой был взят зонт
-        - *slot_take*: номер слота на станции, куда был помещен зонт
-        - *slot_put*: номер слота на станции, из которой был взят зонт
+        - *datetime_take*: Дата и время взятия зонта
+        - *datetime_put*: Дата и время возврата зонта
+        - *station_take*: ID станции, из которой был взят зонт
+        - *station_put*: ID станции, в которую был помещен зонт
+        - *slot_take*: номер слота на станции, из которой был взят зонт
+        - *slot_put*: номер слота на станции, куда был помещен зонт
     """
 
     cur = conn.cursor()
@@ -497,12 +497,12 @@ def get_last_order(user_id: int) -> dict | None:
     :return: dict с данными о заказе\n
         - *id*: ID заказа
         - *state*: Статус заказа
-        - *datetime_take*: Дата и время взятия зонтов
-        - *datetime_put*: Дата и время возврата зонтов
-        - *station_take*: ID станции, в которую был помещен зонт
-        - *station_put*: ID станции, из которой был взят зонт
-        - *slot_take*: номер слота на станции, куда был помещен зонт
-        - *slot_put*: номер слота на станции, из которой был взят зонт
+        - *datetime_take*: Дата и время взятия зонта
+        - *datetime_put*: Дата и время возврата зонта
+        - *station_take*: ID станции, из которой был взят зонт
+        - *station_put*: ID станции, в которую был помещен зонт
+        - *slot_take*: номер слота на станции, из которой был взят зонт
+        - *slot_put*: номер слота на станции, куда был помещен зонт
     """
 
     cur = conn.cursor()
@@ -535,9 +535,9 @@ def get_order(order_id: int) -> dict | None:
         - *id*: ID заказа
         - *user_id*: ID пользователя
         - *state*: Статус заказа
-        - *datetime_take*: Дата и время взятия зонтов
-        - *station_take*: ID станции, в которую был помещен зонт
-        - *slot_take*: номер слота на станции, куда был помещен зонт
+        - *datetime_take*: Дата и время взятия зонта
+        - *station_take*: ID станции, из которой был взят зонт
+        - *slot_take*: номер слота на станции, откуда был взят зонт
         - *deposit_tx_id*: ID транзакции, в которой был сделан депозит
     """
 
@@ -717,6 +717,55 @@ def get_user_payment_token(user_id: int) -> str | None:
 
     return data[0]
 
+
+def get_orders_with_delays() -> list[dict]:
+    """
+    Получить все заказы с задержками
+
+    :return: Список заказов
+        - *id*: ID заказа
+        - *user_id*: ID пользователя
+        - *state*: Статус заказа
+        - *deposit_tx_id*: ID транзакции, в которой был сделан депозит
+        - *datetime_take*: Дата и время взятия зонт
+        - *datetime_last_payment*: Время последнего списания за задержку возврата зонта
+        - *payments_for_delay_number*: Количество списаний за задержку
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, user_id, state, deposit_tx_id, datetime_take, datetime_last_payment, payments_for_delay_number FROM orders WHERE state = 1 AND datetime_last_payment < %s - INTERVAL '1 day' AND payments_for_delay_number < 3", (datetime.now(),))
+    data = cur.fetchall()
+    cur.close()
+
+    res = []
+    for order in data:
+        res.append({
+            "id": order[0],
+            "user_id": order[1],
+            "state": order[2],
+            "deposit_tx_id": order[3],
+            "datetime_take": order[4],
+            "datetime_last_payment": order[5],
+            "payments_for_delay_number": order[6]
+        })
+
+    return res
+
+
+def set_order_delay_paid(order_id: int) -> None:
+    """
+    Установить, что задержка оплачена
+
+    :param order_id: ID заказа
+    """
+
+    cur = conn.cursor()
+    cur.execute("UPDATE orders SET payments_for_delay_number = payments_for_delay_number + 1, datetime_last_payment = %s WHERE id = %s", (datetime.now(), order_id))
+    conn.commit()
+    cur.close()
+
+
+""" Other """
 
 if not config.DEBUG:
     _schedule_delete_old_data()

@@ -152,11 +152,15 @@ def take_umbrella_success_payment():
     token = data.get("Token")
     card_last_four = data.get("CardLastFour")
     custom_data = data.get("Data")
+    payment_type = ""
     if custom_data:
         custom_data = json.loads(custom_data)
         # payment_mode = custom_data["paymentMode"]
+        payment_type = custom_data["paymentType"]
         station_take = custom_data["stationTake"]
-    
+
+    if payment_type != "deposit":
+        return {"code": 0}
     
     if currency != "RUB" or float(amount) != config.DEPOSIT_AMOUNT:
         print("Invalid payment")
