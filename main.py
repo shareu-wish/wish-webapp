@@ -7,6 +7,9 @@ from flask import request
 import jwt
 import datetime
 import db_helper
+import station_controller
+import payments
+import json
 import vk_id_auth as vk_id
 
 
@@ -198,13 +201,14 @@ def station_map():
 def get_stations():
     return db_helper.get_stations()
 
+
 @app.route("/station-map/take-umbrella", methods=["POST"])
 def take_umbrella():
     user_id = check_auth()
     if not user_id:
         return {"status": "error", "message": "Unauthorized"}
     
-    station_id = request.form["station_id"]
+    station_id = int(request.form["station_id"])
 
     can_take = db_helper.get_station(station_id)['can_take']
     if can_take <= 0:
@@ -212,15 +216,106 @@ def take_umbrella():
     
     if db_helper.get_active_order(user_id):
         return {"status": "error", "message": "You have an active order"}
+    
+    # order_id = db_helper.open_order(user_id, station_id)
 
-    # Сложные манипуляции с банками...
+    # Манипуляции с банками
+    payment_token = db_helper.get_user_payment_token(user_id)
+    if payment_token:
+        got_deposit = payments.make_deposit(user_id, station_id)
 
-    # Сложные манипуляции с аппаратной частью станции... (функция должна вернуть номер слота, который был открыт для пользователя)
-    slot = 3
+        if got_deposit:
+            return {"status": "ok", "payment_mode": "auto", "user_id": user_id, "station_id": station_id}
+        else:
+            db_helper.update_user_payment_token(user_id, None)
+            db_helper.update_user_payment_card_last_four(user_id, None)
+        
+    return {"status": "ok", "payment_mode": "manual", "user_id": user_id, "station_id": station_id}
 
-    order_id = db_helper.open_order(user_id, station_id, slot)
 
-    return {"status": "ok", "slot": slot, "order_id": order_id}
+@app.route("/station-map/take-umbrella/success-payment", methods=["POST"])
+def take_umbrella_success_payment():
+    raw_data = request.get_data().decode()
+    if not payments.is_notification_valid(request.headers.get('Content-HMAC'), raw_data):
+        return {"code": 1}
+
+    data = request.form
+    # print(data.data)
+    user_id = data.get("AccountId")
+    # order_id = data.get("InvoiceId")
+    currency = data.get("PaymentCurrency")
+    amount = data.get("PaymentAmount")
+    tx_id = data.get("TransactionId")
+    token = data.get("Token")
+    card_last_four = data.get("CardLastFour")
+    custom_data = data.get("Data")
+    payment_type = ""
+    if custom_data:
+        custom_data = json.loads(custom_data)
+        # payment_mode = custom_data["paymentMode"]
+        payment_type = custom_data["paymentType"]
+        station_take = custom_data["stationTake"]
+
+    if payment_type != "deposit":
+        return {"code": 0}
+    
+    if currency != "RUB" or float(amount) != config.DEPOSIT_AMOUNT:
+        print("Invalid payment")
+        payments.refund_deposit_by_tx_id(tx_id)
+        return {"code": 0}
+    
+    if not station_take and station_take != 0:
+        print("Invalid station_take")
+        payments.refund_deposit_by_tx_id(tx_id)
+        return {"code": 0}
+    
+    real_active_order = db_helper.get_active_order(user_id)
+    if real_active_order:
+        print("Invalid order")
+        payments.refund_deposit_by_tx_id(tx_id)
+        return {"code": 0}
+    
+    order_id = db_helper.open_order(user_id, station_take)
+
+    db_helper.update_user_payment_token(user_id, token)
+    db_helper.update_user_payment_card_last_four(user_id, card_last_four)
+    db_helper.set_order_deposit_tx_id(order_id, tx_id)
+    
+    # Манипуляции с аппаратной частью станции
+    slot = station_controller.give_out_umbrella(order_id, station_take)
+    if slot is None:
+        db_helper.close_order(order_id, state=4)
+        print("Failed to take an umbrella")
+        return {"status": "error", "message": "Failed to take an umbrella"}
+    
+    db_helper.update_order_take_slot(order_id, slot)
+
+    return {"code": 0}
+
+
+@app.route("/station-map/take-umbrella/fail-payment", methods=["POST"])
+def take_umbrella_fail_payment():
+    print("take_umbrella_fail_payment")
+    raw_data = request.get_data().decode()
+    if not payments.is_notification_valid(request.headers.get('Content-HMAC'), raw_data):
+        return {"code": 1}
+
+    data = request.form
+    user_id = data.get("AccountId")
+    # order_id = data.get("InvoiceId")
+
+    # real_active_order = db_helper.get_active_order(user_id)
+    # if not real_active_order or real_active_order['id'] != int(order_id):
+    #     return {"code": 1}
+    
+    # if real_active_order['deposit_tx_id']:
+    #     return {"code": 1}
+    
+    #db_helper.close_order(order_id, state=3)
+    db_helper.update_user_payment_token(user_id, None)
+    db_helper.update_user_payment_card_last_four(user_id, None)
+
+    return {"code": 0}
 
 
 @app.route("/station-map/put-umbrella", methods=["POST"])
@@ -229,7 +324,7 @@ def put_umbrella():
     if not user_id:
         return {"status": "error", "message": "Unauthorized"}
     
-    station_id = request.form["station_id"]
+    station_id = int(request.form["station_id"])
 
     can_put = db_helper.get_station(station_id)['can_put']
     if can_put <= 0:
@@ -240,15 +335,53 @@ def put_umbrella():
         return {"status": "error", "message": "You have no active orders"}
     order_id = active_order['id']
 
-    # Сложные манипуляции с аппаратной частью станции... (функция должна вернуть номер слота, в который пользователь положил зонт)
-    slot = 2
+    # Манипуляции с аппаратной частью станции
+    slot = station_controller.put_umbrella(order_id, station_id)
 
-    # Сложные манипуляции с банками... Возврат залога
+    return {"status": "ok", "slot": slot, "order_id": order_id}
 
-    db_helper.close_order(order_id, station_id, slot)
 
-    return {"status": "ok", "order_id": order_id}
-
+@app.route("/station-map/get-order-status")
+def get_order_status():
+    user_id = check_auth()
+    if not user_id:
+        return redirect("/auth")
+    
+    """
+    station_opened_to_take - слот открыт для взятия зонта
+    station_opened_to_put - слот открыт для возврата зонта
+    in_the_hands - зонт взят, находится у пользователя
+    closed_successfully - зонт возвращен, заказ закрыт
+    timeout_exceeded - время ожидания взятия зонта истекло
+    bank_error - ошибка банка, оплата не прошла
+    unknown - что-то пошло не так
+    """
+    
+    active_order = db_helper.get_active_order(user_id)
+    if active_order:
+        timeout = db_helper.get_station_lock_timeout_by_order_id(active_order['id'])
+        if timeout:
+            if timeout['type'] == 1:
+                return {"status": "ok", "order_status": "station_opened_to_take", "slot": timeout['slot']}
+            elif timeout['type'] == 2:
+                return {"status": "ok", "order_status": "station_opened_to_put", "slot": timeout['slot']}
+            else:
+                return {"status": "ok", "order_status": "unknown"}
+        else:
+            return {"status": "ok", "order_status": "in_the_hands"}
+    else:
+        last_order = db_helper.get_last_order(user_id)
+        order_status = ""
+        if last_order['state'] == 0:
+            order_status = "closed_successfully"
+        elif last_order['state'] == 2:
+            order_status = "timeout_exceeded"
+        elif last_order['state'] == 3:
+            order_status = "bank_error"
+        else:
+            order_status = "unknown"
+        
+        return {"status": "ok", "order_status": order_status}
 
 
 @app.route('/profile')
@@ -327,6 +460,6 @@ def agreement():
 
 if __name__ == "__main__":
     if config.DEBUG:
-        app.run(port=5000, debug=True, host=config.DEBUG_HOST)
+        app.run(port=5000, debug=True, host=config.DEBUG_HOST, use_reloader=False)
     else:
         serve(app, host="0.0.0.0", port=5000, url_scheme="https", threads=100)
