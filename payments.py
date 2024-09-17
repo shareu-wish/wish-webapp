@@ -148,7 +148,6 @@ def _check_for_delays() -> None:
     Проверить на несданные зонты и списать штраф
     """
     orders = db_helper.get_orders_with_delays()
-    print(orders)
     for order in orders:
         res = write_off_for_delay(order['user_id'], order['id'])
         if res:
