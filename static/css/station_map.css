@@ -471,6 +471,10 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 
+.station-interaction-modal-header {
+  justify-content: flex-end;
+}
+
 /* QR scanner */
 .qr-scanner-modal, #qr-scanner-camera {
   width: 100%;
@@ -599,7 +603,6 @@ input[type="search"]::-webkit-search-results-decoration {
 .qr-scanner-button:hover {
   background-color: #004dab;
 }
-
 
 
 @media (min-width: 320px) and (max-width: 480px) {
