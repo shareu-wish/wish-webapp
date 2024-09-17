@@ -6,6 +6,7 @@
 
   <link rel="stylesheet" href="/static/css/auth.css">
   <script src="/static/js/jquery.maskedinput.min.js"></script>
+  <script src="https://unpkg.com/@vkid/sdk@2.1.0/dist-sdk/umd/index.js"></script>
 
   <!-- <script src="//cdn.jsdelivr.net/npm/eruda"></script>
   <script>eruda.init()</script> -->
@@ -15,7 +16,7 @@
 
 <body>
   <div class="container">
-    <img src="/static/img/umbrella.png" alt="logo" class="logo">
+    <img src="/static/img/logos/umbrella.png" alt="logo" class="logo">
 
     <div class="inputPhoneContainer">
       <input type="tel" id="phone" class="phoneInput" placeholder="+7 (999) 999 99-99">
@@ -27,6 +28,10 @@
 
       <p class="usage-terms">Выполняя вход, вы подтверждаете <a href="https://shareu.ru/agreement"
           target="_blank">пользовательское соглашение</a></p>
+
+      <div class="divider"></div>
+      
+      <div id="VkIdSdkOneTap"></div>
 
       <div class="business-info-container">
         <p class="business-info">ИП "Щегольков Климентий Тимофеевич"</p>

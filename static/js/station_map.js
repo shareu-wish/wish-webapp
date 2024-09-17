@@ -30,6 +30,7 @@ function toggleStationWindow(windowId) {
   if (activeStationWindow === windowId) {
     $(`#${windowId}Window`).hide();
     $("#mainWindow").hide();
+    $("#QRScannerButton").show();
     activeStationWindow = null;
     return;
   }
@@ -48,12 +49,14 @@ function toggleStationWindow(windowId) {
 
   if (isMobileScreen) {
     $("#mainWindow").html($(`#${windowId}Window`).html() + 
-        `<div class="close-station-info-window" onclick="$('#mainWindow').hide();activeStationWindow = null;"><i class="bi bi-x-lg"></i></div>`);
+        `<div class="close-station-info-window" onclick="$('#mainWindow').hide();activeStationWindow = null;$('#QRScannerButton').show();"><i class="bi bi-x-lg"></i></div>`);
     $("#mainWindow").show();
   } else {
     $(`#${windowId}Window`).show();
   }
+
   activeStationWindow = windowId;
+  $("#QRScannerButton").hide();
 }
 
 
@@ -152,7 +155,7 @@ async function initMap() {
     markerElement.innerHTML = `
       <div onclick="toggleStationWindow('${station.id}')">
         <div class="umbrellas-count">${station.can_take}</div>
-        <img src="/static/img/umbrella.svg">
+        <img src="/static/img/logos/umbrella-mini.svg">
       </div>
       <div class="station-info-window" id="${station.id}Window">
         <div class="windowContent">
@@ -366,13 +369,66 @@ function initSearch(stations) {
 
 
 function showSearch() {
-  $("#searchOffcanvas").addClass("show")
+  $("#searchOffcanvas").addClass("show");
 }
 
 function hideSearch() {
-  $("#searchOffcanvas").removeClass("show")
+  $("#searchOffcanvas").removeClass("show");
 }
 
+
+function initQRScanner() {
+  shouldStopQRScanning = false;
+
+  const video = document.getElementById('qr-scanner-camera');
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+
+  const mediaConfig = {
+    video: {
+        width: { ideal: window.innerHeight*2 },
+        height: { ideal: window.innerWidth*2 },
+        facingMode: "environment"
+    }
+};
+
+  navigator.mediaDevices.getUserMedia(mediaConfig)
+    .then(stream => {
+      video.srcObject = stream;
+      video.setAttribute("playsinline", true);
+      requestAnimationFrame(tick);
+  })
+  .catch(err => {
+    alert("Не удается получить доступ к камере")
+  });
+
+  function tick() {
+    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+      canvas.height = video.videoHeight;
+      canvas.width = video.videoWidth;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      
+      const qrCode = jsQR(imageData.data, canvas.width, canvas.height);
+
+      if (qrCode) {
+        try {
+          const url = new URL(qrCode.data);
+          const stationId = url.searchParams.get('station_id');
+          if (stationId) {
+            hideQRScannerModal();
+            showStationInfo(stationId);
+            shouldStopQRScanning = true;
+          }
+        } catch {}
+      }
+    }
+
+    if (!shouldStopQRScanning) {
+      requestAnimationFrame(tick);
+    }
+  }
+}
 
 
 /* Получение статуса заказа во время взаимодействия со станцией */
@@ -577,6 +633,27 @@ function showPayment(user_id, station_id) {
 };
 
 
+/* QR code scanner */
+function showQRScannerModal() {
+  initQRScanner();
+  $("#qrScannerModal").addClass("show");
+}
+
+function hideQRScannerModal() {
+  shouldStopQRScanning = true;
+  $("#qrScannerModal").removeClass("show");
+}
+
+
+function findByStationNumber() {
+  hideQRScannerModal();
+  showSearch();
+}
+
+function toggleFlashlight() {
+
+}
+
 
 let map = null;
 let stations = []
@@ -584,6 +661,9 @@ let activeStationWindow = null;
 let hasActiveOrder = false;
 let hasAuth = false;
 let oldStationInteractionOrderStatus = null;
+
+
+let shouldStopQRScanning = false;
 
 
 loadStations().then((data) => {

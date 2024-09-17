@@ -72,6 +72,7 @@ header {
 
 .logo {
   height: 2.2rem;
+  cursor: pointer;
 }
 
 header .right {
@@ -113,7 +114,6 @@ header .right {
 /* Station marker */
 .station-marker {
   width: 3rem;
-  /* background-image: url('/static/img/umbrella.svg'); */
   height: 3rem;
 
   transform: translateX(-50%) translateY(-50%);
@@ -473,6 +473,135 @@ input[type="search"]::-webkit-search-results-decoration {
 
 .station-interaction-modal-header {
   justify-content: flex-end;
+}
+
+/* QR scanner */
+.qr-scanner-modal, #qr-scanner-camera {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+}
+
+.qr-scanner-modal {
+  display: none;
+  background-color: white;
+}
+
+.qr-scanner-modal.show {
+  display: block;
+}
+
+.qr-scanner-buttons {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  --qr-scanner-buttons-height: 3rem;
+  height: var(--qr-scanner-buttons-height);
+  padding: 1rem;
+  box-sizing: border-box;
+
+  z-index: 1002;
+}
+
+.qr-scanner-buttons .button {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: none;
+  color: white;
+  font-size: 16px;
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  height: var(--qr-scanner-buttons-height);
+}
+
+.qr-scanner-buttons .button-long {
+  border-radius: 0.5rem;
+  padding: 0 1rem;
+}
+
+.qr-scanner-buttons .button-icon {
+  width: var(--qr-scanner-buttons-height);
+  font-size: 24px;
+  border-radius: 50%;
+}
+
+.qr-scanner-buttons .button-icon:hover {
+  animation: qr-scanner-pulse 1s infinite;
+}
+
+.qr-scanner-frame {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 75vw;
+  max-width: 300px;
+  height: 75vw;
+  max-height: 300px;
+  border: 3px solid white;
+  border-radius: 15px;
+  /* box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); */
+
+  z-index: 1002;
+}
+
+@keyframes qr-scanner-pulse {
+  0% {
+      transform: scale(1);
+  }
+  50% {
+      transform: scale(1.1);
+  }
+  100% {
+      transform: scale(1);
+  }
+}
+
+.qr-scanner-top-text {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-wrap: nowrap;
+
+  z-index: 1002;
+}
+
+.qr-scanner-button {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  width: 4rem;
+  height: 4rem;
+  background-color: #004dabc1;
+  /* text-align: center; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2.5rem;
+  border-radius: 0.7rem;
+}
+
+.qr-scanner-button:hover {
+  background-color: #004dab;
 }
 
 

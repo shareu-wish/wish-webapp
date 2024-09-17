@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    {% include 'components/head_base.html' %}
+    {% include 'components/yandex_metrika.html' %}
+
+    <meta name="description" content="Станьте партнёром WISH — сервиса бесплатного шеринга зонтов в городе. Устанавливайте нашу станцию в свои заведения и заказывайте рекламу на экране аппарата.">
+    <meta property="og:title" content="Бизнесу — WISH">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shareu.ru/business">
+    <meta property="og:image" content="https://shareu.ru/static/img/business/preview.png">
+    <meta property="og:description" content="Станьте партнёром WISH — сервиса бесплатного шеринга зонтов в городе. Устанавливайте нашу станцию в свои заведения и заказывайте рекламу на экране аппарата.">
+
+    <link rel="stylesheet" href="/static/css/business.css">
+
+    <title>Бизнесу — WISH</title>
+</head>
+
+<body>
+    <div class="preloader" id="preloader">
+        <div class="container">
+            <img src="/static/img/logos/umbrella-orange.svg" alt="umbrella">
+            <span class="loader"></span>
+        </div>
+    </div>
+
+    <section class="first-section" id="firstSection">
+        <header>
+            <img src="/static/img/logos/logo.png" alt="logo" class="logo-header" onclick="window.location.href='/'">
+
+            <div class="links">
+                <a href="/">Главная</a>
+                <a href="/auth"><i class="bi bi-box-arrow-in-right"></i> Войти</a>
+            </div>
+        </header>
+
+        <div class="first-section-content">
+            <h1>Станьте партнёром</h1>
+            <h2>сервиса бесплатного шеринга зонтов</h2>
+            <div class="btns">
+                <button onclick="window.location.href='#install-station'">Установить станцию</button>
+                <button onclick="window.location.href='#place-ad'">Разместить рекламу</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="install-station-section" id="install-station">
+        <h2>Мы привлекаем к вам посетителей в&nbsp;дождливый&nbsp;день</h2>
+        <div class="cards">
+            <div class="card install-station-card">
+                <div>
+                    <img src="/static/img/business/station-installation.png" 
+                        data-anim="/static/img/business/station-installation.gif" 
+                        data-freeze="/static/img/business/station-installation.png">
+                    Разместим аппарат с зонтиками в&nbsp;вашем заведении
+                </div>
+                <strong>Бесплатно</strong>
+            </div>
+            <div class="card install-station-card">
+                <div>
+                    <img src="/static/img/business/umbrellas-delivery.png"
+                        data-anim="/static/img/business/umbrellas-delivery.gif" 
+                        data-freeze="/static/img/business/umbrellas-delivery.png">
+                    Организуем быструю автоматическую выдачу зонтов посетителям
+                </div>
+                <strong>Бесплатно</strong>
+            </div>
+            <div class="card install-station-card">
+                <div>
+                    <img src="/static/img/business/station-maintenance.png"
+                        data-anim="/static/img/business/station-maintenance.gif" 
+                        data-freeze="/static/img/business/station-maintenance.png">
+                    Обеспечим обслуживание и&nbsp;поддержку аппарата
+                </div>
+                <strong>Бесплатно</strong>
+            </div>
+        </div>
+        <div class="install-station-form-container">
+            <div class="left">
+                <div class="form-header">Отправьте заявку на установку аппарата 
+                    <div id="installStationPlace">
+                        <div><div>в&nbsp;торговом&nbsp;центре</div></div>
+                        <div><div>на&nbsp;станции&nbsp;метро</div></div>
+                        <div><div>в&nbsp;кинотеатре</div></div>
+                        <div><div>в&nbsp;ВУЗе</div></div>
+                        <div><div>в&nbsp;коворкинге</div></div>
+                        <div><div>в&nbsp;ресторане</div></div>
+                        <div><div>в&nbsp;гостинице</div></div>
+                        <div><div>в&nbsp;магазине</div></div>
+                        <div><div>в&nbsp;офисе</div></div>
+                        <div><div>в&nbsp;кафе</div></div>
+                    </div>
+                </div>
+                <form class="install-station-form">
+                    <input type="text" name="name" id="installStationOrganization" placeholder="Организация*">
+                    <input type="text" name="city" id="installStationCity" placeholder="Город*">
+                    <input type="email" name="email" id="installStationEmail" placeholder="Электронная почта">
+                    <input type="tel" name="phone" id="installStationPhone" placeholder="Номер телефона">
+                    <textarea rows="3" id="installStationText" placeholder="Запрос"></textarea>
+                    <button type="button" class="btn" onclick="sendInstallStationRequest()">Отправить запрос</button>
+                </form>
+            </div>
+            <div class="right">
+                <div class="station-container">
+                    <img src="/static/img/business/station-1.png">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="place-ad-section" id="place-ad">
+        <h2>Разместим вашу рекламу на нашем аппарате</h2>
+
+        <div class="pluses">
+            <div class="plus">Ваша реклама будет ассоциироваться со спасением от дождя</div>
+            <div class="plus">Мы оставляем клиентов сухими — вы рассказываете им о своём продукте</div>
+        </div>
+
+        <div class="ad-vars">
+            <h3>Выберите подходящий вариант</h3>
+            <div class="list-and-station-container">
+                <div class="list">
+                    <ul>
+                        <li>Ваш баннер на аппарате</li>
+                        <li>Ваш проморолик на экране аппарата</li>
+                        <li>Ваша реклама на куполе зонта</li>
+                    </ul>
+                </div>
+                <div class="station">
+                    <img src="/static/img/business/station-2.png">
+                </div>
+            </div>
+        </div>
+
+        <div class="contact">
+            <span>Для связи пишите <i class="bi bi-chevron-right"></i></span>
+            <span><a href="mailto:partners@shareu.ru"><i class="bi bi-envelope-fill"></i> partners@shareu.ru</a></span>
+        </div>
+    </section>
+
+    <footer>
+        <div class="row first">
+            <img src="/static/img/logos/logo.png" alt="logo">
+        </div>
+        <div class="row menu">
+            <a class="item" href="/">Главная</a>
+            <a class="item" href="#install-station">Установить станцию</a>
+            <a class="item" href="#place-ad">Разместить рекламу</a>
+        </div>
+        <div class="row center">
+            <a class="item" href="mailto:partners@shareu.ru"><i class="bi bi-envelope-fill"></i> partners@shareu.ru</a>
+        </div>
+        <div class="row last">
+            © 2024 WISH, Все права защищены<br>
+            ИП&nbsp;"Щегольков&nbsp;Климентий&nbsp;Тимофеевич", ИНН&nbsp;973302503446, ОГРН&nbsp;32477460003353
+        </div>
+    </footer>
+
+    <script src="/static/js/business.js"></script>
+</body>
+
+</html>
