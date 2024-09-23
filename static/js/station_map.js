@@ -377,60 +377,6 @@ function hideSearch() {
 }
 
 
-function initQRScanner() {
-  shouldStopQRScanning = false;
-
-  const video = document.getElementById('qr-scanner-camera');
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-
-  const mediaConfig = {
-    video: {
-        width: { ideal: window.innerHeight*2 },
-        height: { ideal: window.innerWidth*2 },
-        facingMode: "environment"
-    }
-};
-
-  navigator.mediaDevices.getUserMedia(mediaConfig)
-    .then(stream => {
-      video.srcObject = stream;
-      video.setAttribute("playsinline", true);
-      requestAnimationFrame(tick);
-  })
-  .catch(err => {
-    alert("Не удается получить доступ к камере")
-  });
-
-  function tick() {
-    if (video.readyState === video.HAVE_ENOUGH_DATA) {
-      canvas.height = video.videoHeight;
-      canvas.width = video.videoWidth;
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-      
-      const qrCode = jsQR(imageData.data, canvas.width, canvas.height);
-
-      if (qrCode) {
-        try {
-          const url = new URL(qrCode.data);
-          const stationId = url.searchParams.get('station_id');
-          if (stationId) {
-            hideQRScannerModal();
-            showStationInfo(stationId);
-            shouldStopQRScanning = true;
-          }
-        } catch {}
-      }
-    }
-
-    if (!shouldStopQRScanning) {
-      requestAnimationFrame(tick);
-    }
-  }
-}
-
-
 /* Получение статуса заказа во время взаимодействия со станцией */
 async function getOrderStatus() {
   return await new Promise((resolve, reject) => {
@@ -634,6 +580,62 @@ function showPayment(user_id, station_id) {
 
 
 /* QR code scanner */
+function initQRScanner() {
+  shouldStopQRScanning = false;
+  QRScanningTorch = false;
+
+  const video = document.getElementById('qr-scanner-camera');
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+
+  const mediaConfig = {
+    video: {
+        width: { ideal: window.innerHeight*2 },
+        height: { ideal: window.innerWidth*2 },
+        facingMode: "environment",
+        // torch: true
+    }
+};
+
+  navigator.mediaDevices.getUserMedia(mediaConfig)
+    .then(stream => {
+      QRScanningTrack = stream.getVideoTracks()[0];
+      video.srcObject = stream;
+      video.setAttribute("playsinline", true);
+      requestAnimationFrame(tick);
+  })
+  .catch(err => {
+    alert("Не удается получить доступ к камере")
+  });
+
+  function tick() {
+    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+      canvas.height = video.videoHeight;
+      canvas.width = video.videoWidth;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      
+      const qrCode = jsQR(imageData.data, canvas.width, canvas.height);
+
+      if (qrCode) {
+        try {
+          const url = new URL(qrCode.data);
+          const stationId = url.searchParams.get('station_id');
+          if (stationId) {
+            hideQRScannerModal();
+            showStationInfo(stationId);
+            shouldStopQRScanning = true;
+          }
+        } catch {}
+      }
+    }
+
+    if (!shouldStopQRScanning) {
+      requestAnimationFrame(tick);
+    }
+  }
+}
+
 function showQRScannerModal() {
   initQRScanner();
   $("#qrScannerModal").addClass("show");
@@ -641,6 +643,10 @@ function showQRScannerModal() {
 
 function hideQRScannerModal() {
   shouldStopQRScanning = true;
+  QRScanningTorch = false;
+  if (QRScanningTrack) {
+    QRScanningTrack.stop();
+  }
   $("#qrScannerModal").removeClass("show");
 }
 
@@ -650,8 +656,16 @@ function findByStationNumber() {
   showSearch();
 }
 
-function toggleFlashlight() {
+async function toggleFlashlight() {
+  const capabilities = QRScanningTrack.getCapabilities();
 
+  if (!capabilities.torch) {
+      alert('Фонарик не поддерживается на этом устройстве.');
+      return;
+  }
+
+  QRScanningTorch = !QRScanningTorch;
+  await QRScanningTrack.applyConstraints({ advanced: [{ torch: QRScanningTorch }] });
 }
 
 
@@ -664,6 +678,8 @@ let oldStationInteractionOrderStatus = null;
 
 
 let shouldStopQRScanning = false;
+let QRScanningTrack = null;
+let QRScanningTorch = false;
 
 
 loadStations().then((data) => {
