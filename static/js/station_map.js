@@ -211,6 +211,49 @@ function loadStations() {
 }
 
 
+document.addEventListener('DOMContentLoaded', () => {
+    const button = document.getElementById('toggleButton');
+    let isTorchOn = false;
+    let stream = null;
+    let track = null;
+
+    button.addEventListener('click', async () => {
+        if (!stream) {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: "environment",
+                        torch: true
+                    }
+                });
+                track = stream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities();
+
+                if (!capabilities.torch) {
+                    alert('Фонарик не поддерживается на этом устройстве.');
+                    stream.getTracks().forEach(t => t.stop());
+                    stream = null;
+                    return;
+                }
+
+                isTorchOn = true;
+                await track.applyConstraints({ advanced: [{ torch: isTorchOn }] });
+                button.textContent = 'Выключить фонарик';
+            } catch (error) {
+                console.error('Ошибка доступа к камере:', error);
+                alert('Не удалось получить доступ к камере.');
+            }
+        } else {
+            if (track) {
+                isTorchOn = !isTorchOn;
+                await track.applyConstraints({ advanced: [{ torch: isTorchOn }] });
+                button.textContent = isTorchOn ? 'Выключить фонарик' : 'Включить фонарик';
+            }
+        }
+    });
+});
+
+
 function loadActiveOrder() {
   $.ajax({
     type: "GET",
