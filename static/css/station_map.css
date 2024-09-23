@@ -533,9 +533,9 @@ input[type="search"]::-webkit-search-results-decoration {
   border-radius: 50%;
 }
 
-.qr-scanner-buttons .button-icon:hover {
-  animation: qr-scanner-pulse 1s infinite;
-}
+/* .qr-scanner-buttons .button-icon:active {
+  transform: scale(1.1);
+} */
 
 .qr-scanner-frame {
   position: absolute;
@@ -552,18 +552,6 @@ input[type="search"]::-webkit-search-results-decoration {
   /* box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); */
 
   z-index: 1002;
-}
-
-@keyframes qr-scanner-pulse {
-  0% {
-      transform: scale(1);
-  }
-  50% {
-      transform: scale(1.1);
-  }
-  100% {
-      transform: scale(1);
-  }
 }
 
 .qr-scanner-top-text {
