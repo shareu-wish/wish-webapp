@@ -344,7 +344,7 @@ header {
     &::before, &::after {
       content: "";
       position: absolute;
-      bottom: 14rem;
+      bottom: 15rem;
       left: 50%;
       width: 25rem;
       height: 0;
@@ -354,7 +354,7 @@ header {
     }
     &::after {
       width: 31rem;
-      bottom: 21.5rem;
+      bottom: 24.5rem;
       left: 40%;
     }
   }
@@ -382,7 +382,7 @@ header {
     margin-bottom: $placeHeight;
   }
   & > div:first-child {
-    animation: changePlace 25s linear infinite;
+    animation: changePlace 20s linear infinite;
   }
 
   @keyframes changePlace {

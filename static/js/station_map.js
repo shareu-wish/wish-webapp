@@ -72,6 +72,61 @@ function showRoute(station_coords) {
 }
 
 
+async function drawStations() {
+  await ymaps3.ready;
+
+  const {
+    YMapMarker,
+  } = ymaps3;
+
+  $(".station-marker").remove();
+
+  for (const station of stations) {
+    const markerElement = document.createElement("div");
+    markerElement.className = "station-marker";
+    markerElement.innerHTML = `
+      <div onclick="toggleStationWindow('${station.id}')">
+        <div class="umbrellas-count">${station.can_take}</div>
+        <img src="/static/img/logos/umbrella-mini.svg">
+      </div>
+      <div class="station-info-window" id="${station.id}Window">
+        <div class="windowContent">
+
+          <div class="left-right-container">
+            <div class="left" style="background-image: url('${station.picture}');"></div>
+            <div class="right">
+              <div class="titleContainer">
+                <span class="number">№${station.id}</span>
+                <span class="title">${station.title}</span>
+                <span class="address">${station.address}</span>
+              </div>
+              <div class="btnContainer">
+                <button class="putTakeBtn"><i class="bi bi-arrow-up-circle"></i> ${station.can_take}</button>
+                <button class="putTakeBtn"><i class="bi bi-arrow-down-circle"></i> ${station.can_put}</button>
+                <button class="markerBtn" onclick="showRoute([${station.latitude}, ${station.longitude}])"><i class="bi bi-geo-alt-fill"></i> Маршрут</button>
+              </div>
+            </div>
+          </div>
+
+          <button class="take-umbrella-btn" onclick="takeUmbrella('${station.id}')"><i class="bi bi-umbrella-fill"></i> Взять зонт</button>
+          <button class="put-umbrella-btn" onclick="putUmbrella('${station.id}')" style="display: none;"><i class="bi bi-arrow-down"></i> Вернуть зонт</button>
+
+        </div>
+      </div>
+      `;
+
+    const marker = new YMapMarker(
+      {
+        coordinates: [station.longitude, station.latitude],
+      },
+      markerElement
+    );
+
+    map.addChild(marker);
+  }
+}
+
+
 async function initMap() {
   await ymaps3.ready;
 
@@ -80,7 +135,6 @@ async function initMap() {
     YMapDefaultSchemeLayer,
     YMapDefaultFeaturesLayer,
     YMapControls,
-    YMapMarker,
   } = ymaps3;
 
   const { YMapDefaultMarker } = await ymaps3.import(
@@ -149,49 +203,7 @@ async function initMap() {
     document.getElementsByClassName("ymaps3x0--control-button")[0].click();
   }
 
-  for (const station of stations) {
-    const markerElement = document.createElement("div");
-    markerElement.className = "station-marker";
-    markerElement.innerHTML = `
-      <div onclick="toggleStationWindow('${station.id}')">
-        <div class="umbrellas-count">${station.can_take}</div>
-        <img src="/static/img/logos/umbrella-mini.svg">
-      </div>
-      <div class="station-info-window" id="${station.id}Window">
-        <div class="windowContent">
-
-          <div class="left-right-container">
-            <div class="left" style="background-image: url('${station.picture}');"></div>
-            <div class="right">
-              <div class="titleContainer">
-                <span class="number">№${station.id}</span>
-                <span class="title">${station.title}</span>
-                <span class="address">${station.address}</span>
-              </div>
-              <div class="btnContainer">
-                <button class="putTakeBtn"><i class="bi bi-arrow-up-circle"></i> ${station.can_take}</button>
-                <button class="putTakeBtn"><i class="bi bi-arrow-down-circle"></i> ${station.can_put}</button>
-                <button class="markerBtn" onclick="showRoute([${station.latitude}, ${station.longitude}])"><i class="bi bi-geo-alt-fill"></i> Маршрут</button>
-              </div>
-            </div>
-          </div>
-
-          <button class="take-umbrella-btn" onclick="takeUmbrella('${station.id}')"><i class="bi bi-umbrella-fill"></i> Взять зонт</button>
-          <button class="put-umbrella-btn" onclick="putUmbrella('${station.id}')" style="display: none;"><i class="bi bi-arrow-down"></i> Вернуть зонт</button>
-
-        </div>
-      </div>
-      `;
-
-    const marker = new YMapMarker(
-      {
-        coordinates: [station.longitude, station.latitude],
-      },
-      markerElement
-    );
-
-    map.addChild(marker);
-  }
+  await drawStations()
 
   if (urlCurrentStationId) {
     toggleStationWindow(urlCurrentStationId);
@@ -325,6 +337,7 @@ function showStationInfoFromSearch(stationId) {
 
 function initSearch(stations) {
   const searchItemsContainer = document.getElementById("searchItemsContainer");
+  searchItemsContainer.innerHTML = ''
   for (const station of stations) {
     const searchItem = document.createElement("div");
     searchItem.className = "search-item";
@@ -377,60 +390,6 @@ function hideSearch() {
 }
 
 
-function initQRScanner() {
-  shouldStopQRScanning = false;
-
-  const video = document.getElementById('qr-scanner-camera');
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-
-  const mediaConfig = {
-    video: {
-        width: { ideal: window.innerHeight*2 },
-        height: { ideal: window.innerWidth*2 },
-        facingMode: "environment"
-    }
-};
-
-  navigator.mediaDevices.getUserMedia(mediaConfig)
-    .then(stream => {
-      video.srcObject = stream;
-      video.setAttribute("playsinline", true);
-      requestAnimationFrame(tick);
-  })
-  .catch(err => {
-    alert("Не удается получить доступ к камере")
-  });
-
-  function tick() {
-    if (video.readyState === video.HAVE_ENOUGH_DATA) {
-      canvas.height = video.videoHeight;
-      canvas.width = video.videoWidth;
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-      
-      const qrCode = jsQR(imageData.data, canvas.width, canvas.height);
-
-      if (qrCode) {
-        try {
-          const url = new URL(qrCode.data);
-          const stationId = url.searchParams.get('station_id');
-          if (stationId) {
-            hideQRScannerModal();
-            showStationInfo(stationId);
-            shouldStopQRScanning = true;
-          }
-        } catch {}
-      }
-    }
-
-    if (!shouldStopQRScanning) {
-      requestAnimationFrame(tick);
-    }
-  }
-}
-
-
 /* Получение статуса заказа во время взаимодействия со станцией */
 async function getOrderStatus() {
   return await new Promise((resolve, reject) => {
@@ -457,6 +416,7 @@ function setIsInteractingWithStation(val) {
   }
   oldStationInteractionOrderStatus = null;
   localStorage.setItem("isInteractingWithStation", val);
+  reInitStations();
 }
 
 
@@ -578,6 +538,17 @@ async function checkOrderStatusForUpdates() {
         // TODO: feedback form
         break;
       default:
+        showStationInteractionModal(`
+          <div class="modal-body">
+            <div class="modal-header station-interaction-modal-header">
+              <span class="modal-close" onclick="$('#stationInteractionModal').removeClass('show')"><i class="bi bi-x-lg"></i></span>
+            </div>
+            <div class="modal-content">
+              Произошла непредвиденная ошибка(
+            </div>
+          </div>
+        `)
+        setIsInteractingWithStation(false);
         break;
     }
 
@@ -634,6 +605,62 @@ function showPayment(user_id, station_id) {
 
 
 /* QR code scanner */
+function initQRScanner() {
+  shouldStopQRScanning = false;
+  QRScanningTorch = false;
+
+  const video = document.getElementById('qr-scanner-camera');
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+
+  const mediaConfig = {
+    video: {
+        width: { ideal: window.innerHeight*2 },
+        height: { ideal: window.innerWidth*2 },
+        facingMode: "environment",
+        // torch: true
+    }
+};
+
+  navigator.mediaDevices.getUserMedia(mediaConfig)
+    .then(stream => {
+      QRScanningTrack = stream.getVideoTracks()[0];
+      video.srcObject = stream;
+      video.setAttribute("playsinline", true);
+      requestAnimationFrame(tick);
+  })
+  .catch(err => {
+    alert("Не удается получить доступ к камере")
+  });
+
+  function tick() {
+    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+      canvas.height = video.videoHeight;
+      canvas.width = video.videoWidth;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      
+      const qrCode = jsQR(imageData.data, canvas.width, canvas.height);
+
+      if (qrCode) {
+        try {
+          const url = new URL(qrCode.data);
+          const stationId = url.searchParams.get('station_id');
+          if (stationId) {
+            hideQRScannerModal();
+            showStationInfo(stationId);
+            shouldStopQRScanning = true;
+          }
+        } catch {}
+      }
+    }
+
+    if (!shouldStopQRScanning) {
+      requestAnimationFrame(tick);
+    }
+  }
+}
+
 function showQRScannerModal() {
   initQRScanner();
   $("#qrScannerModal").addClass("show");
@@ -641,6 +668,10 @@ function showQRScannerModal() {
 
 function hideQRScannerModal() {
   shouldStopQRScanning = true;
+  QRScanningTorch = false;
+  if (QRScanningTrack) {
+    QRScanningTrack.stop();
+  }
   $("#qrScannerModal").removeClass("show");
 }
 
@@ -650,8 +681,16 @@ function findByStationNumber() {
   showSearch();
 }
 
-function toggleFlashlight() {
+async function toggleFlashlight() {
+  const capabilities = QRScanningTrack.getCapabilities();
 
+  if (!capabilities.torch) {
+      alert('Фонарик не поддерживается на этом устройстве.');
+      return;
+  }
+
+  QRScanningTorch = !QRScanningTorch;
+  await QRScanningTrack.applyConstraints({ advanced: [{ torch: QRScanningTorch }] });
 }
 
 
@@ -664,6 +703,8 @@ let oldStationInteractionOrderStatus = null;
 
 
 let shouldStopQRScanning = false;
+let QRScanningTrack = null;
+let QRScanningTorch = false;
 
 
 loadStations().then((data) => {
@@ -671,6 +712,16 @@ loadStations().then((data) => {
   initMap();
   initSearch(stations);
 });
+
+function reInitStations() {
+  loadStations().then((data) => {
+    stations = data;
+    drawStations();
+    initSearch(stations);
+  });
+  loadActiveOrder();
+}
+
 // initMap();
 checkAuth()
 loadActiveOrder()
