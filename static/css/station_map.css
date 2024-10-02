@@ -593,6 +593,91 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 
+/* Feedback form */
+.feedback-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.feedback-p {
+  text-align: center;
+}
+
+.feedback-rate-container {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+}
+.feedback-rate:not(:checked) > input {
+  position: absolute;
+  top: -9999px;
+}
+.feedback-rate:not(:checked) > label {
+  float: right;
+  width: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor :pointer;
+  font-size: 3rem;
+  color: #ccc;
+}
+.feedback-rate:not(:checked) > label:before {
+  content: '★ ';
+}
+.feedback-rate > input:checked ~ label {
+  color: #ffb300;
+}
+.feedback-rate:not(:checked) > label:hover,
+.feedback-rate:not(:checked) > label:hover ~ label {
+  color: #eea700;
+}
+.feedback-rate > input:checked + label:hover,
+.feedback-rate > input:checked + label:hover ~ label,
+.feedback-rate > input:checked ~ label:hover,
+.feedback-rate > input:checked ~ label:hover ~ label,
+.feedback-rate > label:hover ~ input:checked ~ label {
+  color: #eea700;
+}
+
+.feedback-text-and-btn-container {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.feedback-textarea {
+  display: block;
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  box-shadow: 0 0 1em hsl(231deg 62% 94%);
+  margin-bottom: 1rem;
+  resize: vertical;
+}
+
+.feedback-submit {
+  width: 100%;
+
+  background-color: #004eab;
+  color: #f2f2f2;
+  font-size: 1.1rem;
+
+  padding: 0.7rem 0.8rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.feedback-submit:active {
+  background-color: #004293;
+}
+
+.feedback-submit:disabled {
+  background-color: #767f8b;
+}
+
+
 @media (min-width: 320px) and (max-width: 480px) {
   .search-offcanvas {
     width: 100%;

@@ -384,6 +384,20 @@ def get_order_status():
         
         return {"status": "ok", "order_status": order_status}
 
+# Feedback
+@app.route("/station-map/order-feedback", methods=["POST"])
+def order_feedback():
+    user_id = check_auth()
+    if not user_id:
+        return {"status": "error", "message": "Unauthorized"}
+    
+    order_id = db_helper.get_last_order(user_id)['id']
+    rate = request.json["rate"]
+    text = request.json["text"]
+    db_helper.create_order_feedback(user_id, order_id, rate, text)
+
+    return {"status": "ok"}
+
 
 @app.route('/profile')
 def profile():
