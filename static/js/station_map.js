@@ -462,6 +462,10 @@ async function checkOrderStatusForUpdates() {
             </div>
           `)
         } else if (oldStationInteractionOrderStatus === 'station_opened_to_put') {
+          if (timesBeforePutUmbrellaTimeout < 2) {
+            timesBeforePutUmbrellaTimeout += 1
+            return
+          }
           showStationInteractionModal(`
             <div class="modal-body">
               <div class="modal-header station-interaction-modal-header">
@@ -524,18 +528,19 @@ async function checkOrderStatusForUpdates() {
         `)
         break;
       case "closed_successfully":
-        showStationInteractionModal(`
-          <div class="modal-body">
-            <div class="modal-header station-interaction-modal-header">
-              <span class="modal-close" onclick="$('#stationInteractionModal').removeClass('show')"><i class="bi bi-x-lg"></i></span>
-            </div>
-            <div class="modal-content">
-              Спасибо за пользование нашим сервисом!
-            </div>
-          </div>
-        `)
+        // showStationInteractionModal(`
+        //   <div class="modal-body">
+        //     <div class="modal-header station-interaction-modal-header">
+        //       <span class="modal-close" onclick="$('#stationInteractionModal').removeClass('show')"><i class="bi bi-x-lg"></i></span>
+        //     </div>
+        //     <div class="modal-content">
+        //       Спасибо за пользование нашим сервисом!
+        //     </div>
+        //   </div>
+        // `)
         setIsInteractingWithStation(false);
-        // TODO: feedback form
+        // Feedback form
+        showFeedbackForm()
         break;
       default:
         showStationInteractionModal(`
@@ -554,6 +559,7 @@ async function checkOrderStatusForUpdates() {
 
 
     oldStationInteractionOrderStatus = data.order_status;
+    timesBeforePutUmbrellaTimeout = 0
   }
 }
 
@@ -694,13 +700,85 @@ async function toggleFlashlight() {
 }
 
 
+/* Feedback form */
+function showFeedbackForm() {
+  showStationInteractionModal(`
+    <div class="modal-body">
+      <div class="modal-header station-interaction-modal-header">
+        <span class="modal-close" onclick="$('#stationInteractionModal').removeClass('show')"><i class="bi bi-x-lg"></i></span>
+      </div>
+      <div class="modal-content">
+        <h3 class="feedback-header">Спасибо за пользование нашим сервисом!</h3>
+        <p class="feedback-p">Пожалуйста, оцените качество обслуживания и оставьте нам свои пожелания.</p>
+        <div class="feedback-rate-container">
+          <div class="feedback-rate">
+            <input type="radio" id="feedback-star5" name="feedback-rate" value="5" onclick="changedStarRating()" />
+            <label for="feedback-star5" title="Отлично">5 stars</label>
+            <input type="radio" id="feedback-star4" name="feedback-rate" value="4" onclick="changedStarRating()" />
+            <label for="feedback-star4" title="Хорошо">4 stars</label>
+            <input type="radio" id="feedback-star3" name="feedback-rate" value="3" onclick="changedStarRating()" />
+            <label for="feedback-star3" title="Нормально">3 stars</label>
+            <input type="radio" id="feedback-star2" name="feedback-rate" value="2" onclick="changedStarRating()" />
+            <label for="feedback-star2" title="Плохо">2 stars</label>
+            <input type="radio" id="feedback-star1" name="feedback-rate" value="1" onclick="changedStarRating()" />
+            <label for="feedback-star1" title="Очень плохо">1 star</label>
+          </div>
+        </div>
+
+        <div class="feedback-text-and-btn-container">
+          <textarea class="feedback-textarea" id="feedback-textarea" placeholder="Пожелание или замечание" rows=5></textarea>
+          <button class="feedback-submit" onclick="submitFeedback()" disabled>Отправить</button>
+        </div>
+      </div>
+    </div>
+  `)
+}
+
+function changedStarRating() {
+  const rate = $('input[name="feedback-rate"]:checked').val();
+  if (rate) {
+    $(".feedback-submit").prop("disabled", false)
+  } else {
+    $(".feedback-submit").prop("disabled", true)
+  }
+}
+
+function submitFeedback() {
+  const rate = $('input[name="feedback-rate"]:checked').val();
+  const text = $("#feedback-textarea").val();
+  if (!rate) return
+  
+  $.ajax({
+    url: "/station-map/order-feedback",
+    type: "POST",
+    data: JSON.stringify({
+      rate: rate,
+      text: text
+    }),
+    contentType: "application/json",
+    success: function(data) {
+      showStationInteractionModal(`
+        <div class="modal-body">
+          <div class="modal-header station-interaction-modal-header">
+            <span class="modal-close" onclick="$('#stationInteractionModal').removeClass('show')"><i class="bi bi-x-lg"></i></span>
+          </div>
+          <div class="modal-content">
+            Спасибо за ваш отзыв!
+          </div>
+        </div>
+      `)
+    }
+  });
+}
+
+
 let map = null;
 let stations = []
 let activeStationWindow = null;
 let hasActiveOrder = false;
 let hasAuth = false;
 let oldStationInteractionOrderStatus = null;
-
+let timesBeforePutUmbrellaTimeout = 0;
 
 let shouldStopQRScanning = false;
 let QRScanningTrack = null;
