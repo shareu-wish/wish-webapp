@@ -474,37 +474,44 @@ header {
 .accordion {
   .accordion-item {
     .question-container {
-      width: 100%;
       display: flex;
       justify-content: space-between;
       padding: 1rem 2rem;
       border-top: 1px solid $orangeColor;
       cursor: pointer;
       font-weight: 600;
-
+      
       i {
         color: $orangeColor;
       }
-
       i.close {
         display: none;
       }
     }
-
     .content {
+      max-height: 0;
       opacity: 0;
       padding: 0 2rem;
-      max-height: 0;
-      // border-bottom: 1px solid #e5e5e5;
       overflow: hidden;
-      clear: both;
-      transition: all 0.2s ease;
+      transition: max-height 0.35s ease, opacity 0.35s ease;
+    }
 
-      p {
-        font-size: 1rem;
-        font-weight: 300;
+    &.active {
+      .content {
+        max-height: 500px; // Увеличиваем max-height для лучшей совместимости с разным контентом
+        opacity: 1;
+      }
+      .question-container {
+        i.open {
+          display: none;
+        }
+        i.close {
+          display: block;
+        }
       }
     }
+  }
+}
 
     // &.last {
     //   .question-container {
