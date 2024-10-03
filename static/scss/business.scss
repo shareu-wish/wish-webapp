@@ -236,15 +236,15 @@ header {
       border: 1px solid $orangeColor;
       border-radius: 1rem;
       padding: 0.5rem 3rem;
-      color: $orangeColor;
-      background: transparent;
+      color: white;
+      background: #ff815;
       font-size: 1.5rem;
       cursor: pointer;
       transition: background, color .3s;
 
       &:hover {
-        background-color: $orangeColor;
-        color: white;
+        background-color: white;
+        color: #ff815;
       }
     }
   }
