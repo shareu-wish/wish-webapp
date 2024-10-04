@@ -60,6 +60,7 @@ def business():
 
 @app.route("/install-station-request", methods=["POST"])
 def install_station_request():
+    name = request.form["name"]
     organization = request.form["organization"]
     city = request.form["city"]
     email = request.form["email"]
@@ -70,7 +71,7 @@ def install_station_request():
         return {"status": "error", "message": "Заполните обязательные поля!"}
         
     
-    db_helper.create_install_station_request(organization, city, email, phone, text)
+    db_helper.create_install_station_request(name, organization, city, email, phone, text)
 
     return {"status": "ok"}
 
@@ -382,6 +383,20 @@ def get_order_status():
             order_status = "unknown"
         
         return {"status": "ok", "order_status": order_status}
+
+# Feedback
+@app.route("/station-map/order-feedback", methods=["POST"])
+def order_feedback():
+    user_id = check_auth()
+    if not user_id:
+        return {"status": "error", "message": "Unauthorized"}
+    
+    order_id = db_helper.get_last_order(user_id)['id']
+    rate = request.json["rate"]
+    text = request.json["text"]
+    db_helper.create_order_feedback(user_id, order_id, rate, text)
+
+    return {"status": "ok"}
 
 
 @app.route('/profile')

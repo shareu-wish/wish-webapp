@@ -36,30 +36,31 @@ function sendQuestion() {
     const phone = $("#supportPhone").val().trim();
     const text = $("#supportText").val().trim();
     if (name === "" || city === "" || text === "") {
-        return alert("Заполните все обязательные поля!");
+      return alert("Заполните все обязательные поля!");
     }
     if (email === "" && phone === "") {
-        return alert("Укажите хотя бы один контактный способ (email или номер телефона)!");
+      return alert("Укажите хотя бы один контактный способ (email или номер телефона)!");
     }
 
     $.ajax({
-        url: "/support",
-        type: "POST",
-        data: {
-            name: name,
-            city: city,
-            email: email,
-            phone: phone,
-            text: text
-        },
-        success: function (res) {
-            alert("Ваше обращение отправлено");
-            $("#supportName").val("");
-            $("#supportCity").val("");
-            $("#supportEmail").val("");
-            $("#supportPhone").val("");
-            $("#supportText").val("");
-        }
+      url: "/support",
+      type: "POST",
+      data: {
+        name: name,
+        city: city,
+        email: email,
+        phone: phone,
+        text: text
+      },
+      success: function (res) {
+        ym(98071024,'reachGoal','sendQuestionToSupport')
+        alert("Ваше обращение отправлено");
+        $("#supportName").val("");
+        $("#supportCity").val("");
+        $("#supportEmail").val("");
+        $("#supportPhone").val("");
+        $("#supportText").val("");
+      }
     });
 }
 

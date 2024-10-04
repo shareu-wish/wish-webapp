@@ -1,5 +1,6 @@
 function sendInstallStationRequest() {
   const organization = $("#installStationOrganization").val().trim();
+  const name = $("#installStationName").val().trim();
   const city = $("#installStationCity").val().trim();
   const email = $("#installStationEmail").val().trim();
   const phone = $("#installStationPhone").val().trim();
@@ -17,6 +18,7 @@ function sendInstallStationRequest() {
     url: "/install-station-request",
     type: "POST",
     data: {
+      name: name,
       organization: organization,
       city: city,
       email: email,
@@ -24,7 +26,9 @@ function sendInstallStationRequest() {
       text: text,
     },
     success: function (res) {
+      ym(98071024,'reachGoal','sendInstallStationRequest')
       alert("Ваш запрос отправлен");
+      $("#installStationName").val("");
       $("#installStationOrganization").val("");
       $("#installStationCity").val("");
       $("#installStationEmail").val("");

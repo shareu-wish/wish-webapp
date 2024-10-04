@@ -549,7 +549,7 @@ header .nav a:hover {
 }
 .person-card.founder {
   padding: 2rem 1rem;
-  border: 2px solid #974f79;
+  border: 0px;
   border-radius: 1rem;
   width: 18rem;
 }
@@ -568,7 +568,6 @@ header .nav a:hover {
   text-align: center;
   font-size: 1.2rem;
   font-style: italic;
-  background: linear-gradient(to right, #974f79 4px, transparent 4px) 0 100%, linear-gradient(to left, #974f79 4px, transparent 4px) 100% 0, linear-gradient(to bottom, #974f79 4px, transparent 4px) 100% 0, linear-gradient(to top, #974f79 4px, transparent 4px) 0 100%;
   background-repeat: no-repeat;
   background-size: 20px 20px;
 }
