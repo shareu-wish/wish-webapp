@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  {% include 'components/head_base.html' %}
+
+  <link rel="stylesheet" href="/static/css/auth.css">
+  <script src="/static/js/jquery.maskedinput.min.js"></script>
+  <script src="https://unpkg.com/@vkid/sdk@2.1.0/dist-sdk/umd/index.js"></script>
+
+  <!-- <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+  <script>eruda.init()</script> -->
+
+  <title>Авторизация | WISH</title>
+</head>
+
+<body>
+  <div class="container">
+    <img src="/static/img/logos/umbrella.png" alt="logo" class="logo">
+
+    <div class="inputPhoneContainer">
+      <input type="tel" id="phone" class="phoneInput" placeholder="+7 (999) 999 99-99">
+      <div class="checkbox-rect">
+        <input type="checkbox" id="notificationAgreementCheckbox" name="check">
+        <label for="notificationAgreementCheckbox">Я согласен на получение важных уведомлений</label>
+      </div>
+      <button class="nextBtn" onclick="goToPreVerification()">Войти по телефону</button>
+
+      <p class="usage-terms">Выполняя вход, вы подтверждаете <a href="https://shareu.ru/agreement"
+          target="_blank">пользовательское соглашение</a></p>
+
+      <div class="divider"></div>
+      
+      <div id="VkIdSdkOneTap"></div>
+
+      <div class="business-info-container">
+        <p class="business-info">ООО&nbsp;«ВЕНДИНГ&nbsp;И&nbsp;ШЕРИНГ»</p>
+        <!-- <p class="business-info">123022, г.&nbsp;Москва, ул.&nbsp;Ходынская, д.&nbsp;2.</p> -->
+        <p class="business-info">ИНН&nbsp;9703190094, КПП&nbsp;770301001, ОГРН&nbsp;1247700610211</p>
+      </div>
+    </div>
+
+    <div class="preVerifyPhoneContainer">
+      <!--<div class="textContainer">
+        <p>На Ваш номер телефона <span id="yourPhone">+7 (952) 354 76-38</span> поступит звонок для его подтверждения.
+        </p>
+
+        <a href="#" onclick="openSection('inputPhone')">Изменить номер?</a>
+
+        <p>Вам нужно будет ввести последние 4 цифры номера, который Вам звонит.</p>
+      </div>
+
+      <button class="startVerificationBtn" onclick="startFlashCall()">Позвонить</button>-->
+
+      <div>
+        <p class="phoneSpelling">Правильно ли указан номер?</p>
+        <p id="yourPhone"></p>
+      </div>
+      <div>
+        <button class="changePhoneBtn" onclick="openSection('inputPhone')">Нет, изменить номер</button>
+        <button class="startVerificationBtn" onclick="startFlashCall()">Да, все верно</button>
+      </div>
+    </div>
+
+    <div class="verifyPhoneContainer">
+      <div class="pinBox">
+        <input class="pinEntry" name="token" type="number" maxlength="4" autocomplete="off" placeholder="0000">
+      </div>
+      <p>4 последние цифры номера входящего звонка</p>
+      <a href="#" id="restartTimer" onclick="startFlashCall()">Позвонить еще раз</a>
+    </div>
+  </div>
+
+  <script src="/static/js/auth.js"></script>
+</body>
+
+</html>
