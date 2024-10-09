@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  {% include 'components/head_base.html' %}
+  {% include 'components/yandex_metrika.html' %}
+
+  <!-- {% from 'components/modal.html' import modal %} -->
+  <link rel="stylesheet" href="/static/css/components/modal.css">
+
+  <!-- <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+  <script>eruda.init()</script> -->
+
+  <script src="https://api-maps.yandex.ru/v3/?apikey=122cc2d8-cfc2-4b95-8482-ab66964ffb28&lang=ru_RU"></script>
+  <script src="https://widget.cloudpayments.ru/bundles/cloudpayments.js"></script>
+  <link rel="stylesheet" href="/static/css/station_map.css">
+
+  <title>Карта | WISH</title>
+</head>
+
+<body>
+
+  <header>
+    <img src="/static/img/logos/logo.png" alt="logo" class="logo" onclick="window.location.href='/'">
+
+    <div class="right">
+      <div class="search-container">
+        <div class="search-btn" onclick="showSearch()"><i class="bi bi-search"></i></div>
+      </div>
+      <div class="header-login" id="headerLoginContainer" onclick="window.location.href='/auth'" style="display: none;">
+        Войти
+      </div>
+      <div class="profile" id="profile" onclick="window.location.href='/profile'">
+        <div class="profile-btn"><i class="bi bi-person-fill"></i></div>
+      </div>
+    </div>
+  </header>
+
+  <div id="map"></div>
+
+  <nav>
+    <!-- <div class="nav-el"><i class="bi bi-list-ul"></i></div> -->
+    <!-- <div class="nav-el" onclick="showQRScannerModal()"><i class="bi bi-qr-code-scan"></i></div> -->
+    <!-- <div class="nav-el"><i class="bi bi-search"></i></div> -->
+    <div class="nav-el"><i class="bi bi-info-circle"></i></div>
+    <div class="nav-el nav-placeholder"><i class="bi bi-search"></i></div>
+    <div class="nav-el nav-placeholder"><i class="bi bi-search"></i></div>
+
+  </nav>
+
+  <div class="station-info-window" id="mainWindow"></div>
+
+  <div class="route-window" id="routeWindow">
+    <div class="close-route-window" onclick="$('#routeWindow').hide()"><i class="bi bi-x-lg"></i></div>
+    <div class="navigator-header">Навигатор</div>
+    <iframe src="/loading" id="navigator"></iframe>
+  </div>
+
+  <div class="qr-scanner-button" onclick="showQRScannerModal()" id="QRScannerButton"><i class="bi bi-qr-code-scan"></i></div>
+
+  <!-- {% call modal(title="Авторизуйтесь", id="auth-suggestion-modal", 
+      close_func="$('#auth-suggestion-modal').removeClass('show')", 
+      action_text='Авторизоваться', 
+      action_func="window.location.href='/auth?station_id='+activeStationWindow") %}
+    Пожалуйста, войдите в аккаунт, чтобы взять зонт.
+  {% endcall %} -->
+
+  <div class="search-offcanvas-container" id="searchOffcanvas">
+    <div class="search-offcanvas">
+      <div class="search-offcanvas-header-line">
+        <input type="search" id="search" autocomplete="off" placeholder="Найти по номеру аппарата">
+        <span class="modal-close" onclick="hideSearch()"><i class="bi bi-x-lg"></i></span>
+      </div>
+      <div id="searchItemsContainer">
+        
+      </div>
+    </div>
+  </div>
+
+
+  <div id="stationInteractionModal" class="modal">
+  </div>
+
+  
+  <div class="qr-scanner-modal" id="qrScannerModal">
+    <video id="qr-scanner-camera" autoplay></video>
+    <div class="qr-scanner-frame"></div>
+    <div class="qr-scanner-top-text">Отсканируйте QR-код на аппарате</div>
+
+    <div class="qr-scanner-buttons">
+      <button class="button button-icon" onclick="hideQRScannerModal()" aria-label="Назад">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <button class="button button-long" onclick="findByStationNumber()" aria-label="Найти по номеру">Найти по номеру аппарата</button>
+      <button class="button button-icon" onclick="toggleFlashlight()" aria-label="Фонарик">
+        <i class="bi bi-lightbulb-fill"></i>
+      </button>
+  </div>
+  </div>
+
+
+  <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
+  <script src="/static/js/station_map.js"></script>
+</body>
+
+</html>
