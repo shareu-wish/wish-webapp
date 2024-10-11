@@ -498,7 +498,7 @@ header {
       // border-bottom: 1px solid #e5e5e5;
       overflow: hidden;
       clear: both;
-      transition: all 0s ease;
+      transition: all 0.2s ease;
 
       p {
         font-size: 1rem;
@@ -517,7 +517,7 @@ header {
         opacity: 1;
         padding: 1rem 2rem;
         max-height: 100%;
-        transition: all 0s ease;
+        transition: all 0.35s ease;
       }
       .question-container {
         i.open {
@@ -644,6 +644,8 @@ header {
 
   &.founder {
     padding: 2rem 1rem;
+    border: 2px solid $purpleColor;
+    border-radius: 1rem;
     width: 18rem;
 
     .position {
@@ -665,6 +667,7 @@ header {
   font-size: 1.2rem;
   font-style: italic;
 
+  background: linear-gradient(to right, $purpleColor 4px, transparent 4px) 0 100%, linear-gradient(to left, $purpleColor 4px, transparent 4px) 100% 0, linear-gradient(to bottom, $purpleColor 4px, transparent 4px) 100% 0, linear-gradient(to top, $purpleColor 4px, transparent 4px) 0 100%;
   background-repeat: no-repeat;
   background-size: 20px 20px;
 
@@ -1501,102 +1504,3 @@ footer {
     bottom: calc(100% - 31%);
   }
 }
-
-.payment-container {
-  display: flex;
-  justify-content: space-between;
-  background-color: #dde5f4;
-  padding: 0;
-  border-radius: 14px; /* Закругление углов контейнера */
-  overflow: hidden; /* Чтобы блоки не выходили за закругленные углы */
-  margin-top: 50px;
-  margin-left: 120px;
-  margin-right: 120px;
-}
-
-.payment-option {
-  flex: 1;
-  padding: 20px;
-  box-shadow: none;
-}
-
-.payment-option:nth-child(1) {
-  background-color: #F0F5FA;
-}
-
-.payment-option:nth-child(2) {
-  background-color: #E6EEF7;
-}
-
-.payment-option:nth-child(3) {
-  background-color: #DEE8F4;
-}
-
-.payment-option:nth-child(4) {
-  background-color: #D6E2F1;
-}
-
-.payment-option h5 {
-  margin-top: 1;
-  color: #004EAB;
-}
-
-.tar-glav {
-  margin-top: 5%;
-  font-family: Arial;
-  font-size: 40px;
-  font-weight: 700;
-  line-height: 40px;
-  text-align: left;
-  background-color: white;
-  margin-left: 120px;
-
-}
-.tar-tit-text {
-  font-family: Arial;
-  font-size: 40px;
-  font-weight: 700;
-  line-height: 40px;
-  text-align: left;
-  margin-left: 20%;
-  margin-top: 20%;
-}
-
-.tar-tit{
-  margin-top: 10px;
-}
-
-
-
-.payment-option p {
-  margin: 7px 0;
-  font-size: 12px;
-}
-
-/* Мобильная версия */
-@media (max-width: 768px) {
-  .payment-container {
-    flex-direction: column;
-    margin-top: 50px;
-    margin-left: 50px;
-    margin-right: 50px;
-  }
-
-  .payment-option {
-    margin: 0;
-    border-bottom: 1px solid #ccc; /* Добавляем границу между блоками для разделения */
-  }
-
-  .payment-option:last-child {
-    border-bottom: none; /* Убираем последнюю границу */
-  }
-  .tar-glav {
-    margin-top: 10%;
-    font-family: Arial;
-    font-size: 30px;
-    font-weight: 700;
-    line-height: 40px;
-    text-align: center;
-    background-color: white;
-    margin-left: 0px;
-  }}
