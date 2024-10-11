@@ -218,6 +218,8 @@ header {
     text-align: center;
     font-size: 6rem;
     color: $orangeColor;
+    line-height: 3.5rem;
+    margin-bottom: 2rem;
   }
 
   h2 {
@@ -243,8 +245,8 @@ header {
       transition: background, color .3s;
 
       &:hover {
-        background-color: $orangeColor;
-        color: white;
+        background-color: white;
+        color: orangered;
       }
     }
   }
@@ -560,12 +562,12 @@ footer {
     &.menu {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
+      justify-content: left;
       column-gap: 2rem;
       row-gap: 0.8rem;
       .item {
         // flex: 0 0 calc(100%/6);
-        text-align: center;
+        text-align: left;
         font-size: 1rem;
         color: white;
         text-decoration: none;
@@ -577,9 +579,9 @@ footer {
 
     &.center {
       display: flex;
-      justify-content: center;
+      justify-content: left;
       .item {
-        text-align: center;
+        text-align: left;
         font-size: 1rem;
         color: white;
         text-decoration: none;
