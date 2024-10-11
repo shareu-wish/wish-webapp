@@ -823,7 +823,7 @@ input[type="search"]::-webkit-search-results-decoration {
 /* Блок залога */
 .deposit-box {
   flex-grow: 1;
-  margin-left: 10px;
+  margin-left: 7px;
 }
 .deposit-header {
   margin-left: -12%;
@@ -833,7 +833,7 @@ input[type="search"]::-webkit-search-results-decoration {
   color: #004EAB80;
   font-size: 12px;
   padding: 6px 0;
-  width: 112%;
+  width: 117%;
   border-radius: 10px;
   margin-bottom: 10px;
 }
@@ -845,9 +845,10 @@ input[type="search"]::-webkit-search-results-decoration {
   border-radius: 12px;
   margin-bottom: 10px;
   box-shadow: none;
+  width: 105%;
 }
 .deposit-label {
-  margin-left: 20px;
+  margin-left: 15px;
   font-size: 11px;
 }
 .deposit-price {
