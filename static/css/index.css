@@ -738,8 +738,7 @@ footer .row.menu {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  -moz-column-gap: 2rem;
-       column-gap: 2rem;
+  column-gap: 2rem;
   row-gap: 0.8rem;
 }
 footer .row.menu .item {
@@ -949,8 +948,7 @@ footer .row.last {
     width: 100%;
   }
   footer .row.menu {
-    -moz-column-gap: 0;
-         column-gap: 0;
+    column-gap: 0;
   }
   footer .row.menu .item {
     flex: 0 0 33.3333333333%;
@@ -1109,8 +1107,7 @@ footer .row.last {
     width: 100%;
   }
   footer .row.menu {
-    -moz-column-gap: 0;
-         column-gap: 0;
+    column-gap: 0;
   }
   footer .row.menu .item {
     flex: 0 0 25%;
