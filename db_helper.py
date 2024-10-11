@@ -801,23 +801,6 @@ def create_install_station_request(name: str, organization: str, city: str, emai
     cur.close()
 
 
-""" Order feedback """
-def create_order_feedback(user_id: int, order_id: int, rate: int, text: str) -> None:
-    """
-    Создать запись в таблице обратной связи
-
-    :param user_id: ID пользователя
-    :param order_id: ID заказа
-    :param rate: Оценка
-    :param text: Текст обратной связи
-    """
-
-    cur = conn.cursor()
-    cur.execute("INSERT INTO order_feedback (user_id, order_id, rate, text) VALUES (%s, %s, %s, %s)", (user_id, order_id, rate, text))
-    conn.commit()
-    cur.close()
-
-
 """ Other """
 
 if not config.DEBUG:

@@ -167,8 +167,6 @@ header .links a:hover {
   text-align: center;
   font-size: 6rem;
   color: #ff815b;
-  line-height: 3.5rem;
-  margin-bottom: 2rem;
 }
 .first-section-content h2 {
   text-align: center;
@@ -193,8 +191,8 @@ header .links a:hover {
   transition: background, color 0.3s;
 }
 .first-section-content .btns button:hover {
-  background-color: white;
-  color: orangered;
+  background-color: #ff815b;
+  color: white;
 }
 
 /* Install station section */
@@ -508,13 +506,12 @@ footer .row {
 footer .row.menu {
   display: flex;
   flex-wrap: wrap;
-  justify-content: left;
-  -moz-column-gap: 2rem;
-       column-gap: 2rem;
+  justify-content: center;
+  column-gap: 2rem;
   row-gap: 0.8rem;
 }
 footer .row.menu .item {
-  text-align: left;
+  text-align: center;
   font-size: 1rem;
   color: white;
   text-decoration: none;
@@ -524,10 +521,10 @@ footer .row.menu .item:hover {
 }
 footer .row.center {
   display: flex;
-  justify-content: left;
+  justify-content: center;
 }
 footer .row.center .item {
-  text-align: left;
+  text-align: center;
   font-size: 1rem;
   color: white;
   text-decoration: none;
