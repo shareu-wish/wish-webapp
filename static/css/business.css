@@ -161,12 +161,14 @@ header .links a:hover {
 }
 
 .first-section-content {
-  width: 70%;
+  width: 100%;
 }
 .first-section-content h1 {
   text-align: center;
   font-size: 6rem;
   color: #ff815b;
+  margin-bottom: 3%;
+  line-height: 1;
 }
 .first-section-content h2 {
   text-align: center;
@@ -184,15 +186,15 @@ header .links a:hover {
   border: 1px solid #ff815b;
   border-radius: 1rem;
   padding: 0.5rem 3rem;
-  color: #ff815b;
-  background: transparent;
+  color: white;
+  background: #ff815b;
   font-size: 1.5rem;
   cursor: pointer;
   transition: background, color 0.3s;
 }
 .first-section-content .btns button:hover {
-  background-color: #ff815b;
-  color: white;
+  background-color: white;
+  color: ff815b;
 }
 
 /* Install station section */
@@ -403,6 +405,7 @@ header .links a:hover {
   font-size: 3rem;
   color: #ff815b;
   padding: 0 2rem;
+  
 }
 .place-ad-section .pluses {
   width: 50%;
@@ -468,23 +471,23 @@ header .links a:hover {
   padding: 1.5rem 2rem;
   display: flex;
   justify-content: space-between;
-  color: white;
-  font-size: 1.3rem;
+  color: #ff815b;
+  font-size: 1.8rem;
 }
 .place-ad-section .contact span:first-child {
   font-weight: bold;
-  color: #ff815b;
+  color: white;
 }
 .place-ad-section .contact i {
   position: relative;
   bottom: -2px;
 }
 .place-ad-section .contact a {
-  color: white;
+  color: #ff815b;
   text-decoration: none;
 }
 .place-ad-section .contact a:hover {
-  color: #ff815b;
+  color: white;
 }
 
 /* Footer */
@@ -506,7 +509,7 @@ footer .row {
 footer .row.menu {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: left;
   column-gap: 2rem;
   row-gap: 0.8rem;
 }
@@ -521,7 +524,7 @@ footer .row.menu .item:hover {
 }
 footer .row.center {
   display: flex;
-  justify-content: center;
+  justify-content: left;
 }
 footer .row.center .item {
   text-align: center;

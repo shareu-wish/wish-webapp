@@ -71,6 +71,20 @@ function showRoute(station_coords) {
   });
 }
 
+function generateNumberCells(number, containerId) {
+  const numberContainer = document.getElementById(containerId);
+  if (!numberContainer) return; // проверка на наличие элемента
+  numberContainer.innerHTML = ''; // Очищаем старые ячейки
+  
+  const digits = String(number).split('');
+  digits.forEach(digit => {
+    const span = document.createElement('span');
+    span.classList.add('number');
+    span.textContent = digit;
+    numberContainer.appendChild(span);
+  });
+}
+
 
 async function drawStations() {
   await ymaps3.ready;
@@ -85,46 +99,116 @@ async function drawStations() {
     const markerElement = document.createElement("div");
     markerElement.className = "station-marker";
     markerElement.innerHTML = `
-      <div onclick="toggleStationWindow('${station.id}')">
+
+    <div onclick="toggleStationWindow('${station.id}')">
         <div class="umbrellas-count">${station.can_take}</div>
         <img src="/static/img/logos/umbrella-mini.svg">
-      </div>
-      <div class="station-info-window" id="${station.id}Window">
-        <div class="windowContent">
-
-          <div class="left-right-container">
-            <div class="left" style="background-image: url('${station.picture}');"></div>
-            <div class="right">
-              <div class="titleContainer">
-                <span class="number">№${station.id}</span>
-                <span class="title">${station.title}</span>
-                <span class="address">${station.address}</span>
-              </div>
-              <div class="btnContainer">
-                <button class="putTakeBtn"><i class="bi bi-arrow-up-circle"></i> ${station.can_take}</button>
-                <button class="putTakeBtn"><i class="bi bi-arrow-down-circle"></i> ${station.can_put}</button>
-                <button class="markerBtn" onclick="showRoute([${station.latitude}, ${station.longitude}])"><i class="bi bi-geo-alt-fill"></i> Маршрут</button>
-              </div>
-            </div>
-          </div>
-
-          <button class="take-umbrella-btn" onclick="takeUmbrella('${station.id}')"><i class="bi bi-umbrella-fill"></i> Взять зонт</button>
-          <button class="put-umbrella-btn" onclick="putUmbrella('${station.id}')" style="display: none;"><i class="bi bi-arrow-down"></i> Вернуть зонт</button>
-
+    </div>
+    <div class="station-info-window" id="${station.id}Window">
+      <div class="windowContent">
+        <div class="container">
+            <div class="header">
+                № <span id="number-container-${station.id}"></span>
         </div>
-      </div>
+            
+            
+            <div class="location-row">
+                <div>
+                    <div class="location"><a>${station.title}</a></div>
+                    <div class="location-text"><a>${station.address}</a></div>
+                </div>
+                
+                <div class="map-button" onclick="showRoute([${station.latitude}, ${station.longitude}])">
+                    <!-- SVG-иконка для карты -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin">
+                        <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Маршрут
+                </div>
+            </div>
+            
+            <div>
+                <div class="location"><a>Как найти:</a></div>
+                <div class="location-text"><a>от главного входа направо. У кофемашины.</a></div>
+            </div>
+            
+            <div>
+                <div class="location"><a>График работы:</a></div>
+                <div class="location-text"><a> пн - пт: 06:00 - 23:00 <span style="color: green;">открыто</span></a></div>
+                <div class="location-text"><a> cб - вс: <span style="color: rgb(128, 0, 0);">закрыто</span></a></div>
+            </div>
+            
+            <!-- Блок залога и доступности сбоку -->
+            <div class="deposit-availability-container">
+                <!-- Шкала с метками и крестиком -->
+                <div class="timeline">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-marker"></div> <!-- Первые сутки -->
+                    <div class="timeline-marker"></div> <!-- Вторые сутки -->
+                    <div class="timeline-marker"></div> <!-- Третьи сутки -->
+                </div>
+
+                <!-- Блок залога -->
+                <div class="deposit-box">
+                    <div class="deposit-header">залог 300 рублей</div>
+
+                    <div class="deposit-item">
+                        <span class="deposit-label">первые сутки</span>
+                        <span class="deposit-price-free">бесплатно</span>
+                    </div>
+                    <div class="deposit-item">
+                        <span class="deposit-label">вторые сутки</span>
+                        <span class="deposit-price">300 рублей</span>
+                    </div>
+                    <div class="deposit-item">
+                        <span class="deposit-label">третьи сутки</span>
+                        <span class="deposit-price">300 рублей</span>
+                    </div>
+                </div>      
+                <!-- Информация о зонтах -->
+                <div class="umbrella-info-new">
+                    <div class="umbrella-block">
+                        <div class="umbrella-row">
+                            <img src="/static/img/logos/umbrella-rounded-green.png" alt="Зонт" class="umbrella-icon green">
+                            <span class="umbrella-number">${station.can_take}</span>
+                        </div>
+                        <span class="umbrella-label">можно взять</span>
+                    </div>
+                    <div class="umbrella-block">
+                        <div class="umbrella-row">
+                            <img src="/static/img/logos/umbrella-rounded.png" alt="Зонт" class="umbrella-icon blue">
+                            <span class="umbrella-number">${station.can_put}</span>
+                        </div>
+                        <span class="umbrella-label">можно сдать</span>
+                    </div>
+                </div>  
+            </div>
+        
+
+            
+            <button class="take-umbrella-btn" onclick="takeUmbrella('${station.id}')"><i class="bi bi-umbrella-fill"></i> Взять зонт</button>
+            <button class="put-umbrella-btn" onclick="putUmbrella('${station.id}')" style="display: none;"><i class="bi bi-arrow-down"></i> Вернуть зонт</button>
+            
+            </div>
+    </div>
+
+
       `;
-
-    const marker = new YMapMarker(
-      {
-        coordinates: [station.longitude, station.latitude],
-      },
-      markerElement
-    );
-
-    map.addChild(marker);
+    
+      const marker = new YMapMarker(
+        {
+          coordinates: [station.longitude, station.latitude],
+        },
+        markerElement
+      );
+  
+      map.addChild(marker);
+  
+      // Вызываем функцию для генерации номера станции сразу после создания маркера
+      generateNumberCells(station.id, `number-container-${station.id}`);
+    }
   }
-}
 
 
 async function initMap() {
@@ -221,6 +305,7 @@ function loadStations() {
     },
   });
 }
+
 
 
 function loadActiveOrder() {

@@ -149,9 +149,9 @@ header .right {
   display: none;
 
   position: absolute;
-  background-color: white;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 1rem;
+  background-color: none;
+  /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 01);
+  border-radius: 2rem; */
 
   z-index: 2;
   cursor: default;
@@ -160,16 +160,16 @@ header .right {
 .station-marker .station-info-window {
   top: 0;
   right: 0;
-  width: 25rem;
-  height: 10rem;
+  width: 0rem;
+  height: 0rem;
   transform: translateX(102%);
 }
 
 #mainWindow {
-  bottom: 5.2rem;
+  bottom: 3rem;
   left: 50%;
   width: 95%;
-  height: 10rem;
+  height: auto;
   transform: translateX(-50%);
 }
 
@@ -684,3 +684,314 @@ input[type="search"]::-webkit-search-results-decoration {
   }
 }
 
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+.container {
+  width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff; /* Белый фон для всего контейнера */
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.header {
+  text-align: left;
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 6%;
+  color: #004eab;
+  font-family: "Arial"
+}
+.numbers {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.number {
+  color: #004eab; /* Синий текст */
+  font-family: "Arial";
+  padding-left: 9px;
+  padding-right: 9px;
+  padding-top: 1px;   /* Отступ сверху */
+  padding-bottom: 1px;
+  margin: 2px;
+  border-radius: 8px;
+  width: 30px;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid #004eab; /* Синяя рамка */
+  background-color: transparent; /* Прозрачный фон */
+}
+.location-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.location {
+  font-weight: bold;
+  font-size: 115%;
+  flex-grow: 1;
+  margin-top: 6%;
+}
+.location-text {
+  font-weight: none;
+  flex-grow: 1;
+  max-width: 250px;
+  font-size: 75%;
+}
+.map-button {
+  background-color: #E8EFF7;
+  color: black;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  gap: 4px; /* Расстояние между текстом и иконкой */
+  margin-top: 10px;
+}
+.map-button svg {
+  width: 18px;
+  height: 18px;
+}
+.time, .deposit, .availability {
+  margin-top: 6%;
+}
+.deposit-availability-container {
+  display: flex;
+  justify-content: flex;
+  align-items: flex;
+  background-color: #E8EFF7; /* Голубой фон для секции с залогом */
+  border-radius: 14px;
+  padding: 15px;
+  padding-top: 25px;
+  padding-bottom: 20px;
+  margin-top: 6%;
+  margin-left: -5.7%;
+  margin-right: -5.8%;
+}
+
+/* Новый стиль для timeline */
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100px; /* Высота всей линии */
+  margin-top: 40px;
+  margin-left: 15px;
+}
+
+.timeline-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #a0c4ff;
+  z-index: 1;
+}
+
+.timeline-marker {
+  position: relative;
+  background-color: white;
+  border: 0px solid #a0c4ff;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* Стили для треугольника */
+.timeline-marker:before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5.5px solid black;
+}
+
+/* Блок залога */
+.deposit-box {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+.deposit-header {
+  margin-left: -12%;
+  text-align: center;
+  background-color: white;
+  font-weight: bold;
+  color: #004EAB80;
+  font-size: 12px;
+  padding: 6px 0;
+  width: 112%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.deposit-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: none;
+}
+.deposit-label {
+  margin-left: 20px;
+  font-size: 11px;
+}
+.deposit-price {
+  background-color: #BED5ED;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 10px;
+  border-top: 10px;
+  font-weight: none;
+  color: black;
+  font-size: 11px;
+}
+.deposit-price-free {
+  background-color: #BED5ED;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 14px;
+  padding-right: 14px;
+  border-radius: 10px;
+  border-top: 10px;
+  font-weight: none;
+  color: black;
+  font-size: 11px;
+}
+
+/* Стили для зонтов */
+.availability {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.availability-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.availability-item:last-child {
+  margin-bottom: 0;
+}
+.availability-icon {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+.availability-icon.green {
+  border: 2px solid green;
+}
+.availability-icon.blue {
+  border: 2px solid #004eab;
+}
+.availability-text {
+  font-size: 13px;
+  font-weight: bold;
+  color: #000;
+}
+
+.availability-number {
+  margin-left: 5px;
+  font-size: 15px;
+}
+
+.take-umbrella-btn {
+  display: block;
+  width: 180px; /* Широкая кнопка */
+  padding: 8px;
+  background-color: #004eab;
+  color: white;
+  text-align: center;
+  border-radius: 10px; /* Более округленные края */
+  font-weight: bold;
+  text-decoration: none;
+  margin: 20px auto 0 auto; /* Центрируем кнопку и добавляем отступ */
+  font-size: 14px; /* Сделаем текст кнопки больше */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Добавим легкую тень */
+  cursor: pointer;
+}
+.put-umbrella-btn{
+display: block;
+  width: 180px; /* Широкая кнопка */
+  padding: 8px;
+  background-color: #004eab;
+  color: white;
+  text-align: center;
+  border-radius: 10px; /* Более округленные края */
+  font-weight: bold;
+  text-decoration: none;
+  margin: 20px auto 0 auto; /* Центрируем кнопку и добавляем отступ */
+  font-size: 14px; /* Сделаем текст кнопки больше */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Добавим легкую тень */
+  cursor: pointer;
+  }
+.button:hover {
+  background-color: #0056b3; /* Добавим эффект при наведении */
+}
+
+
+.umbrella-info-new {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 10px; /* Отступ между блоками */
+margin-top: 10px;
+margin-right: 30px;
+margin-left: 45px;
+
+}
+
+.umbrella-block {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 0px; /* Отступ между картинкой с цифрой и текстом */
+}
+
+.umbrella-row {
+display: flex;
+align-items: center; /* Выравнивание картинки с цифрой по центру вертикали */
+gap: 0px; /* Отступ между зонтом и числом */
+}
+
+.umbrella-icon {
+width: 42px; /* Размер иконки зонта уменьшен для размещения рядом с цифрой */
+height: 42px;
+}
+
+.umbrella-number {
+font-size: 19px; /* Размер числа зонтов */
+font-weight: bold;
+color: black;
+}
+
+.umbrella-label {
+font-size: 11px; /* Размер текста подписи */
+color: black;
+text-transform: none;
+text-align: center;
+line-height: 1.2;
+}
