@@ -161,14 +161,14 @@ header .links a:hover {
 }
 
 .first-section-content {
-  width: 100%;
+  width: 70%;
 }
 .first-section-content h1 {
   text-align: center;
   font-size: 6rem;
   color: #ff815b;
-  margin-bottom: 3%;
-  line-height: 1;
+  line-height: 3.5rem;
+  margin-bottom: 2rem;
 }
 .first-section-content h2 {
   text-align: center;
@@ -186,15 +186,15 @@ header .links a:hover {
   border: 1px solid #ff815b;
   border-radius: 1rem;
   padding: 0.5rem 3rem;
-  color: white;
-  background: #ff815b;
+  color: #ff815b;
+  background: transparent;
   font-size: 1.5rem;
   cursor: pointer;
   transition: background, color 0.3s;
 }
 .first-section-content .btns button:hover {
   background-color: white;
-  color: ff815b;
+  color: orangered;
 }
 
 /* Install station section */
@@ -405,7 +405,6 @@ header .links a:hover {
   font-size: 3rem;
   color: #ff815b;
   padding: 0 2rem;
-  
 }
 .place-ad-section .pluses {
   width: 50%;
@@ -471,23 +470,23 @@ header .links a:hover {
   padding: 1.5rem 2rem;
   display: flex;
   justify-content: space-between;
-  color: #ff815b;
-  font-size: 1.8rem;
+  color: white;
+  font-size: 1.3rem;
 }
 .place-ad-section .contact span:first-child {
   font-weight: bold;
-  color: white;
+  color: #ff815b;
 }
 .place-ad-section .contact i {
   position: relative;
   bottom: -2px;
 }
 .place-ad-section .contact a {
-  color: #ff815b;
+  color: white;
   text-decoration: none;
 }
 .place-ad-section .contact a:hover {
-  color: white;
+  color: #ff815b;
 }
 
 /* Footer */
@@ -510,11 +509,12 @@ footer .row.menu {
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
-  column-gap: 2rem;
+  -moz-column-gap: 2rem;
+       column-gap: 2rem;
   row-gap: 0.8rem;
 }
 footer .row.menu .item {
-  text-align: center;
+  text-align: left;
   font-size: 1rem;
   color: white;
   text-decoration: none;
@@ -527,7 +527,7 @@ footer .row.center {
   justify-content: left;
 }
 footer .row.center .item {
-  text-align: center;
+  text-align: left;
   font-size: 1rem;
   color: white;
   text-decoration: none;

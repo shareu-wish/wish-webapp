@@ -49,8 +49,9 @@ function toggleStationWindow(windowId) {
 
   if (isMobileScreen) {
     $("#mainWindow").html($(`#${windowId}Window`).html() + 
-        `<div class="close-station-info-window" onclick="$('#mainWindow').hide();activeStationWindow = null;$('#QRScannerButton').show();"><i class="bi bi-x-lg"></i></div>`);
+        `<div class="close-station-info-window" onclick="$('#mainWindow').hide();activeStationWindow = null;$('#QRScannerButton').show();$('.ymaps3x0--control.ymaps3x0--control__background').show();"><i class="bi bi-x-lg"></i></div>`);
     $("#mainWindow").show();
+    $(".ymaps3x0--control.ymaps3x0--control__background").hide();
   } else {
     $(`#${windowId}Window`).show();
   }
@@ -128,10 +129,12 @@ async function drawStations() {
                 </div>
             </div>
             
-            <div>
+           
+            ${station.information ? ` <div>
                 <div class="location"><a>Как найти:</a></div>
-                <div class="location-text"><a>от главного входа направо. У кофемашины.</a></div>
-            </div>
+                <div class="location-text"><a>${station.information}</a></div>
+            </div>` :""}
+
             
             <div>
                 <div class="location"><a>График работы:</a></div>

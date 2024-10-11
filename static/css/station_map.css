@@ -684,20 +684,18 @@ input[type="search"]::-webkit-search-results-decoration {
   }
 }
 
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
-}
+
 .container {
-  width: 400px;
-  margin: 20px auto;
+  width: 100%;
   padding: 20px;
   background-color: #fff; /* Белый фон для всего контейнера */
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+.station-marker .container{
+  min-width: 400px;
+}
+
 .header {
   text-align: left;
   font-size: 32px;
@@ -771,7 +769,6 @@ body {
   align-items: flex;
   background-color: #E8EFF7; /* Голубой фон для секции с залогом */
   border-radius: 14px;
-  padding: 15px;
   padding-top: 25px;
   padding-bottom: 20px;
   margin-top: 6%;
@@ -918,7 +915,7 @@ body {
   font-size: 15px;
 }
 
-.take-umbrella-btn {
+.take-umbrella-btn, .put-umbrella-btn {
   display: block;
   width: 180px; /* Широкая кнопка */
   padding: 8px;
@@ -933,22 +930,9 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Добавим легкую тень */
   cursor: pointer;
 }
-.put-umbrella-btn{
-display: block;
-  width: 180px; /* Широкая кнопка */
-  padding: 8px;
-  background-color: #004eab;
-  color: white;
-  text-align: center;
-  border-radius: 10px; /* Более округленные края */
-  font-weight: bold;
-  text-decoration: none;
-  margin: 20px auto 0 auto; /* Центрируем кнопку и добавляем отступ */
-  font-size: 14px; /* Сделаем текст кнопки больше */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Добавим легкую тень */
-  cursor: pointer;
-  }
-.button:hover {
+
+
+.take-umbrella-btn:hover, .put-umbrella-btn:hover {
   background-color: #0056b3; /* Добавим эффект при наведении */
 }
 
