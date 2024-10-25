@@ -218,6 +218,11 @@ header {
     text-align: center;
     font-size: 6rem;
     color: $orangeColor;
+<<<<<<< Updated upstream
+=======
+    line-height: 103%;
+    margin-bottom: 2rem;
+>>>>>>> Stashed changes
   }
 
   h2 {
@@ -236,8 +241,8 @@ header {
       border: 1px solid $orangeColor;
       border-radius: 1rem;
       padding: 0.5rem 3rem;
-      color: $orangeColor;
-      background: transparent;
+      color: white;
+      background: $orangeColor;
       font-size: 1.5rem;
       cursor: pointer;
       transition: background, color .3s;

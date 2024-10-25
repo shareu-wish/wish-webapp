@@ -167,6 +167,11 @@ header .links a:hover {
   text-align: center;
   font-size: 6rem;
   color: #ff815b;
+<<<<<<< Updated upstream
+=======
+  line-height: 103%;
+  margin-bottom: 2rem;
+>>>>>>> Stashed changes
 }
 .first-section-content h2 {
   text-align: center;
@@ -184,8 +189,8 @@ header .links a:hover {
   border: 1px solid #ff815b;
   border-radius: 1rem;
   padding: 0.5rem 3rem;
-  color: #ff815b;
-  background: transparent;
+  color: white;
+  background: #ff815b;
   font-size: 1.5rem;
   cursor: pointer;
   transition: background, color 0.3s;
@@ -506,7 +511,11 @@ footer .row {
 footer .row.menu {
   display: flex;
   flex-wrap: wrap;
+<<<<<<< Updated upstream
   justify-content: center;
+=======
+  justify-content: left;
+>>>>>>> Stashed changes
   column-gap: 2rem;
   row-gap: 0.8rem;
 }
@@ -830,4 +839,4 @@ footer .row.last {
   .place-ad-section .contact {
     width: 75%;
   }
-}/*# sourceMappingURL=business.css.map */
+}

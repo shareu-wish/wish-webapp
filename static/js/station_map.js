@@ -671,6 +671,38 @@ loadStations().then((data) => {
   initMap();
   initSearch(stations);
 });
+<<<<<<< Updated upstream
+=======
+
+function reInitStations() {
+  loadStations().then((data) => {
+    stations = data;
+    drawStations();
+    initSearch(stations);
+  });
+  loadActiveOrder();
+}
+
+
+function handleButtonScroll(buttonClass) {
+  const button = document.querySelector(buttonClass); // Выбираем кнопку по классу
+
+  document.addEventListener("scroll", function () {
+    const documentHeight = document.body.scrollHeight;
+    const currentScroll = window.scrollY + window.innerHeight;
+
+    if (currentScroll >= documentHeight - 100) {
+      // Пользователь почти долистал до конца
+      button.classList.add("unfixed");
+    } else {
+      // Кнопка фиксирована внизу
+      button.classList.remove("unfixed");
+    }
+  });
+}
+
+
+>>>>>>> Stashed changes
 // initMap();
 checkAuth()
 loadActiveOrder()
