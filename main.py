@@ -11,9 +11,12 @@ import station_controller
 import payments
 import json
 import vk_id_auth as vk_id
+from api.v1 import api_v1
 
 
 app = Flask(__name__)
+
+app.register_blueprint(api_v1, url_prefix='/api/v1/')
 
 
 def check_auth():
@@ -26,7 +29,7 @@ def check_auth():
 
     try:
         payload = jwt.decode(token, config.JWT_SECRET, algorithms=["HS256"])
-    except jwt.ExpiredSignatureError:
+    except (jwt.ExpiredSignatureError, jwt.exceptions.InvalidSignatureError, jwt.exceptions.DecodeError):
         return False
 
     return payload['id']

@@ -1,0 +1,139 @@
+openapi: 3.1.0
+info:
+  title: WISH - API v1
+  description: |-
+    [WISH](https://shareu.ru/) documentation (mainly for mobile applications)
+    
+
+  #termsOfService: http://swagger.io/terms/
+  contact:
+    email: markzum@yandex.ru
+  #license:
+  #  name: Apache 2.0
+  #  url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://shareu.ru/api/v1
+tags:
+  - name: auth
+    description: User authorization
+paths:
+  /auth/start-phone-verification/:
+    post:
+      tags:
+        - auth
+      summary: Start phone verification
+      description: Init flash-call for phone verification
+      operationId: authStartPhoneVerification
+      requestBody:
+        # description: Init flash-call for phone verification
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/startPhoneVerificationRequest'
+        required: true
+      responses:
+        '200':
+          description: The flash-call to user has been ordered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standartOKSchema'
+  
+  /auth/check-code:
+    post:
+      tags:
+        - auth
+      summary: Submit the code
+      description: If code is valid user will be created (if not exists)
+      operationId: authCheckCode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authCheckCodeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful check
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/authCheckCodeResponseVerified'
+                  - $ref: '#/components/schemas/authCheckCodeResponseNotVerified'
+              examples:
+                success:
+                  summary: Code is verified
+                  value:
+                    status: "ok"
+                    is_verified: true
+                    auth_token: "eyJhbGciOiJIUzI1NiIIInR5cCI6IkpXVCJ9.eyJpZCI6NywiZXhwIjoyMQM4NDIxMTY6fQ.oPmyN0ctSVWGZySvB5ZLfLeJr7maHvBlKY6XuaZBijw"
+                error:
+                  summary: Code is not verified
+                  value:
+                    status: "ok"
+                    is_verified: false
+                    reason: "timeout_exceeded"
+
+
+components:
+  schemas:
+    startPhoneVerificationRequest:
+      required:
+        - phone
+      type: object
+      properties:
+        phone:
+          type: string
+          examples: ['+7 800 555-35-35']
+    
+    standartOKSchema:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["ok"]
+    
+    authCheckCodeRequest:
+      required:
+        - phone
+        - code
+      type: object
+      properties:
+        phone:
+          type: string
+          examples: ['+7 800 555-35-35']
+        code:
+          type: string
+          examples: ['1234']
+    
+    authCheckCodeResponseVerified:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["ok"]
+        is_verified:
+          type: boolean
+          enum: [true]
+        auth_token:
+          type: string
+          examples: ["eyJhbGciOiJIUzI1NiIIInR5cCI6IkpXVCJ9.eyJpZCI6NywiZXhwIjoyMQM4NDIxMTY6fQ.oPmyN0ctSVWGZySvB5ZLfLeJr7maHvBlKY6XuaZBijw"]
+    
+    authCheckCodeResponseNotVerified:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["ok"]
+        is_verified:
+          type: boolean
+          enum: [false]
+        reason:
+          type: string
+          enum:
+            - "attempts_exceeded"
+            - "timeout_exceeded"
+            - null
+
