@@ -17,6 +17,10 @@ servers:
 tags:
   - name: auth
     description: User authorization
+  - name: stations
+    description: Stations
+  - name: orders
+    description: Actions with orders
 paths:
   /auth/start-phone-verification/:
     post:
@@ -76,8 +80,105 @@ paths:
                     is_verified: false
                     reason: "timeout_exceeded"
 
+  /stations/get-all-stations/:
+    get:
+      tags:
+        - stations
+      summary: Get all stations with all data
+      description: Get all stations with all data
+      responses:
+        '200':
+          description: Successful check
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAllStationsResponse'
+  
+
+  /orders/take-umbrella/:
+    post:
+      tags:
+        - orders
+      summary: Take umbrella
+      security: 
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/takeUmbrellaRequest'
+        required: true
+      responses:
+        '200':
+          description: Returned payment method
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/takeUmbrellaResponseSuccess'
+                  - $ref: '#/components/schemas/takeUmbrellaResponseError'
+              examples:
+                success:
+                  summary: Deposit is taken / manual is required
+                  value:
+                    status: "ok"
+                    payment_mode: "auto"
+                    deposit_amount: 149
+                    user_id: 1234
+                    station_id: 23
+                error:
+                  summary: The deposit cannot be taken
+                  value:
+                    status: "error"
+                    message: "You have an active order"
+  
+  /orders/put-umbrella/:
+    post:
+      tags:
+        - orders
+      summary: Put umbrella
+      security: 
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/takeUmbrellaRequest'
+        required: true
+      responses:
+        '200':
+          description: Returned payment method
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/putUmbrellaResponseSuccess'
+                  - $ref: '#/components/schemas/takeUmbrellaResponseError'
+              examples:
+                success:
+                  summary: The umbrella return slot is open
+                  value:
+                    status: "ok"
+                    slot: 8
+                    order_id: 25387
+                error:
+                  summary: Error
+                  value:
+                    status: "error"
+                    message: "You have no active orders"
+
+
+
+
+
 
 components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     startPhoneVerificationRequest:
       required:
@@ -86,7 +187,8 @@ components:
       properties:
         phone:
           type: string
-          examples: ['+7 800 555-35-35']
+          description: Spaces, dashes, and parentheses can be used. Be sure to use +7
+          examples: ['+7 (800) 555-35-35']
     
     standartOKSchema:
       type: object
@@ -103,7 +205,8 @@ components:
       properties:
         phone:
           type: string
-          examples: ['+7 800 555-35-35']
+          description: Spaces, dashes, and parentheses can be used. Be sure to use +7
+          examples: ['+7 (800) 555-35-35']
         code:
           type: string
           examples: ['1234']
@@ -120,7 +223,7 @@ components:
         auth_token:
           type: string
           examples: ["eyJhbGciOiJIUzI1NiIIInR5cCI6IkpXVCJ9.eyJpZCI6NywiZXhwIjoyMQM4NDIxMTY6fQ.oPmyN0ctSVWGZySvB5ZLfLeJr7maHvBlKY6XuaZBijw"]
-    
+
     authCheckCodeResponseNotVerified:
       type: object
       properties:
@@ -136,4 +239,140 @@ components:
             - "attempts_exceeded"
             - "timeout_exceeded"
             - null
+    
+
+    stationObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          examples: [32]
+        title:
+          type: string
+          examples: ['Какое-то кафе']
+        address:
+          type: string
+          examples: ['ул. Пушкина, д. Колотушкина']
+        latitude:
+          type: number
+          examples: [55.755863]
+        longitude:
+          type: number
+          examples: [37.6177]
+        opening_hours:
+          type: array
+          items:
+            type: object
+            properties:
+              mon:
+                type: object
+                description: may be mon/tue/wed/thu/fri/sat/sun
+                properties: 
+                  start:
+                    type: string
+                    examples: ["9:00"]
+                  stop:
+                    type: string
+                    examples: ["21:00"]
+                  break_start:
+                    type: string
+                    examples: ["13:30"]
+                  break_stop:
+                    type: string
+                    examples: ["14:00"]
+              tue:
+                type: object
+                description: may be mon/tue/wed/thu/fri/sat/sun
+                properties: 
+                  start:
+                    type: string
+                    examples: ["10:00"]
+                  stop:
+                    type: string
+                    examples: ["20:00"]
+              sun:
+                type: string
+                examples: [null]
+        capacity:
+          description: How many umbrellas can fit in the station at all
+          type: integer
+          examples: [20]
+        can_put:
+          description: How many umbrellas can fit in the station now
+          type: integer
+          examples: [6]
+        can_take:
+          description: How many umbrellas are there in the station now
+          type: integer
+          examples: [14]
+        information:
+          description: Additional information how to find the station
+          type: string
+          examples: ["Пойдите туда, не знаю куда"]
+        state:
+          description: |-
+            `0` - works fine \
+            `1` - does not work
+          type: integer
+          examples: [0]
+    
+    getAllStationsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/stationObject'
+    
+
+    takeUmbrellaRequest:
+      type: object
+      properties: 
+        station_id:
+          type: integer
+          examples: [23]
+
+    takeUmbrellaResponseSuccess:
+      type: object
+      properties: 
+        status:
+          type: string
+          emum: ["ok"]
+        payment_mode:
+          description: |- 
+            `auto` - the deposit is automatically debited \
+            `manual` - a manual deposit is required
+          type: string
+          enum: ["auto", "manual"]
+        deposit_amount:
+          type: integer
+          examples: [149]
+        user_id:
+          type: integer
+          examples: [1234]
+        station_id:
+          type: integer
+          examples: [23]
+    
+    takeUmbrellaResponseError:
+      type: object
+      properties: 
+        status:
+          type: string
+          emum: ["error"]
+        message:
+          type: string
+          examples: ["Unauthorized"]
+    
+
+    putUmbrellaResponseSuccess:
+      type: object
+      properties: 
+        status:
+          type: string
+          emum: ["ok"]
+        slot:
+          description: The slot that will open to return the umbrella
+          type: integer
+          examples: [8]
+        order_id:
+          type: integer
+          examples: [25387]
 
