@@ -4,3 +4,4 @@ PyJWT==2.8.0
 waitress==3.0.0
 psycopg2==2.9.9
 paho-mqtt==2.1.0
+flask-swagger-ui==4.11.1
