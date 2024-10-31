@@ -13,7 +13,7 @@ info:
   #  url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
 servers:
-  - url: http://192.168.10.104:5000/api/v1
+  - url: https://shareu.ru/api/v1
 tags:
   - name: auth
     description: User authorization
