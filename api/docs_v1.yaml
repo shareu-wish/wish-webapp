@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.3
 info:
   title: WISH - API v1
   description: |-
@@ -13,7 +13,7 @@ info:
   #  url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
 servers:
-  - url: https://shareu.ru/api/v1
+  - url: http://192.168.10.104:5000/api/v1
 tags:
   - name: auth
     description: User authorization
@@ -21,8 +21,10 @@ tags:
     description: Stations
   - name: orders
     description: Actions with orders
+  - name: profile
+    description: User information
 paths:
-  /auth/start-phone-verification/:
+  /auth/start-phone-verification:
     post:
       tags:
         - auth
@@ -80,7 +82,7 @@ paths:
                     is_verified: false
                     reason: "timeout_exceeded"
 
-  /stations/get-all-stations/:
+  /stations/get-all-stations:
     get:
       tags:
         - stations
@@ -88,14 +90,14 @@ paths:
       description: Get all stations with all data
       responses:
         '200':
-          description: Successful check
+          description: Successful
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/getAllStationsResponse'
   
 
-  /orders/take-umbrella/:
+  /orders/take-umbrella:
     post:
       tags:
         - orders
@@ -132,7 +134,7 @@ paths:
                     status: "error"
                     message: "You have an active order"
   
-  /orders/put-umbrella/:
+  /orders/put-umbrella:
     post:
       tags:
         - orders
@@ -167,6 +169,124 @@ paths:
                     status: "error"
                     message: "You have no active orders"
 
+  /orders/get-order-status:
+    get:
+      tags:
+        - orders
+      summary: Get current order status
+      description: Returns the status of the user's current order
+      security: 
+        - Bearer: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/getOrderStatusResponseStationAction'
+                  - $ref: '#/components/schemas/getOrderStatusResponseOtherActions'
+              examples:
+                success:
+                  summary: Station opened
+                  value:
+                    status: "ok"
+                    order_status: "station_opened_to_take"
+                    slot: 8
+                success2:
+                  summary: Other statuses
+                  value:
+                    status: "ok"
+                    order_status: "closed_successfully"
+
+  /orders/feedback:
+    post:
+      tags:
+        - orders
+      summary: Leave a feedback
+      description: Leave a feedback for the last order
+      security: 
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ordersFeedbackRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standartOKSchema'
+
+  /profile/get-user-info:
+    get:
+      tags:
+        - profile
+      summary: Get user info
+      security: 
+        - Bearer: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUserInfoResponse'
+
+  /profile/update-user-info:
+    post:
+      tags:
+        - profile
+      summary: Update user info
+      security: 
+        - Bearer: []
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateUserInfoRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standartOKSchema'
+
+  /profile/get-active-order:
+    get:
+      tags:
+        - profile
+      summary: Get user's active order
+      security: 
+        - Bearer: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profileGetActiveOrderResponse'
+  
+  /profile/get-processed-orders:
+    get:
+      tags:
+        - profile
+      summary: Get all processed user orders
+      security: 
+        - Bearer: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profileGetProcessedOrdersResponse'
+
 
 
 
@@ -188,7 +308,7 @@ components:
         phone:
           type: string
           description: Spaces, dashes, and parentheses can be used. Be sure to use +7
-          examples: ['+7 (800) 555-35-35']
+          example: '+7 (800) 555-35-35'
     
     standartOKSchema:
       type: object
@@ -206,10 +326,10 @@ components:
         phone:
           type: string
           description: Spaces, dashes, and parentheses can be used. Be sure to use +7
-          examples: ['+7 (800) 555-35-35']
+          example: '+7 (800) 555-35-35'
         code:
           type: string
-          examples: ['1234']
+          example: '1234'
     
     authCheckCodeResponseVerified:
       type: object
@@ -222,7 +342,7 @@ components:
           enum: [true]
         auth_token:
           type: string
-          examples: ["eyJhbGciOiJIUzI1NiIIInR5cCI6IkpXVCJ9.eyJpZCI6NywiZXhwIjoyMQM4NDIxMTY6fQ.oPmyN0ctSVWGZySvB5ZLfLeJr7maHvBlKY6XuaZBijw"]
+          example: "eyJhbGciOiJIUzI1NiIIInR5cCI6IkpXVCJ9.eyJpZCI6NywiZXhwIjoyMQM4NDIxMTY6fQ.oPmyN0ctSVWGZySvB5ZLfLeJr7maHvBlKY6XuaZBijw"
 
     authCheckCodeResponseNotVerified:
       type: object
@@ -246,19 +366,19 @@ components:
       properties:
         id:
           type: integer
-          examples: [32]
+          example: 32
         title:
           type: string
-          examples: ['Какое-то кафе']
+          example: 'Какое-то кафе'
         address:
           type: string
-          examples: ['ул. Пушкина, д. Колотушкина']
+          example: 'ул. Пушкина, д. Колотушкина'
         latitude:
           type: number
-          examples: [55.755863]
+          example: 55.755863
         longitude:
           type: number
-          examples: [37.6177]
+          example: 37.6177
         opening_hours:
           type: array
           items:
@@ -270,51 +390,51 @@ components:
                 properties: 
                   start:
                     type: string
-                    examples: ["9:00"]
+                    example: "9:00"
                   stop:
                     type: string
-                    examples: ["21:00"]
+                    example: "21:00"
                   break_start:
                     type: string
-                    examples: ["13:30"]
+                    example: "13:30"
                   break_stop:
                     type: string
-                    examples: ["14:00"]
+                    example: "14:00"
               tue:
                 type: object
                 description: may be mon/tue/wed/thu/fri/sat/sun
                 properties: 
                   start:
                     type: string
-                    examples: ["10:00"]
+                    example: "10:00"
                   stop:
                     type: string
-                    examples: ["20:00"]
+                    example: "20:00"
               sun:
                 type: string
-                examples: [null]
+                example: null
         capacity:
           description: How many umbrellas can fit in the station at all
           type: integer
-          examples: [20]
+          example: 20
         can_put:
           description: How many umbrellas can fit in the station now
           type: integer
-          examples: [6]
+          example: 6
         can_take:
           description: How many umbrellas are there in the station now
           type: integer
-          examples: [14]
+          example: 14
         information:
           description: Additional information how to find the station
           type: string
-          examples: ["Пойдите туда, не знаю куда"]
+          example: "Пойдите туда, не знаю куда"
         state:
           description: |-
             `0` - works fine \
             `1` - does not work
           type: integer
-          examples: [0]
+          example: 0
     
     getAllStationsResponse:
       type: array
@@ -327,14 +447,14 @@ components:
       properties: 
         station_id:
           type: integer
-          examples: [23]
+          example: 23
 
     takeUmbrellaResponseSuccess:
       type: object
       properties: 
         status:
           type: string
-          emum: ["ok"]
+          enum: ["ok"]
         payment_mode:
           description: |- 
             `auto` - the deposit is automatically debited \
@@ -343,23 +463,23 @@ components:
           enum: ["auto", "manual"]
         deposit_amount:
           type: integer
-          examples: [149]
+          example: 149
         user_id:
           type: integer
-          examples: [1234]
+          example: 1234
         station_id:
           type: integer
-          examples: [23]
+          example: 23
     
     takeUmbrellaResponseError:
       type: object
       properties: 
         status:
           type: string
-          emum: ["error"]
+          enum: ["error"]
         message:
           type: string
-          examples: ["Unauthorized"]
+          example: "Unauthorized"
     
 
     putUmbrellaResponseSuccess:
@@ -367,12 +487,204 @@ components:
       properties: 
         status:
           type: string
-          emum: ["ok"]
+          enum: ["ok"]
         slot:
           description: The slot that will open to return the umbrella
           type: integer
-          examples: [8]
+          example: 8
         order_id:
           type: integer
-          examples: [25387]
+          example: 25387
+    
 
+    getOrderStatusResponseStationAction:
+      type: object
+      properties: 
+        status:
+          type: string
+          enum: ["ok"]
+        order_status:
+          description: |-
+            * `station_opened_to_take` - the slot is open for taking an umbrella
+            * `station_opened_to_put` - the slot is open to return the umbrella
+          type: integer
+          enum: ["station_opened_to_take", "station_opened_to_put"]
+        slot:
+          type: integer
+          example: 8
+  
+    getOrderStatusResponseOtherActions:
+      type: object
+      properties: 
+        status:
+          type: string
+          enum: ["ok"]
+        order_status:
+          description: |-
+            * `in_the_hands` - the umbrella has been taken and is in the user's possession
+            * `closed_successfully` - the umbrella is returned, the order is closed
+            * `timeout_exceeded` - the waiting time for taking the umbrella has expired
+            * `bank_error` - bank error, payment failed
+            * `unknown` - something went wrong
+          type: integer
+          enum: ["in_the_hands", "closed_successfully", "timeout_exceeded", "bank_error", "unknown"]
+    
+    
+    ordersFeedbackRequest:
+      type: object
+      properties: 
+        rate:
+          type: integer
+          enum: [1, 2, 3, 4, 5]
+          example: 5
+        text:
+          description: may be null
+          type: string
+          example: "Все было круто!"
+    
+
+    getUserInfoResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1234
+        phone:
+          type: string
+          example: '+78005553535'
+        name:
+          type: string
+          example: 'Иван'
+        gender:
+          description: |- 
+            `1` - man \
+            `2` - woman
+          type: integer
+          enum: [1, 2, 0]
+        age:
+          type: integer
+          example: 34
+        payment_card_last_four:
+          type: integer
+          example: 1337
+    
+
+    updateUserInfoRequest:
+      type: object
+      properties: 
+        name:
+          type: string
+          example: "Марина"
+        gender:
+          description: |-
+            `1` - man \
+            `2` - woman
+          type: integer
+          enum: [1, 2, 0]
+          example: 2
+        age:
+          type: integer
+          example: 16
+    
+
+    activeOrderObject:
+      type: object
+      properties: 
+        id:
+          type: integer
+          example: 234
+        state:
+          description: |-
+            Order status: \
+            `0` - the order is closed (standard) \
+            `1` - the order is open \
+            `2` - the order is closed because the user did not take the umbrella during \
+            `3` - the order is closed due to payment problems \
+            `4` - the order is closed due to an internal error (for example, there are no free umbrellas)
+          type: integer
+        datetime_take:
+          description: Date and time of taking the umbrella
+          type: string
+          example: "2024-07-19 12:14:23.684691+03"
+        station_take:
+          description: ID of the station from which the umbrella was taken
+          type: integer
+          example: 23
+        slot_take:
+          description: The slot number at the station where the umbrella was taken from
+          type: integer
+          example: 4
+        deposit_tx_id:
+          description: ID of the transaction in which the deposit was made
+          type: string
+          example: "2482965031"
+
+    orderObject:
+      type: object
+      properties: 
+        id:
+          type: integer
+          example: 234
+        state:
+          description: |-
+            Order status: \
+            `0` - the order is closed (standard) \
+            `1` - the order is open \
+            `2` - the order is closed because the user did not take the umbrella during \
+            `3` - the order is closed due to payment problems \
+            `4` - the order is closed due to an internal error (for example, there are no free umbrellas)
+          type: integer
+        datetime_take:
+          description: Date and time of taking the umbrella
+          type: string
+          example: "2024-07-19 12:14:23.684691+03"
+        datetime_put:
+          description: Date and time of umbrella return
+          type: string
+          example: "2024-07-19 18:15:20.684691+03"
+        station_take:
+          description: ID of the station from which the umbrella was taken
+          type: integer
+          example: 23
+        station_put:
+          description: ID of the station where the umbrella was placed
+          type: integer
+          example: 24
+        slot_take:
+          description: The slot number at the station where the umbrella was taken from
+          type: integer
+          example: 4
+        slot_put:
+          description: The number of the slot at the station where the umbrella was placed
+          type: integer
+          example: 9
+        station_take_address:
+          description: The address of the station where the umbrella was taken from
+          type: string
+          example: "Москва, ул. Пушкина, дом Колотушкина"
+        station_put_address:
+          description: The address of the station where the umbrella was returned
+          type: string
+          example: "Москва, ул. Пушкина, дом 44"
+
+
+    profileGetActiveOrderResponse: 
+      type: object
+      properties: 
+        status:
+          type: string
+          enum: ["ok", "error"]
+        order:
+          $ref: '#/components/schemas/activeOrderObject'
+    
+
+    profileGetProcessedOrdersResponse: 
+      type: object
+      properties: 
+        status:
+          type: string
+          enum: ["ok", "error"]
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/orderObject'

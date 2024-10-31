@@ -12,11 +12,28 @@ import payments
 import json
 import vk_id_auth as vk_id
 from api.v1 import api_v1
+from flask_swagger_ui import get_swaggerui_blueprint
 
 
 app = Flask(__name__)
 
 app.register_blueprint(api_v1, url_prefix='/api/v1/')
+
+
+# Swagger UI
+@app.route('/dev/docs_v1.yaml')
+def get_swagger_file():
+    return send_from_directory("api", "docs_v1.yaml")
+
+SWAGGER_URL = "/dev/docs"
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL, # URL для доступа к Swagger UI
+    "/dev/docs_v1.yaml", # Путь к YAML файлу (URL)
+    config={
+        "app_name": "WISH"
+    }
+)
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 
 def check_auth():
@@ -439,7 +456,7 @@ def profile_update_user_info():
 def get_active_order():
     user_id = check_auth()
     if not user_id:
-        return {"status": "ok", "order": None}
+        return {"status": "error", "order": None}
 
     order = db_helper.get_active_order(user_id)
     if not order:
@@ -451,7 +468,7 @@ def get_active_order():
 def get_processed_orders():
     user_id = check_auth()
     if not user_id:
-        return {"status": "ok", "orders": []}
+        return {"status": "error", "orders": []}
 
     orders = db_helper.get_processed_orders(user_id)
     if not orders:
