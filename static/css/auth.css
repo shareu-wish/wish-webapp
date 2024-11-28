@@ -100,11 +100,11 @@ body {
 
 /* Pre verification */
 /* .textContainer {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 0.5rem;
-} */
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  } */
 
 #yourPhone {
   font-weight: bold;
@@ -119,8 +119,8 @@ body {
 }
 
 /* .preVerifyPhoneContainer p {
-  font-size: 0.8rem;
-} */
+    font-size: 0.8rem;
+  } */
 
 .preVerifyPhoneContainer a {
   font-size: 0.8rem;
@@ -128,7 +128,8 @@ body {
   color: #004daf;
 }
 
-.startVerificationBtn, .changePhoneBtn {
+.startVerificationBtn,
+.changePhoneBtn {
   font-size: 0.9rem;
   padding: 0.5rem 1rem;
 }
@@ -227,7 +228,6 @@ input[type="number"] {
   pointer-events: none;
 }
 
-
 /* Checkbox */
 .checkbox-rect {
   margin-top: 0.6rem;
@@ -282,7 +282,6 @@ input[type="number"] {
   background: #004daf;
   box-shadow: 0 0 0 1px #004daf;
 }
-
 
 .divider {
   width: 100%;
