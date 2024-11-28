@@ -1946,6 +1946,9 @@ footer {
 
 @media (max-width: 768px) {
 
+  .tar-glav {
+    margin-top: 10px;
+  }
 
   .cards{
     display: table-column;
@@ -2004,10 +2007,15 @@ footer {
   margin-top: 150px;
 }
 
- .btn-left, .btn-right{
+ .btn-left{
   max-width: 300px;
   margin-top: 30px;
  }
+
+
+.btn-right{
+  max-width: 300px;
+  margin-top: 0px;
 }
 
 
@@ -2152,4 +2160,5 @@ footer {
   margin-left: 0;
   margin-top: -40px;
   opacity: 50%;
+}
 }
