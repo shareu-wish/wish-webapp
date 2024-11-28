@@ -509,7 +509,8 @@ footer .row.menu {
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
-  column-gap: 2rem;
+  -moz-column-gap: 2rem;
+       column-gap: 2rem;
   row-gap: 0.8rem;
 }
 footer .row.menu .item {
@@ -832,4 +833,4 @@ footer .row.last {
   .place-ad-section .contact {
     width: 75%;
   }
-}
+}/*# sourceMappingURL=business.css.map */

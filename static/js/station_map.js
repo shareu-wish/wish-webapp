@@ -149,24 +149,19 @@ async function drawStations() {
                     <div class="timeline-line"></div>
                     <div class="timeline-marker"></div> <!-- Первые сутки -->
                     <div class="timeline-marker"></div> <!-- Вторые сутки -->
-                    <div class="timeline-marker"></div> <!-- Третьи сутки -->
                 </div>
 
                 <!-- Блок залога -->
                 <div class="deposit-box">
-                    <div class="deposit-header">залог 300 рублей</div>
-
+                    <div class="deposit-header">цена старта:</div>
                     <div class="deposit-item">
-                        <span class="deposit-label">первые сутки</span>
-                        <span class="deposit-price-free">бесплатно</span>
+                    <div class="deposit-item">
+                        <span class="deposit-label">старт с подпиской</span>
+                        <span class="deposit-price">0 рублей</span>
                     </div>
                     <div class="deposit-item">
-                        <span class="deposit-label">вторые сутки</span>
-                        <span class="deposit-price">300 рублей</span>
-                    </div>
-                    <div class="deposit-item">
-                        <span class="deposit-label">третьи сутки</span>
-                        <span class="deposit-price">300 рублей</span>
+                        <span class="deposit-label">старт без подписки</span>
+                        <span class="deposit-price">149 рублей</span>
                     </div>
                 </div>      
                 <!-- Информация о зонтах -->
