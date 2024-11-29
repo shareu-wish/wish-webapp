@@ -13,6 +13,7 @@ import json
 import vk_id_auth as vk_id
 from api.v1 import api_v1
 from flask_swagger_ui import get_swaggerui_blueprint
+import requests
 
 
 app = Flask(__name__)
@@ -50,6 +51,17 @@ def check_auth():
         return False
 
     return payload['id']
+
+
+def transform_auth():
+    """
+    Перенести authToken из cookies в Bearer Authorization header
+    """
+    token = request.cookies.get("authToken")
+    if not token:
+        return {}
+
+    return {"Authorization": f"Bearer {token}"}
 
 
 # Главная страница
@@ -451,6 +463,11 @@ def profile_update_user_info():
     db_helper.update_user_info(user_id, data)
     
     return {"status": "ok"}
+
+@app.route('/profile/get-subscription-info')
+def profile_get_subscription_info():
+    url = config.API_URL + "/api/v1/subscription/get-subscription-info"
+    return requests.get(url, headers=transform_auth()).json()
 
 @app.route("/profile/get-active-order")
 def get_active_order():

@@ -23,6 +23,8 @@ tags:
     description: Actions with orders
   - name: profile
     description: User information
+  - name: subscription
+    description: Subscription
 paths:
   /auth/start-phone-verification:
     post:
@@ -286,6 +288,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/profileGetProcessedOrdersResponse'
+
+
+  /subscription/get-subscription-info:
+    get:
+      tags:
+        - subscription
+      summary: Get user's subscription info
+      security: 
+        - Bearer: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getSubscriptionInfoResponse'
 
 
 
@@ -688,3 +706,35 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/orderObject'
+    
+
+    getSubscriptionInfoResponse: 
+      type: object
+      properties: 
+        status:
+          type: string
+          enum: ["ok", "error"]
+        subscription:
+          type: object
+          description: May be None if user has never had a subscription
+          properties:
+            owner:
+              type: integer
+              example: 111
+              description: ID of the person who pays for the subscription
+            family_members:
+              type: array
+              items:
+                type: integer
+                description: ID of the family members. Owner's ID should always be in the list
+              example: [111, 222, 333]
+            until:
+              type: string
+              example: "2024-07-19 18:15:20.684691+03"
+              description: The date and time until which the subscription is valid
+            is_active:
+              type: boolean
+              example: true
+              description: |-
+                `true` - the subscription is active \
+                `false` - the subscription is not active

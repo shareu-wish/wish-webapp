@@ -270,3 +270,15 @@ def profile_get_processed_orders():
         orders[i]['station_put_address'] = db_helper.get_station(orders[i]['station_put'])['address']
 
     return {"status": "ok", "orders": orders}
+
+
+# Subscription
+@api_v1.route("/subscription/get-subscription-info")
+def get_subscription_info():
+    user_id = check_auth()
+    if not user_id:
+        return {"status": "error", "message": "Unauthorized"}
+
+    subscription = db_helper.get_subscription(user_id)
+
+    return {"status": "ok", "subscription": subscription}

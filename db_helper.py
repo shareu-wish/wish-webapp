@@ -1,6 +1,7 @@
 import psycopg2
 import config
 from threading import Timer
+import datetime as dt
 from datetime import datetime
 
 
@@ -834,6 +835,39 @@ def has_user_feedback(user_id: int, order_id: int) -> bool:
     return data is not None
 
 
+""" Subscription """
+def get_subscription(user_id: int) -> dict | None:
+    """
+    Получить подписку пользователя
+
+    :param user_id: ID пользователя
+    :return: dict с данными о подписке\n
+        - *owner*: ID пользователя, оплачивающего подписку
+        - *family_members*: ID пользователей членов семьи
+        - *until*: Дата и время, до которых действует подписка
+        - *is_active*: Дата и время окончания подписки
+    """
+
+    cur = conn.cursor()
+    # Find subscription where user_id in family_members array
+    cur.execute("SELECT owner, family_members, until FROM subscriptions WHERE %s = ANY(family_members)", (user_id,))
+    data = cur.fetchone()
+    cur.close()
+
+    if data is None:
+        return None
+
+    res = {
+        "owner": data[0],
+        "family_members": data[1],
+        "until": data[2],
+        "is_active": data[2] > datetime.now().astimezone(tz=dt.timezone(dt.timedelta(seconds=10800)))
+    }
+
+    return res
+
+
+
 """ Other """
 
 if not config.DEBUG:
@@ -841,4 +875,4 @@ if not config.DEBUG:
 
 
 if __name__ == "__main__":
-    print(get_all_station_lock_timeouts())
+    print(get_subscription(7))

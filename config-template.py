@@ -1,4 +1,5 @@
 # Общие настройки
+API_URL="http://localhost"
 TIME_TO_TAKE_UMBRELLA = 30
 DEPOSIT_AMOUNT=300
 
