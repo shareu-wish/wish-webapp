@@ -836,21 +836,53 @@ def has_user_feedback(user_id: int, order_id: int) -> bool:
 
 
 """ Subscription """
-def get_subscription(user_id: int) -> dict | None:
+def get_user_subscription(user_id: int) -> dict | None:
     """
     Получить подписку пользователя
 
     :param user_id: ID пользователя
     :return: dict с данными о подписке\n
+        - *id*: ID подписки
         - *owner*: ID пользователя, оплачивающего подписку
         - *family_members*: ID пользователей членов семьи
         - *until*: Дата и время, до которых действует подписка
-        - *is_active*: Дата и время окончания подписки
+        - *is_active*: Действует ли сейчас подписка
     """
 
     cur = conn.cursor()
     # Find subscription where user_id in family_members array
-    cur.execute("SELECT owner, family_members, until FROM subscriptions WHERE %s = ANY(family_members)", (user_id,))
+    cur.execute("SELECT id, owner, family_members, until FROM subscriptions WHERE %s = ANY(family_members)", (user_id,))
+    data = cur.fetchone()
+    cur.close()
+
+    if data is None:
+        return None
+
+    res = {
+        "id": data[0],
+        "owner": data[1],
+        "family_members": data[2],
+        "until": data[3],
+        "is_active": data[3] > datetime.now().astimezone(tz=dt.timezone(dt.timedelta(seconds=10800)))
+    }
+
+    return res
+
+
+def get_subscription(subscription_id: int) -> dict | None:
+    """
+    Получить подписку по ID
+
+    :param subscription_id: ID подписки
+    :return: dict с данными о подписке\n
+        - *owner*: ID пользователя, оплачивающего подписку
+        - *family_members*: ID пользователей членов семьи
+        - *until*: Дата и время, до которых действует подписка
+        - *is_active*: Действует ли сейчас подписка
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT owner, family_members, until FROM subscriptions WHERE id = %s", (subscription_id,))
     data = cur.fetchone()
     cur.close()
 
@@ -866,6 +898,85 @@ def get_subscription(user_id: int) -> dict | None:
 
     return res
 
+
+def create_subscription_invitation(user_id: int, recipient_id: int) -> None:
+    """
+    Создать приглашение в подписку
+
+    :param user_id: ID пользователя, который пригласил в свою подписку
+    :param recipient_id: ID пользователя, который приглашается
+    """
+
+    # get subscription_id by user_id
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM subscriptions WHERE owner = %s", (user_id,))
+    data = cur.fetchone()
+    cur.close()
+    if data is None:
+        return
+    subscription_id = data[0]
+    
+    # insert data in subscription_invitations
+    cur = conn.cursor()
+    cur.execute("INSERT INTO subscription_invitations (subscription_id, owner, recipient) VALUES (%s, %s, %s)", (subscription_id, user_id, recipient_id))
+    conn.commit()
+    cur.close()
+
+
+def find_user_subscription_invitations(user_id: int) -> list[dict]:
+    """
+    Найти приглашения в подписку
+
+    :param user_id: ID пользователя, которого приглашают
+    :return: Список приглашений в подписку\n
+        - *id*: ID приглашения
+        - *subscription_id*: ID подписки
+        - *owner*: ID пользователя, который пригласил в свою подписку
+        - *recipient*: ID пользователя, который приглашается
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, subscription_id, owner, recipient FROM subscription_invitations WHERE recipient = %s", (user_id,))
+    data = cur.fetchall()
+    cur.close()
+
+    res = []
+    for invitation in data:
+        res.append({
+            "id": invitation[0],
+            "subscription_id": invitation[1],
+            "owner": invitation[2],
+            "recipient": invitation[3]
+        })
+
+    return res
+
+
+def find_subscription_invitations_by_subscription_id(subscription_id: int) -> list[dict]:
+    """
+    Найти приглашения в подписку
+
+    :param subscription_id: ID подписки
+    :return: Список приглашений в подписку\n
+        - *id*: ID приглашения
+        - *owner*: ID пользователя, который пригласил в свою подписку
+        - *recipient*: ID пользователя, который приглашается
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, owner, recipient FROM subscription_invitations WHERE subscription_id = %s", (subscription_id,))
+    data = cur.fetchall()
+    cur.close()
+
+    res = []
+    for invitation in data:
+        res.append({
+            "id": invitation[0],
+            "owner": invitation[1],
+            "recipient": invitation[2]
+        })
+
+    return res
 
 
 """ Other """

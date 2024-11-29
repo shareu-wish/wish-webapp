@@ -279,6 +279,50 @@ def get_subscription_info():
     if not user_id:
         return {"status": "error", "message": "Unauthorized"}
 
-    subscription = db_helper.get_subscription(user_id)
+    subscription = db_helper.get_user_subscription(user_id)
+
+    users = []
+    for user_id in subscription['family_members']:
+        user = {"id": user_id}
+        user_db = db_helper.get_user(user_id)
+        user["phone"] = user_db['phone']
+        user["name"] = user_db['name']
+        users.append(user)
+    subscription['family_members'] = users
 
     return {"status": "ok", "subscription": subscription}
+
+
+@api_v1.route("/subscription/send-invitation", methods=["POST"])
+def subscription_send_invitation():
+    user_id = check_auth()
+    if not user_id:
+        return {"status": "error", "code": "unauthorized", "message": "Unauthorized"}
+    
+    phone = phone_verification.clean_phone(request.json["phone"])
+    recipient = db_helper.get_user_by_phone(phone)
+    if not recipient:
+        return {"status": "error", "code": "user_not_found", "message": "User with this phone number does not exist"}
+    
+    # check if recipient is already in the family
+    subscription = db_helper.get_user_subscription(recipient['id'])
+    if subscription:
+        if recipient['id'] == subscription['owner']:
+            return {"status": "error", "code": "user_already_has_subscription", "message": "User is already has a subscription"}
+        else:
+            return {"status": "error", "code": "user_already_in_family", "message": "User is already in the family"}
+    
+    # check if user has already sent an invitation to this user
+    other_invitations = db_helper.find_user_subscription_invitations(recipient['id'])
+    if not all(invitation['owner'] != user_id for invitation in other_invitations):
+        return {"status": "error", "code": "invitation_already_sent", "message": "Invitation to this user has already been sent"}
+    
+    # check if sum of family members + invitations is not greater than 3
+    current_user_subscription = db_helper.get_user_subscription(user_id)
+    family_members = current_user_subscription['family_members']
+    invitations = db_helper.find_subscription_invitations_by_subscription_id(current_user_subscription['id'])
+    if len(family_members) + len(invitations) > config.MAX_FAMILY_MEMBERS:
+        return {"status": "error", "code": "family_members_limit_reached", "message": "Family members limit reached"}
+    
+    db_helper.create_subscription_invitation(user_id, recipient['id'])
+    return {"status": "ok"}

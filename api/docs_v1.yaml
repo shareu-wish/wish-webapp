@@ -306,6 +306,39 @@ paths:
                 $ref: '#/components/schemas/getSubscriptionInfoResponse'
 
 
+  /subscription/send-invitation:
+    post:
+      tags:
+        - subscription
+      summary: Send an invitation to family
+      security: 
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sendSubscriptionToFamilyRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/standartOKSchema'
+                  - $ref: '#/components/schemas/sendSubscriptionToFamilyResponseError'
+              examples:
+                success:
+                  summary: Success
+                error:
+                  summary: Error
+                  value:
+                    status: "error"
+                    code: "user_not_found"
+                    message: "User with this phone number does not exist"
+
+
 
 
 
@@ -723,11 +756,22 @@ components:
               example: 111
               description: ID of the person who pays for the subscription
             family_members:
+              description: Family members. Owner's ID should always be in the list
               type: array
               items:
-                type: integer
-                description: ID of the family members. Owner's ID should always be in the list
-              example: [111, 222, 333]
+                properties:
+                  id: 
+                    type: integer
+                    example: 222
+                    description: ID of the family member
+                  phone:
+                    type: string
+                    example: "+78005553535"
+                    description: Phone number of the family member
+                  name:
+                    type: string
+                    example: "Марина"
+                    description: Name of the family member
             until:
               type: string
               example: "2024-07-19 18:15:20.684691+03"
@@ -738,3 +782,27 @@ components:
               description: |-
                 `true` - the subscription is active \
                 `false` - the subscription is not active
+    
+
+    sendSubscriptionToFamilyRequest:
+      type: object
+      properties:
+        phone:
+          type: string
+          example: "+78125730128"
+          description: May include spaces and parentheses (but not desirable)
+
+    sendSubscriptionToFamilyResponseError: 
+      type: object
+      properties: 
+        status:
+          type: string
+          enum: ["error"]
+        code:
+          type: string
+          enum: ["user_not_found", "user_already_has_subscription", "user_already_in_family", "invitation_already_sent", "family_members_limit_reached", "unauthorized"]
+        message:
+          type: string
+          example: ["User with this phone number does not exist", "User is already has a subscription", "Unauthorized"]
+
+
