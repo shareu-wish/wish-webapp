@@ -280,6 +280,8 @@ def get_subscription_info():
         return {"status": "error", "message": "Unauthorized"}
 
     subscription = db_helper.get_user_subscription(user_id)
+    if not subscription:
+        return {"status": "ok", "subscription": None}
 
     users = []
     for user_id in subscription['family_members']:
@@ -308,7 +310,8 @@ def subscription_send_invitation():
     subscription = db_helper.get_user_subscription(recipient['id'])
     if subscription:
         if recipient['id'] == subscription['owner']:
-            return {"status": "error", "code": "user_already_has_subscription", "message": "User is already has a subscription"}
+            if subscription['is_active']:
+                return {"status": "error", "code": "user_already_has_subscription", "message": "User is already has a subscription"}
         else:
             return {"status": "error", "code": "user_already_in_family", "message": "User is already in the family"}
     
@@ -374,3 +377,48 @@ def get_user_subscription_invitations():
         }
     
     return {"status": "ok", "invitations": invitations}
+
+
+@api_v1.route("/subscription/accept-invitation", methods=["POST"])
+def subscription_accept_invitation():
+    """
+    Принять приглашение в подписку
+    """
+    user_id = check_auth()
+    if not user_id:
+        return {"status": "error", "code": "unauthorized", "message": "Unauthorized"}
+
+    invitation_id = request.json["invitation_id"]
+    invitation = db_helper.get_subscription_invitation(invitation_id)
+    if not invitation:
+        return {"status": "error", "code": "invitation_not_found", "message": "Invitation not found"}
+
+    # check if user is already in the family
+    user_old_subscription = db_helper.get_user_subscription(user_id)
+    if user_old_subscription:
+        if user_old_subscription["owner"] == user_id:
+            if user_old_subscription["is_active"]:
+                return {"status": "error", "code": "already_has_subscription", "message": "User already has a subscription"}
+            else:
+                db_helper.delete_inactive_subscription(user_old_subscription["id"])
+        else:
+            return {"status": "error", "code": "already_in_family", "message": "User is already in the family"}
+
+    db_helper.add_user_to_subscription_family(invitation['subscription_id'], user_id)
+    db_helper.delete_subscription_invitation(invitation_id)
+    return {"status": "ok"}
+
+
+@api_v1.route("/subscription/reject-invitations", methods=["POST"])
+def subscription_reject_invitations():
+    """
+    Отклонить приглашение в подписку (пользователем, которого приглашают)
+    """
+    user_id = check_auth()
+    if not user_id:
+        return {"status": "error", "code": "unauthorized", "message": "Unauthorized"}
+
+    db_helper.delete_subscription_invitation(request.json["invitation_id"])
+
+    return {"status": "ok"}
+

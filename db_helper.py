@@ -923,6 +923,36 @@ def create_subscription_invitation(user_id: int, recipient_id: int) -> None:
     cur.close()
 
 
+def get_subscription_invitation(invitation_id: int) -> dict | None:
+    """
+    Найти приглашение в подписку
+
+    :param invitation_id: ID приглашения
+    :return: dict с данными о приглашении\n
+        - *id*: ID приглашения
+        - *subscription_id*: ID подписки
+        - *owner*: ID пользователя, который пригласил в свою подписку
+        - *recipient*: ID пользователя, который приглашается
+    """
+
+    cur = conn.cursor()
+    cur.execute("SELECT id, subscription_id, owner, recipient FROM subscription_invitations WHERE id = %s", (invitation_id, ))
+    data = cur.fetchone()
+    cur.close()
+
+    if data is None:
+        return None
+
+    res = {
+        "id": data[0],
+        "subscription_id": data[1],
+        "owner": data[2],
+        "recipient": data[3]
+    }
+
+    return res
+
+
 def find_user_subscription_invitations(user_id: int) -> list[dict]:
     """
     Найти приглашения в подписку
@@ -979,6 +1009,46 @@ def find_subscription_invitations_by_subscription_id(subscription_id: int) -> li
     return res
 
 
+def delete_subscription_invitation(invitation_id: int) -> None:
+    """
+    Удалить приглашение в подписку
+
+    :param invitation_id: ID приглашения
+    """
+
+    cur = conn.cursor()
+    cur.execute("DELETE FROM subscription_invitations WHERE id = %s", (invitation_id, ))
+    conn.commit()
+    cur.close()
+
+
+def delete_inactive_subscription(subscription_id: int) -> None:
+    """
+    Удалить неактивную подписку
+
+    :param subscription_id: ID подписки
+    """
+
+    cur = conn.cursor()
+    cur.execute("DELETE FROM subscriptions WHERE id = %s AND until < %s", (subscription_id, datetime.now().astimezone(tz=dt.timezone(dt.timedelta(seconds=10800)))))
+    conn.commit()
+    cur.close()
+
+
+def add_user_to_subscription_family(subscription_id: int, user_id: int) -> None:
+    """
+    Добавить пользователя в семью подписки
+
+    :param subscription_id: ID подписки
+    :param user_id: ID пользователя
+    """
+
+    cur = conn.cursor()
+    cur.execute("UPDATE subscriptions SET family_members = array_append(family_members, %s) WHERE id = %s", (user_id, subscription_id))
+    conn.commit()
+    cur.close()
+
+
 """ Other """
 
 if not config.DEBUG:
@@ -986,4 +1056,4 @@ if not config.DEBUG:
 
 
 if __name__ == "__main__":
-    print(get_subscription(7))
+    print(delete_subscription_invitation(123))
