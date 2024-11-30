@@ -305,7 +305,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/getSubscriptionInfoResponse'
 
-
   /subscription/send-invitation:
     post:
       tags:
@@ -317,7 +316,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/sendSubscriptionToFamilyRequest'
+              $ref: '#/components/schemas/subscriptionSendInvitationToFamilyRequest'
         required: true
       responses:
         '200':
@@ -327,7 +326,7 @@ paths:
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/standartOKSchema'
-                  - $ref: '#/components/schemas/sendSubscriptionToFamilyResponseError'
+                  - $ref: '#/components/schemas/subscriptionSendInvitationToFamilyResponseError'
               examples:
                 success:
                   summary: Success
@@ -337,7 +336,6 @@ paths:
                     status: "error"
                     code: "user_not_found"
                     message: "User with this phone number does not exist"
-
 
   /subscription/get-subscription-invitations:
     get:
@@ -369,7 +367,68 @@ paths:
               schema:
                 $ref: '#/components/schemas/getUserSubscriptionInvitationsResponse'
 
-
+  /subscription/accept-invitation:
+    post:
+      tags:
+        - subscription
+      summary: Accept invitation to the family
+      security: 
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/subscriptionAcceptInvitationToFamilyRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standartOKSchema'
+    
+  /subscription/reject-invitation:
+    post:
+      tags:
+        - subscription
+      summary: Reject invitation to the family
+      security: 
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/subscriptionAcceptInvitationToFamilyRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standartOKSchema'
+  
+  /subscription/delete-invitation:
+    post:
+      tags:
+        - subscription
+      summary: Delete invitation to the family by subscription owner
+      security: 
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/subscriptionAcceptInvitationToFamilyRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standartOKSchema'
 
 
 
@@ -815,7 +874,7 @@ components:
                 `false` - the subscription is not active
     
 
-    sendSubscriptionToFamilyRequest:
+    subscriptionSendInvitationToFamilyRequest:
       type: object
       properties:
         phone:
@@ -823,7 +882,7 @@ components:
           example: "+78125730128"
           description: May include spaces and parentheses (but not desirable)
 
-    sendSubscriptionToFamilyResponseError: 
+    subscriptionSendInvitationToFamilyResponseError: 
       type: object
       properties: 
         status:
@@ -896,5 +955,12 @@ components:
               recipient:
                 type: integer
                 example: 321
+    
+    subscriptionAcceptInvitationToFamilyRequest:
+      type: object
+      properties:
+        invitation_id:
+          type: integer
+          example: 1234
 
 

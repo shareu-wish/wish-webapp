@@ -409,7 +409,7 @@ def subscription_accept_invitation():
     return {"status": "ok"}
 
 
-@api_v1.route("/subscription/reject-invitations", methods=["POST"])
+@api_v1.route("/subscription/reject-invitation", methods=["POST"])
 def subscription_reject_invitations():
     """
     Отклонить приглашение в подписку (пользователем, которого приглашают)
@@ -418,7 +418,35 @@ def subscription_reject_invitations():
     if not user_id:
         return {"status": "error", "code": "unauthorized", "message": "Unauthorized"}
 
-    db_helper.delete_subscription_invitation(request.json["invitation_id"])
+    invitation_id = request.json["invitation_id"]
+    invitation = db_helper.get_subscription_invitation(invitation_id)
+    if not invitation:
+        return {"status": "error", "code": "invitation_not_found", "message": "Invitation not found"}
+    if invitation['recipient'] != user_id:
+        return {"status": "error", "code": "not_invited_user", "message": "Not invited user"}
+    
+    db_helper.delete_subscription_invitation(invitation_id)
+
+    return {"status": "ok"}
+
+
+@api_v1.route("/subscription/delete-invitation", methods=["POST"])
+def subscription_delete_invitation():
+    """
+    Удалить приглашение в подписку (пользователем, который приглашает)
+    """
+    user_id = check_auth()
+    if not user_id:
+        return {"status": "error", "code": "unauthorized", "message": "Unauthorized"}
+
+    invitation_id = request.json["invitation_id"]
+    invitation = db_helper.get_subscription_invitation(invitation_id)
+    if not invitation:
+        return {"status": "error", "code": "invitation_not_found", "message": "Invitation not found"}
+    if invitation['owner'] != user_id:
+        return {"status": "error", "code": "not_owner", "message": "Not owner"}
+
+    db_helper.delete_subscription_invitation(invitation_id)
 
     return {"status": "ok"}
 
