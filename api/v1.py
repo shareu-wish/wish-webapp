@@ -321,8 +321,56 @@ def subscription_send_invitation():
     current_user_subscription = db_helper.get_user_subscription(user_id)
     family_members = current_user_subscription['family_members']
     invitations = db_helper.find_subscription_invitations_by_subscription_id(current_user_subscription['id'])
-    if len(family_members) + len(invitations) > config.MAX_FAMILY_MEMBERS:
+    if len(family_members) + len(invitations) >= config.MAX_FAMILY_MEMBERS:
         return {"status": "error", "code": "family_members_limit_reached", "message": "Family members limit reached"}
     
     db_helper.create_subscription_invitation(user_id, recipient['id'])
     return {"status": "ok"}
+
+
+@api_v1.route("/subscription/get-subscription-invitations")
+def get_subscription_invitations():
+    """
+    Получить приглашения разных людей в конкретную подписку
+    """
+    user_id = check_auth()
+    if not user_id:
+        return {"status": "error", "code": "unauthorized", "message": "Unauthorized"}
+
+    subscription = db_helper.get_user_subscription(user_id)
+    if not subscription:
+        return {"status": "error", "code": "subscription_not_found", "message": "Subscription not found"}
+    
+    invitations = db_helper.find_subscription_invitations_by_subscription_id(subscription['id'])
+
+    for invitation in invitations:
+        user = db_helper.get_user(invitation['recipient'])
+        invitation['recipient'] = {
+            "id": invitation['recipient'],
+            "phone": user['phone'],
+            "name": user['name']
+        }
+    
+    return {"status": "ok", "invitations": invitations}
+
+
+@api_v1.route("/subscription/get-user-invitations")
+def get_user_subscription_invitations():
+    """
+    Получить приглашения текущего пользователя во все подписки
+    """
+    user_id = check_auth()
+    if not user_id:
+        return {"status": "error", "code": "unauthorized", "message": "Unauthorized"}
+
+    invitations = db_helper.find_user_subscription_invitations(user_id)
+
+    for invitation in invitations:
+        owner = db_helper.get_user(invitation['owner'])
+        invitation['owner'] = {
+            "id": invitation['owner'],
+            "phone": owner['phone'],
+            "name": owner['name']
+        }
+    
+    return {"status": "ok", "invitations": invitations}

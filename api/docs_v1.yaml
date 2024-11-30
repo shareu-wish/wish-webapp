@@ -339,6 +339,37 @@ paths:
                     message: "User with this phone number does not exist"
 
 
+  /subscription/get-subscription-invitations:
+    get:
+      tags:
+        - subscription
+      summary: Get invitations from different people to a specific subscription
+      security: 
+        - Bearer: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getSubscriptionInvitationsResponse'
+  
+  /subscription/get-user-invitations:
+    get:
+      tags:
+        - subscription
+      summary: Get invitations from all subscriptions to specific user
+      security: 
+        - Bearer: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUserSubscriptionInvitationsResponse'
+
+
 
 
 
@@ -804,5 +835,66 @@ components:
         message:
           type: string
           example: ["User with this phone number does not exist", "User is already has a subscription", "Unauthorized"]
+
+    getSubscriptionInvitationsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["ok", "error"]
+        invitations:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1234
+              owner:
+                type: integer
+                example: 123
+              recipient:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 321
+                  phone:
+                    type: string
+                    example: "+78002002316"
+                  name:
+                    type: string
+                    example: "Владимир"
+    
+    getUserSubscriptionInvitationsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["ok", "error"]
+        invitations:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1234
+              owner:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 321
+                  phone:
+                    type: string
+                    example: "+12024561111"
+                    description: This is an example, in reality we will not have foreign numbers
+                  name:
+                    type: string
+                    example: "Дональд"
+              recipient:
+                type: integer
+                example: 321
 
 
