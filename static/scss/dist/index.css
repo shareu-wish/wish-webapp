@@ -744,8 +744,7 @@ footer .row.menu {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  -moz-column-gap: 2rem;
-       column-gap: 2rem;
+  column-gap: 2rem;
   row-gap: 0.8rem;
 }
 footer .row.menu .item {
@@ -955,8 +954,7 @@ footer .row.last {
     width: 100%;
   }
   footer .row.menu {
-    -moz-column-gap: 0;
-         column-gap: 0;
+    column-gap: 0;
   }
   footer .row.menu .item {
     flex: 0 0 33.3333333333%;
@@ -1115,8 +1113,7 @@ footer .row.last {
     width: 100%;
   }
   footer .row.menu {
-    -moz-column-gap: 0;
-         column-gap: 0;
+    column-gap: 0;
   }
   footer .row.menu .item {
     flex: 0 0 25%;
@@ -1470,8 +1467,7 @@ footer .row.last {
   line-height: 12px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   color: #004EAB;
 }
 
@@ -1484,8 +1480,7 @@ footer .row.last {
   line-height: 12px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   color: grey;
 }
 
@@ -1498,8 +1493,7 @@ footer .row.last {
   line-height: 36px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
 }
 
 .period-left {
@@ -1509,8 +1503,7 @@ footer .row.last {
   line-height: 16px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   margin-left: 0px;
   margin-top: -32px;
   margin-left: 100px;
@@ -1523,8 +1516,7 @@ footer .row.last {
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   width: 323px;
   height: 40px;
   margin-left: 24px;
@@ -1540,8 +1532,7 @@ footer .row.last {
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   margin-left: 24px;
   margin-top: 20px;
 }
@@ -1553,8 +1544,7 @@ footer .row.last {
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   margin-left: 24px;
   margin-top: 30px;
 }
@@ -1566,8 +1556,7 @@ footer .row.last {
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   opacity: 50%;
   margin-left: 0;
 }
@@ -1579,8 +1568,7 @@ footer .row.last {
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   opacity: 50%;
   margin-left: 0;
 }
@@ -1592,8 +1580,7 @@ footer .row.last {
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   opacity: 50%;
   margin-left: 0;
   margin-top: -20px;
@@ -1607,8 +1594,7 @@ footer .row.last {
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   opacity: 50%;
   margin-left: 0;
   margin-top: -20px;
@@ -1622,8 +1608,7 @@ footer .row.last {
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   margin-left: 0;
   margin-top: -20px;
   margin-left: 183px;
@@ -1636,8 +1621,7 @@ footer .row.last {
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   margin-left: 0;
   margin-top: -20px;
   margin-left: 207px;
@@ -1650,8 +1634,7 @@ footer .row.last {
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   margin-left: 0;
   margin-top: -40px;
   opacity: 50%;
@@ -1664,8 +1647,7 @@ footer .row.last {
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   margin-left: 0;
   margin-top: -40px;
   opacity: 50%;
@@ -1720,8 +1702,7 @@ footer .row.last {
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
-  -webkit-text-decoration-skip-ink: none;
-          text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
   margin-left: 24px;
   color: #004EAB;
   opacity: 75%;
@@ -1797,8 +1778,7 @@ footer .row.last {
     line-height: 20px;
     text-align: left;
     text-underline-position: from-font;
-    -webkit-text-decoration-skip-ink: none;
-            text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
     margin-left: 24px;
     color: #004EAB;
     opacity: 75%;
@@ -1811,8 +1791,7 @@ footer .row.last {
     line-height: 20px;
     text-align: left;
     text-underline-position: from-font;
-    -webkit-text-decoration-skip-ink: none;
-            text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
     margin-left: 24px;
     margin-top: 20px;
   }
@@ -1823,8 +1802,7 @@ footer .row.last {
     line-height: 20px;
     text-align: left;
     text-underline-position: from-font;
-    -webkit-text-decoration-skip-ink: none;
-            text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
     margin-left: 24px;
     margin-top: 30px;
   }
@@ -1835,8 +1813,7 @@ footer .row.last {
     line-height: 20px;
     text-align: left;
     text-underline-position: from-font;
-    -webkit-text-decoration-skip-ink: none;
-            text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
     opacity: 50%;
     margin-left: 0;
   }
@@ -1847,8 +1824,7 @@ footer .row.last {
     line-height: 20px;
     text-align: left;
     text-underline-position: from-font;
-    -webkit-text-decoration-skip-ink: none;
-            text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
     opacity: 50%;
     margin-left: 0;
   }
@@ -1859,8 +1835,7 @@ footer .row.last {
     line-height: 20px;
     text-align: left;
     text-underline-position: from-font;
-    -webkit-text-decoration-skip-ink: none;
-            text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
     opacity: 50%;
     margin-left: 30px;
     margin-top: -20px;
@@ -1873,8 +1848,7 @@ footer .row.last {
     line-height: 20px;
     text-align: left;
     text-underline-position: from-font;
-    -webkit-text-decoration-skip-ink: none;
-            text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
     opacity: 50%;
     margin-top: -20px;
     margin-left: 120px;
@@ -1886,8 +1860,7 @@ footer .row.last {
     line-height: 20px;
     text-align: left;
     text-underline-position: from-font;
-    -webkit-text-decoration-skip-ink: none;
-            text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
     margin-left: 0;
     margin-top: -20px;
     margin-left: 130px;
@@ -1899,8 +1872,7 @@ footer .row.last {
     line-height: 20px;
     text-align: left;
     text-underline-position: from-font;
-    -webkit-text-decoration-skip-ink: none;
-            text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
     margin-left: 0;
     margin-top: -20px;
     margin-left: 140px;
@@ -1912,8 +1884,7 @@ footer .row.last {
     line-height: 20px;
     text-align: left;
     text-underline-position: from-font;
-    -webkit-text-decoration-skip-ink: none;
-            text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
     margin-left: 0;
     margin-top: -40px;
     opacity: 50%;
@@ -1925,8 +1896,7 @@ footer .row.last {
     line-height: 20px;
     text-align: left;
     text-underline-position: from-font;
-    -webkit-text-decoration-skip-ink: none;
-            text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
     margin-left: 0;
     margin-top: -40px;
     opacity: 50%;
@@ -1947,4 +1917,4 @@ footer .row.last {
     height: 48px;
     margin-top: -20px;
   }
-}/*# sourceMappingURL=index.css.map */
+}
