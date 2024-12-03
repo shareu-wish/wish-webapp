@@ -1624,8 +1624,6 @@ footer {
     font-size: 48px;
     font-weight: 700;
     line-height: 48px;
-    text-underline-position: from-font;
-    text-decoration-skip-ink: none;
     width: 197px;
     height: 48px;
     margin-left: -580px;
@@ -1957,7 +1955,7 @@ footer {
 
 .card-left{
   background-color: #fff;
-  max-width: 370px;
+  max-width: 340px;
   height: 334px;
   top: 8px;
   gap: 0px;
@@ -1970,7 +1968,7 @@ footer {
 
 .card-left-back{
   background: linear-gradient(120deg,#0066E0, #00c6e0);
-  max-width: 370px;
+  max-width: 340px;
   height: 232px;
   top: 8px;
   gap: 0;
@@ -1983,7 +1981,7 @@ footer {
 
 .card-right{
   background-color: #fff;
-  max-width: 370px;
+  max-width: 340px;
   height: 232px;
   top: 8px;
   gap: 0px;
@@ -1995,7 +1993,7 @@ footer {
 
 .card-right-back{
   background-color: rgba(18, 15, 29, 0.25);
-  max-width: 370px;
+  max-width: 340px;
   height: 232px;
   top: 108px;
   gap: 0px;
@@ -2035,7 +2033,7 @@ footer {
 
 .additional-left-info-part1{
   font-family: Arial;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 20px;
   text-align: left;
@@ -2048,7 +2046,7 @@ footer {
 
 .additional-right-info-part1{
   font-family: Arial;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 20px;
   text-align: left;
@@ -2060,7 +2058,7 @@ footer {
 
 .additional-left-info-part1-1{
   font-family: Arial;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 20px;
   text-align: left;
@@ -2072,7 +2070,7 @@ footer {
 
 .additional-right-info-part1-1{
   font-family: Arial;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 20px;
   text-align: left;
@@ -2084,7 +2082,7 @@ footer {
 
 .additional-left-info-plus{
   font-family: Arial;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 900;
   line-height: 20px;
   text-align: left;
@@ -2093,26 +2091,38 @@ footer {
   opacity: 50%;
   margin-left: 30px;
   margin-top: -20px;
-  margin-left: 120px;
+  margin-left: 110px;
 }
 
 .additional-right-info-plus{
   font-family: Arial;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: 900;
   line-height: 20px;
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   opacity: 50%;
+  margin-top: -20px;
+  margin-left: 120px;
+}
+
+.additional-left-info-part2{
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
   margin-left: 0;
   margin-top: -20px;
   margin-left: 130px;
 }
 
-.additional-left-info-part2{
+.additional-right-info-part2{
   font-family: Arial;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 20px;
   text-align: left;
@@ -2123,22 +2133,9 @@ footer {
   margin-left: 140px;
 }
 
-.additional-right-info-part2{
-  font-family: Arial;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 20px;
-  text-align: left;
-  text-underline-position: from-font;
-  text-decoration-skip-ink: none;
-  margin-left: 0;
-  margin-top: -20px;
-  margin-left: 150px;
-}
-
 .additional-left-info-part2-1{
   font-family: Arial;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 20px;
   text-align: left;
@@ -2151,7 +2148,7 @@ footer {
 
 .additional-right-info-part2-1{
   font-family: Arial;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 20px;
   text-align: left;
@@ -2160,5 +2157,23 @@ footer {
   margin-left: 0;
   margin-top: -40px;
   opacity: 50%;
+}
+
+.tar-title{
+  font-family: Arial;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 48px;
+  margin-top: 10px;
+}
+
+.tar-text{
+  font-family: Arial;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 48px;
+  width: 197px;
+  height: 48px;
+  margin-top: -20px;
 }
 }
