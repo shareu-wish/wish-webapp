@@ -1404,6 +1404,9 @@ footer .row.last {
   font-size: 48px;
   font-weight: 700;
   line-height: 48px;
+  text-underline-position: from-font;
+  -webkit-text-decoration-skip-ink: none;
+          text-decoration-skip-ink: none;
   width: 197px;
   height: 48px;
   margin-left: -580px;
