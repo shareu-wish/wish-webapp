@@ -23,6 +23,8 @@ tags:
     description: Actions with orders
   - name: profile
     description: User information
+  - name: subscription
+    description: Subscription
 paths:
   /auth/start-phone-verification:
     post:
@@ -288,6 +290,145 @@ paths:
                 $ref: '#/components/schemas/profileGetProcessedOrdersResponse'
 
 
+  /subscription/get-subscription-info:
+    get:
+      tags:
+        - subscription
+      summary: Get user's subscription info
+      security: 
+        - Bearer: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getSubscriptionInfoResponse'
+
+  /subscription/send-invitation:
+    post:
+      tags:
+        - subscription
+      summary: Send an invitation to family
+      security: 
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/subscriptionSendInvitationToFamilyRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/standartOKSchema'
+                  - $ref: '#/components/schemas/subscriptionSendInvitationToFamilyResponseError'
+              examples:
+                success:
+                  summary: Success
+                error:
+                  summary: Error
+                  value:
+                    status: "error"
+                    code: "user_not_found"
+                    message: "User with this phone number does not exist"
+
+  /subscription/get-subscription-invitations:
+    get:
+      tags:
+        - subscription
+      summary: Get invitations from different people to a specific subscription
+      security: 
+        - Bearer: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getSubscriptionInvitationsResponse'
+  
+  /subscription/get-user-invitations:
+    get:
+      tags:
+        - subscription
+      summary: Get invitations from all subscriptions to specific user
+      security: 
+        - Bearer: []
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUserSubscriptionInvitationsResponse'
+
+  /subscription/accept-invitation:
+    post:
+      tags:
+        - subscription
+      summary: Accept invitation to the family
+      security: 
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/subscriptionAcceptInvitationToFamilyRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standartOKSchema'
+    
+  /subscription/reject-invitation:
+    post:
+      tags:
+        - subscription
+      summary: Reject invitation to the family
+      security: 
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/subscriptionAcceptInvitationToFamilyRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standartOKSchema'
+  
+  /subscription/delete-invitation:
+    post:
+      tags:
+        - subscription
+      summary: Delete invitation to the family by subscription owner
+      security: 
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/subscriptionAcceptInvitationToFamilyRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standartOKSchema'
 
 
 
@@ -688,3 +829,138 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/orderObject'
+    
+
+    getSubscriptionInfoResponse: 
+      type: object
+      properties: 
+        status:
+          type: string
+          enum: ["ok", "error"]
+        subscription:
+          type: object
+          description: May be None if user has never had a subscription
+          properties:
+            owner:
+              type: integer
+              example: 111
+              description: ID of the person who pays for the subscription
+            family_members:
+              description: Family members. Owner's ID should always be in the list
+              type: array
+              items:
+                properties:
+                  id: 
+                    type: integer
+                    example: 222
+                    description: ID of the family member
+                  phone:
+                    type: string
+                    example: "+78005553535"
+                    description: Phone number of the family member
+                  name:
+                    type: string
+                    example: "Марина"
+                    description: Name of the family member
+            until:
+              type: string
+              example: "2024-07-19 18:15:20.684691+03"
+              description: The date and time until which the subscription is valid
+            is_active:
+              type: boolean
+              example: true
+              description: |-
+                `true` - the subscription is active \
+                `false` - the subscription is not active
+    
+
+    subscriptionSendInvitationToFamilyRequest:
+      type: object
+      properties:
+        phone:
+          type: string
+          example: "+78125730128"
+          description: May include spaces and parentheses (but not desirable)
+
+    subscriptionSendInvitationToFamilyResponseError: 
+      type: object
+      properties: 
+        status:
+          type: string
+          enum: ["error"]
+        code:
+          type: string
+          enum: ["user_not_found", "user_already_has_subscription", "user_already_in_family", "invitation_already_sent", "family_members_limit_reached", "unauthorized"]
+        message:
+          type: string
+          example: ["User with this phone number does not exist", "User is already has a subscription", "Unauthorized"]
+
+    getSubscriptionInvitationsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["ok", "error"]
+        invitations:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1234
+              owner:
+                type: integer
+                example: 123
+              recipient:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 321
+                  phone:
+                    type: string
+                    example: "+78002002316"
+                  name:
+                    type: string
+                    example: "Владимир"
+    
+    getUserSubscriptionInvitationsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["ok", "error"]
+        invitations:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1234
+              owner:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 321
+                  phone:
+                    type: string
+                    example: "+12024561111"
+                    description: This is an example, in reality we will not have foreign numbers
+                  name:
+                    type: string
+                    example: "Дональд"
+              recipient:
+                type: integer
+                example: 321
+    
+    subscriptionAcceptInvitationToFamilyRequest:
+      type: object
+      properties:
+        invitation_id:
+          type: integer
+          example: 1234
+
+

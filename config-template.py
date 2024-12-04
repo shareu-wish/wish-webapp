@@ -1,4 +1,6 @@
 # Общие настройки
+API_URL="http://localhost"
+MAX_FAMILY_MEMBERS=4
 TIME_TO_TAKE_UMBRELLA = 30
 DEPOSIT_AMOUNT=300
 
