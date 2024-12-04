@@ -1,32 +1,10 @@
-# Общие настройки
-API_URL="http://localhost"
-MAX_FAMILY_MEMBERS=4
-TIME_TO_TAKE_UMBRELLA = 30
-DEPOSIT_AMOUNT=300
-
-# База данных
-DB_HOST=""
-DB_NAME=""
-DB_USER=""
-DB_PASSWORD=""
-
-# Верефикация телефонов пользователей
-ZVONOK_PUBLIC_KEY=""
-ZVONOK_CAMPAIGN_ID=""
-
-# JWT
-JWT_SECRET=""
-
-# MQTT
-MQTT_HOST=""
-MQTT_PORT=0
-MQTT_USERNAME=""
-MQTT_PASSWORD=""
-
-# CloudPayments
-CLOUD_PAYMENTS_PUBLIC_ID=""
-CLOUD_PAYMENTS_SECRET_KEY=""
-CLOUD_PAYMENTS_BASIC_AUTH=""
+# API URL
+# Рабочий режим
+API_URL="https://api.shareu.ru"
+# Тестовый режим
+# API_URL="https://api.shareu.ru/test"
+# Локальный режим
+# API_URL="http://localhost:5050"
 
 # Debug
 DEBUG=True
