@@ -27,21 +27,3 @@ def exchange_code_for_tokens(code, state, device_id, code_verifier):
 
     response = requests.post(url, data=data)
     return response.json()
-
-
-def get_user_info(access_token):
-    """
-    Метод позволяет получить немаскированные данные пользователя по `access_token`.
-    
-    https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/api-integration/api-description#Poluchenie-nemaskirovannyh-dannyh
-    """
-
-    url = "https://id.vk.com/oauth2/user_info"
-    data = {
-        "client_id": CLIENT_ID,
-        "access_token": access_token
-    }
-
-    response = requests.post(url, data=data)
-    return response.json()
-
