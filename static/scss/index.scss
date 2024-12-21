@@ -765,6 +765,21 @@ header {
           animation: rainDropOnUmbrella linear 0.45s;
         }
       }
+
+      // New Year
+      .snowflake {
+        color: #76a9ed;
+        font-family: 'Arial Black', sans-serif;
+        width: 0.5rem;
+        height: 0.5rem;
+        position: absolute;
+        z-index: 3;
+        animation: rainDrop linear 3s;
+
+        &.on-umbrella {
+          animation: rainDropOnUmbrella linear 1.4s;
+        }
+      }
     }
   }
 }

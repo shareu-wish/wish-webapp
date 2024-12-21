@@ -73,13 +73,26 @@ function createRain() {
 
   const drop = document.createElement("div");
 
+  // Defalut
+  // if (coord >= umbrellaRect.left && coord <= umbrellaRect.right) {
+  //   drop.className = "drop on-umbrella";
+  //   TTL = 450
+  // } else {
+  //   drop.className = "drop";
+  // }
+
+  // New Year
+  drop.innerHTML = "&#10052;";
+  drop.style.fontSize = Math.floor(Math.random() * 20 + 10) + "px";
   if (coord >= umbrellaRect.left && coord <= umbrellaRect.right) {
-    drop.className = "drop on-umbrella";
-    TTL = 450
+    drop.className = "snowflake on-umbrella";
+    TTL = 1400
   } else {
-    drop.className = "drop";
+    drop.className = "snowflake";
+    TTL = 3000
   }
 
+  
   drop.style.left = coord + "px";
   document.getElementById("take-umbrella-rain").appendChild(drop);
   setTimeout(function () {
